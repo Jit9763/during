@@ -65,9 +65,14 @@ async function loadData() {
                         taskObj.alloc = t.getAttribute('alloc') || 'lambit'; // for enumerators
                     }
                     if (taskObj.type === 'training-summary') {
-                        taskObj.totalBatches = parseInt(t.getAttribute('totalBatches')) || 6;
+                        taskObj.totalBatches = parseInt(t.getAttribute('totalBatches')) || 7;
                         taskObj.completedBatches = parseInt(t.getAttribute('completedBatches')) || 0;
                         taskObj.totalAttended = parseInt(t.getAttribute('totalAttended')) || 0;
+                        try {
+                            taskObj.batchList = JSON.parse(t.getAttribute('batchList') || '[]');
+                        } catch (e) {
+                            taskObj.batchList = [];
+                        }
                     }
                     if (taskObj.type === 'finance-tracker') {
                         taskObj.allocated = parseInt(t.getAttribute('allocated')) || 0;
@@ -263,22 +268,58 @@ function renderPage() {
                 
                 const attendPercent = Math.round((task.totalAttended / totalExpected) * 100);
                 
+                // Recalculate completedBatches from batchList
+                const completedCount = task.batchList.filter(b => b.status === 'purn').length;
+                task.completedBatches = completedCount;
+                
                 totalTasks += 1;
                 totalPurn += (task.completedBatches / task.totalBatches);
+
+                let batchRows = task.batchList.map((b, bIdx) => {
+                    if (isAdminPage) {
+                        return `
+                            <tr>
+                                <td>Batch ${b.id}</td>
+                                <td><input type="text" class="batch-input" value="${b.date}" onchange="updateBatchField('${task.id}', ${bIdx}, 'date', this.value)"></td>
+                                <td><input type="text" class="batch-input" value="${b.venue}" onchange="updateBatchField('${task.id}', ${bIdx}, 'venue', this.value)"></td>
+                                <td><input type="text" class="batch-input" value="${b.time}" onchange="updateBatchField('${task.id}', ${bIdx}, 'time', this.value)"></td>
+                                <td>
+                                    <select class="batch-status-select" onchange="updateBatchStatus('${task.id}', ${bIdx}, this.value)">
+                                        <option value="lambit" ${b.status === 'lambit' ? 'selected' : ''}>Pending</option>
+                                        <option value="purn" ${b.status === 'purn' ? 'selected' : ''}>Done</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        `;
+                    } else {
+                        return `
+                            <tr>
+                                <td style="font-weight:700;">Batch ${b.id}</td>
+                                <td>${b.date}</td>
+                                <td><i class="fas fa-map-marker-alt" style="color:var(--secondary);"></i> ${b.venue}</td>
+                                <td><i class="fas fa-clock" style="color:#666;"></i> ${b.time}</td>
+                                <td><span class="status-tag status-${b.status}" style="padding:2px 5px; font-size:9px;">${b.status === 'purn' ? 'Done' : 'Pending'}</span></td>
+                            </tr>
+                        `;
+                    }
+                }).join('');
 
                 if (isAdminPage) {
                     taskHtml += `
                         <div class="task-card" style="grid-column: 1 / -1; border-left: 5px solid var(--secondary);">
                             <span class="task-name">${task.name}</span>
                             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:10px;">
-                                <div class="counter-input-group">
-                                    <label>पूर्ण बैच (बैच 6 में से):</label>
-                                    <input type="number" class="counter-input" value="${task.completedBatches}" min="0" max="${task.totalBatches}" onchange="updateGenericField('${task.id}', 'completedBatches', this.value)">
-                                </div>
+                                <div class="counter-info"><span>बैच पूर्ण: ${task.completedBatches} / ${task.totalBatches}</span></div>
                                 <div class="counter-input-group">
                                     <label>कुल उपस्थिति (Expected: ${totalExpected}):</label>
                                     <input type="number" class="counter-input" value="${task.totalAttended}" onchange="updateGenericField('${task.id}', 'totalAttended', this.value)">
                                 </div>
+                            </div>
+                            <div class="batch-schedule-container">
+                                <table class="batch-schedule-table">
+                                    <thead><tr><th>Batch</th><th>Date</th><th>Venue (जगह)</th><th>Time (समय)</th><th>Status</th></tr></thead>
+                                    <tbody>${batchRows}</tbody>
+                                </table>
                             </div>
                         </div>
                     `;
@@ -297,6 +338,13 @@ function renderPage() {
                                 <span>${attendPercent}%</span>
                             </div>
                             <div class="mini-progress-track"><div class="mini-bar" style="width: ${attendPercent}%; background: #9c27b0;"></div></div>
+                            
+                            <div class="batch-schedule-container">
+                                <table class="batch-schedule-table">
+                                    <thead><tr><th>Batch</th><th>Date</th><th>Venue (जगह)</th><th>Time (समय)</th><th>Status</th></tr></thead>
+                                    <tbody>${batchRows}</tbody>
+                                </table>
+                            </div>
                         </div>
                     `;
                 }
@@ -703,6 +751,29 @@ function updateGenericField(id, key, value) {
     calculateOverallProgress();
 }
 
+function updateBatchField(id, index, field, value) {
+    taskData.forEach(cat => {
+        cat.tasks.forEach(task => {
+            if (task.id === id) {
+                task.batchList[index][field] = value;
+            }
+        });
+    });
+}
+
+function updateBatchStatus(id, index, value) {
+    taskData.forEach(cat => {
+        cat.tasks.forEach(task => {
+            if (task.id === id) {
+                task.batchList[index].status = value;
+                const completed = task.batchList.filter(b => b.status === 'purn').length;
+                task.completedBatches = completed;
+            }
+        });
+    });
+    calculateOverallProgress();
+}
+
 function calculateOverallProgress() {
     let totalPurn = 0;
     let totalTasks = 0;
@@ -778,7 +849,8 @@ function exportData() {
                 else attrs += ` alloc="${task.alloc}"`;
                 xml += `        <task id="${task.id}" name="${task.name}" type="user-group" ${attrs} />\n`;
             } else if (task.type === 'training-summary') {
-                xml += `        <task id="${task.id}" name="${task.name}" type="training-summary" totalBatches="${task.totalBatches}" completedBatches="${task.completedBatches}" totalAttended="${task.totalAttended}" />\n`;
+                const batchListJson = JSON.stringify(task.batchList).replace(/"/g, '&quot;');
+                xml += `        <task id="${task.id}" name="${task.name}" type="training-summary" totalBatches="${task.totalBatches}" completedBatches="${task.completedBatches}" totalAttended="${task.totalAttended}" batchList="${batchListJson}" />\n`;
             } else if (task.type === 'finance-tracker') {
                 xml += `        <task id="${task.id}" name="${task.name}" type="finance-tracker" allocated="${task.allocated}" paid="${task.paid}" status="${task.status}" />\n`;
             } else if (task.type === 'logistics-checklist') {
