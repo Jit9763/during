@@ -1026,44 +1026,53 @@ function resetData() {
 }
 
 // 5. Export XML
-function exportData() {
+function exportToXML() {
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<census_plan>\n`;
     taskData.forEach(cat => {
         xml += `    <category name="${cat.category}">\n`;
         cat.tasks.forEach(task => {
+            const dl = task.deadline ? ` deadline="${task.deadline}"` : '';
+            
             if (task.type === 'counter') {
-                xml += `        <task id="${task.id}" name="${task.name}" type="counter" total="${task.total}" completed="${task.completed}" />\n`;
+                xml += `        <task id="${task.id}" name="${task.name}" type="counter" total="${task.total}" completed="${task.completed}"${dl} />\n`;
             } else if (task.type === 'info') {
-                xml += `        <task id="${task.id}" name="${task.name}" type="info" content="${task.content}" />\n`;
+                xml += `        <task id="${task.id}" name="${task.name}" type="info" content="${task.content}"${dl} />\n`;
             } else if (task.type === 'map-stats') {
-                xml += `        <task id="${task.id}" name="${task.name}" type="map-stats" total="${task.total}" checked="${task.checked}" correct="${task.correct}" incorrect="${task.incorrect}" deadline="${task.deadline}" status="${task.status}" />\n`;
+                xml += `        <task id="${task.id}" name="${task.name}" type="map-stats" total="${task.total}" checked="${task.checked}" correct="${task.correct}" incorrect="${task.incorrect}" status="${task.status}"${dl} />\n`;
             } else if (task.type === 'cell-info') {
                 const staffListJson = JSON.stringify(task.staffList).replace(/"/g, '&quot;');
-                xml += `        <task id="${task.id}" name="${task.name}" type="cell-info" staffCount="${task.staffCount}" computers="${task.computers}" printers="${task.printers}" staffList="${staffListJson}" />\n`;
+                xml += `        <task id="${task.id}" name="${task.name}" type="cell-info" staffCount="${task.staffCount}" computers="${task.computers}" printers="${task.printers}" staffList="${staffListJson}"${dl} />\n`;
             } else if (task.type === 'user-group') {
                 let attrs = `totalCount="${task.totalCount}" reserveCount="${task.reserveCount}" uploadedCount="${task.uploadedCount}" reserveUploadedCount="${task.reserveUploadedCount}" portalDeadline="${task.portalDeadline}" niyukti="${task.niyukti}" hlbAlloc="${task.hlbAlloc}" idCard="${task.idCard}" mapDistrib="${task.mapDistrib}" reserveId="${task.reserveId}"`;
                 if (task.id === 'sup1') attrs += ` circleAlloc="${task.circleAlloc}" pragnakAlloc="${task.pragnakAlloc}"`;
                 else attrs += ` alloc="${task.alloc}"`;
-                xml += `        <task id="${task.id}" name="${task.name}" type="user-group" ${attrs} />\n`;
+                xml += `        <task id="${task.id}" name="${task.name}" type="user-group" ${attrs}${dl} />\n`;
             } else if (task.type === 'training-summary') {
                 const batchListJson = JSON.stringify(task.batchList).replace(/"/g, '&quot;');
-                xml += `        <task id="${task.id}" name="${task.name}" type="training-summary" totalBatches="${task.totalBatches}" completedBatches="${task.completedBatches}" totalAttended="${task.totalAttended}" batchList="${batchListJson}" />\n`;
+                xml += `        <task id="${task.id}" name="${task.name}" type="training-summary" totalBatches="${task.totalBatches}" completedBatches="${task.completedBatches}" totalAttended="${task.totalAttended}" batchList="${batchListJson}"${dl} />\n`;
             } else if (task.type === 'training-logistics') {
-                xml += `        <task id="${task.id}" name="${task.name}" type="training-logistics" centerSelection="${task.centerSelection}" permissionLetter="${task.permissionLetter}" />\n`;
+                xml += `        <task id="${task.id}" name="${task.name}" type="training-logistics" centerSelection="${task.centerSelection}" permissionLetter="${task.permissionLetter}"${dl} />\n`;
             } else if (task.type === 'training-centers') {
-                xml += `        <task id="${task.id}" name="${task.name}" type="training-centers" c1="${task.c1}" c2="${task.c2}" c3="${task.c3}" c4="${task.c4}" />\n`;
+                xml += `        <task id="${task.id}" name="${task.name}" type="training-centers" c1="${task.c1}" c2="${task.c2}" c3="${task.c3}" c4="${task.c4}"${dl} />\n`;
             } else if (task.type === 'logistics-checklist') {
-                xml += `        <task id="${task.id}" name="${task.name}" type="logistics-checklist" internet="${task.internet}" sound="${task.sound}" food="${task.food}" water="${task.water}" />\n`;
+                xml += `        <task id="${task.id}" name="${task.name}" type="logistics-checklist" internet="${task.internet}" sound="${task.sound}" food="${task.food}" water="${task.water}"${dl} />\n`;
             } else {
-                xml += `        <task id="${task.id}" name="${task.name}" status="${task.status}" />\n`;
+                xml += `        <task id="${task.id}" name="${task.name}" status="${task.status}"${dl} />\n`;
             }
         });
         xml += `    </category>\n`;
     });
     xml += `</census_plan>`;
     
-    document.getElementById('xml-output').value = xml;
-    document.getElementById('export-modal').style.display = 'flex';
+    // Create download link
+    const blob = new Blob([xml], { type: 'text/xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'data.xml';
+    a.click();
+    URL.revokeObjectURL(url);
+    alert("डाटा (data.xml) जनरेट हो गया है। कृपया इसे अपने GitHub फोल्डर में रिप्लेस करें।");
 }
 
 // Start sequence
