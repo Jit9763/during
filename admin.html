@@ -37,35 +37,31 @@
                 <div id="overall-bar"></div>
             </div>
         </section>
+        <!-- Daily Scheduler -->
+        <div id="daily-scheduler"></div>
 
-        <div class="admin-grid">
-            <div id="daily-scheduler"></div>
-            
-            <!-- Cloud Sync Settings -->
-            <div class="task-card" style="grid-column: 1 / -1; background: #f0fdf4; border: 1px solid var(--success);">
-                <span class="task-name"><i class="fas fa-cloud"></i> लाइव क्लाउड सिंक (Google Sheets Backend)</span>
-                <div style="display:flex; gap:10px; margin-top:10px;">
-                    <input type="text" id="api-url" class="batch-input" placeholder="Google Web App URL यहाँ पेस्ट करें..." style="flex:1;">
-                    <button class="save-btn" style="padding: 8px 15px; background: var(--success);" onclick="saveApiUrl()"><i class="fas fa-link"></i> लिंक करें</button>
-                    <button class="export-btn" style="padding: 8px 15px; background: var(--accent);" onclick="forceCloudSync()"><i class="fas fa-upload"></i> डेटा सिंक करें</button>
-                </div>
-                <p style="font-size:11px; margin-top:5px; color:#166534;">* एक बार लिंक करने के बाद, "Save" बटन दबाते ही डेटा सीधे गूगल शीट में सुरक्षित होगा।</p>
-            </div>
+        <!-- Cloud Sync Settings (Compact) -->
+        <div class="cloud-sync-bar">
+            <div class="sync-label"><i class="fas fa-cloud"></i> क्लाउड सिंक:</div>
+            <input type="text" id="api-url" class="sync-input" placeholder="Google Web App URL यहाँ पेस्ट करें...">
+            <button class="sync-btn sync-link" onclick="saveApiUrl()"><i class="fas fa-link"></i> लिंक</button>
+            <button class="sync-btn sync-push" onclick="forceCloudSync()"><i class="fas fa-upload"></i> सिंक</button>
+        </div>
 
-            <div id="admin-container">
-                <!-- Categories and tasks will be injected here by script.js -->
-                <div style="text-align: center; padding: 50px;">
-                    <i class="fas fa-spinner fa-spin" style="font-size: 40px; color: var(--primary);"></i>
-                    <p style="margin-top: 10px;">डेटा लोड हो रहा है...</p>
-                </div>
+        <!-- Admin Content (Same as Public Container Structure) -->
+        <div id="admin-container">
+            <div style="text-align: center; padding: 50px;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 40px; color: var(--primary);"></i>
+                <p style="margin-top: 10px;">डेटा लोड हो रहा है...</p>
             </div>
         </div>
 
-        <div class="footer-btns">
-            <button class="save-btn" onclick="saveChanges()"><i class="fas fa-save"></i> सुरक्षित करें (Save)</button>
-            <button class="export-btn" onclick="exportToXML()"><i class="fas fa-file-export"></i> XML एक्सपोर्ट</button>
-            <button class="export-btn" style="background:#7c3aed;" onclick="generateReport()"><i class="fas fa-file-alt"></i> प्रतिवेदन (Report)</button>
-            <button class="export-btn" style="background:#ef4444;" onclick="resetData()"><i class="fas fa-sync"></i> XML से डेटा लाएं (Sync/Reset)</button>
+        <!-- Sticky Footer Action Bar -->
+        <div class="admin-action-bar">
+            <button class="action-btn btn-save" onclick="saveChanges()"><i class="fas fa-save"></i> Save</button>
+            <button class="action-btn btn-export" onclick="exportToXML()"><i class="fas fa-file-export"></i> XML</button>
+            <button class="action-btn btn-report" onclick="generateReport()"><i class="fas fa-file-alt"></i> रिपोर्ट</button>
+            <button class="action-btn btn-reset" onclick="resetData()"><i class="fas fa-sync"></i> Reset</button>
         </div>
     </div>
 
