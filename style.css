@@ -317,6 +317,60 @@ header h1 {
     border-radius: 4px;
 }
 
+.staff-input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* User Group Status Grid */
+.status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.sub-status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fdfdfd;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    font-size: 13px;
+}
+
+.sub-status-label {
+    color: #555;
+    font-weight: 600;
+}
+
+.admin-sub-status {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+.admin-sub-status label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.admin-sub-status select {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+}
+
 /* Admin Radio Buttons */
 .radio-group {
     display: flex;

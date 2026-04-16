@@ -14,11 +14,24 @@
     </category>
     
     <category name="उपयोगकर्ता प्रबंधन (User Management)">
-        <task id="7" name="पर्यवेक्षकों (39+4) का ऑनलाइन पंजीकरण" status="purn" />
-        <task id="8" name="प्रगणकों (237+24) का ऑनलाइन पंजीकरण" status="purn" />
-        <task id="9" name="कार्मिक टेम्पलेट (Staff Template) बल्क अपलोड" status="apurn" />
-        <task id="10" name="प्रगणकों के एसएमएस पासवर्ड ट्रिगर करना" status="lambit" />
-        <task id="11" name="नियुक्ति पत्र और आईडी कार्ड प्रिंट करना" status="lambit" />
+        <task id="charge1" name="चार्ज कार्मिक (Charge User) विवरण" type="info" content="चार्ज ऑफिसर और सहायक कर्मचारी" />
+        <task id="sup1" name="पर्यवेक्षक (Supervisors - 39+4) प्रबंधन" type="user-group" 
+            reserveCount="4" 
+            niyukti="purn" 
+            circleAlloc="purn" 
+            pragnakAlloc="lambit" 
+            hlbAlloc="lambit" 
+            idCard="lambit" 
+            mapDistrib="lambit" 
+            reserveId="lambit" />
+        <task id="enum1" name="प्रगणक (Enumerators - 237+24) प्रबंधन" type="user-group" 
+            reserveCount="24" 
+            niyukti="purn" 
+            alloc="lambit" 
+            hlbAlloc="lambit" 
+            idCard="lambit" 
+            mapDistrib="lambit" 
+            reserveId="lambit" />
     </category>
     
     <category name="प्रशिक्षण प्रबंधन (Training Management)">

@@ -51,6 +51,17 @@ async function loadData() {
                             taskObj.staffList = [];
                         }
                     }
+                    if (taskObj.type === 'user-group') {
+                        taskObj.reserveCount = parseInt(t.getAttribute('reserveCount')) || 0;
+                        taskObj.niyukti = t.getAttribute('niyukti') || 'lambit';
+                        taskObj.circleAlloc = t.getAttribute('circleAlloc') || 'lambit';
+                        taskObj.pragnakAlloc = t.getAttribute('pragnakAlloc') || 'lambit';
+                        taskObj.hlbAlloc = t.getAttribute('hlbAlloc') || 'lambit';
+                        taskObj.idCard = t.getAttribute('idCard') || 'lambit';
+                        taskObj.mapDistrib = t.getAttribute('mapDistrib') || 'lambit';
+                        taskObj.reserveId = t.getAttribute('reserveId') || 'lambit';
+                        taskObj.alloc = t.getAttribute('alloc') || 'lambit'; // for enumerators
+                    }
                     catTasks.push(taskObj);
                 }
                 taskData.push({ category: categoryName, tasks: catTasks });
@@ -134,6 +145,72 @@ function renderPage() {
                         ${pillsHtml}
                     </div>
                 `;
+            } else if (task.type === 'user-group') {
+                const subTasks = [
+                    { label: 'नियुक्ति', key: 'niyukti' },
+                    { label: 'HLB आवंटन', key: 'hlbAlloc' },
+                    { label: 'ID वितरण', key: 'idCard' },
+                    { label: 'मैप वितरण', key: 'mapDistrib' },
+                    { label: 'Reserve ID', key: 'reserveId' }
+                ];
+
+                if (task.id === 'sup1') {
+                    subTasks.splice(1, 0, { label: 'सर्किल आवंटन', key: 'circleAlloc' });
+                    subTasks.splice(2, 0, { label: 'प्रगणक आवंटन', key: 'pragnakAlloc' });
+                } else {
+                    subTasks.splice(1, 0, { label: 'आवंटन', key: 'alloc' });
+                }
+
+                // Calculate group progress
+                totalTasks += subTasks.length;
+                subTasks.forEach(st => {
+                    if (task[st.key] === 'purn') totalPurn += 1;
+                });
+
+                if (isAdminPage) {
+                    let adminInputs = subTasks.map(st => `
+                        <div class="admin-sub-status">
+                            <label>${st.label}</label>
+                            <select onchange="updateUserGroupStatus('${task.id}', '${st.key}', this.value)">
+                                <option value="lambit" ${task[st.key] === 'lambit' ? 'selected' : ''}>लंबित (Pending)</option>
+                                <option value="apurn" ${task[st.key] === 'apurn' ? 'selected' : ''}>अपूर्ण (Partial)</option>
+                                <option value="purn" ${task[st.key] === 'purn' ? 'selected' : ''}>पूर्ण (Done)</option>
+                            </select>
+                        </div>
+                    `).join('');
+
+                    taskHtml += `
+                        <div class="task-card" style="grid-column: 1 / -1;">
+                            <span class="task-name">${task.name}</span>
+                            <div style="margin-bottom:10px;">
+                                <label style="font-size:11px; font-weight:700;">Reserve संख्या:</label>
+                                <input type="number" class="counter-input" value="${task.reserveCount}" onchange="updateUserGroupField('${task.id}', 'reserveCount', this.value)">
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;">
+                                ${adminInputs}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    let statusGridHtml = subTasks.map(st => `
+                        <div class="sub-status-item">
+                            <span class="sub-status-label">${st.label}</span>
+                            <span class="status-tag status-${task[st.key]}" style="padding: 2px 6px; font-size: 10px;">${getStatusLabel(task[st.key])}</span>
+                        </div>
+                    `).join('');
+
+                    taskHtml += `
+                        <div class="task-card" style="grid-column: 1 / -1;">
+                            <span class="task-name">${task.name}</span>
+                            <div style="margin-bottom:10px; font-size:12px; font-weight:700; color:var(--secondary);">
+                                <i class="fas fa-users-cog"></i> Reserve संख्या: ${task.reserveCount}
+                            </div>
+                            <div class="status-grid">
+                                ${statusGridHtml}
+                            </div>
+                        </div>
+                    `;
+                }
             } else if (task.type === 'cell-info') {
                 // We don't weight cell info in overall progress if it's just info
                 
@@ -435,6 +512,28 @@ function updateStaffDetail(id, index, field, value) {
     });
 }
 
+// User Group Functions
+function updateUserGroupStatus(id, key, value) {
+    taskData.forEach(cat => {
+        cat.tasks.forEach(task => {
+            if (task.id === id) {
+                task[key] = value;
+            }
+        });
+    });
+    calculateOverallProgress();
+}
+
+function updateUserGroupField(id, key, value) {
+    taskData.forEach(cat => {
+        cat.tasks.forEach(task => {
+            if (task.id === id) {
+                task[key] = parseInt(value) || 0;
+            }
+        });
+    });
+}
+
 function calculateOverallProgress() {
     let totalPurn = 0;
     let totalTasks = 0;
@@ -446,7 +545,16 @@ function calculateOverallProgress() {
             } else if (t.type === 'map-stats') {
                 totalTasks += 1;
                 totalPurn += (t.checked / t.total);
-            } else if (t.type === 'info') {
+            } else if (t.type === 'user-group') {
+                const subKeys = ['niyukti', 'hlbAlloc', 'idCard', 'mapDistrib', 'reserveId'];
+                if (t.id === 'sup1') subKeys.push('circleAlloc', 'pragnakAlloc');
+                else subKeys.push('alloc');
+                
+                totalTasks += subKeys.length;
+                subKeys.forEach(k => {
+                    if (t[k] === 'purn') totalPurn += 1;
+                });
+            } else if (t.type === 'info' || t.type === 'cell-info') {
                 // skip
             } else {
                 totalTasks += 1;
@@ -482,6 +590,11 @@ function exportData() {
             } else if (task.type === 'cell-info') {
                 const staffListJson = JSON.stringify(task.staffList).replace(/"/g, '&quot;');
                 xml += `        <task id="${task.id}" name="${task.name}" type="cell-info" staffCount="${task.staffCount}" computers="${task.computers}" printers="${task.printers}" staffList="${staffListJson}" />\n`;
+            } else if (task.type === 'user-group') {
+                let attrs = `reserveCount="${task.reserveCount}" niyukti="${task.niyukti}" hlbAlloc="${task.hlbAlloc}" idCard="${task.idCard}" mapDistrib="${task.mapDistrib}" reserveId="${task.reserveId}"`;
+                if (task.id === 'sup1') attrs += ` circleAlloc="${task.circleAlloc}" pragnakAlloc="${task.pragnakAlloc}"`;
+                else attrs += ` alloc="${task.alloc}"`;
+                xml += `        <task id="${task.id}" name="${task.name}" type="user-group" ${attrs} />\n`;
             } else {
                 xml += `        <task id="${task.id}" name="${task.name}" status="${task.status}" />\n`;
             }
