@@ -1352,9 +1352,13 @@ function generateReport() {
             <h2>भिनाय ब्लॉक, जिला अजमेर (राजस्थान)</h2>
         </div>
 
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+            <div><strong>पत्रांक:</strong> भिनाय/जनगणना/2027/${today.getFullYear()}</div>
+            <div style="text-align:right;"><strong>दिनांक:</strong> ${dateStr}</div>
+        </div>
+
         <div class="meta">
             <div><strong>सेवा में,</strong><br>श्रीमान तहसीलदार महोदय,<br>तहसील भिनाय, जिला अजमेर</div>
-            <div style="text-align:right;"><strong>दिनांक:</strong> ${dateStr}<br><strong>पत्रांक:</strong> भिनाय/जनगणना/2027/${today.getFullYear()}</div>
         </div>
 
         <div class="subject">विषय: जनगणना 2027 की पूर्व तैयारी का प्रगति प्रतिवेदन</div>
