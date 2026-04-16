@@ -61,6 +61,7 @@ async function loadData() {
                         taskObj.idCard = t.getAttribute('idCard') || 'lambit';
                         taskObj.mapDistrib = t.getAttribute('mapDistrib') || 'lambit';
                         taskObj.reserveId = t.getAttribute('reserveId') || 'lambit';
+                        taskObj.uploadedCount = parseInt(t.getAttribute('uploadedCount')) || 0;
                         taskObj.portalDeadline = t.getAttribute('portalDeadline') || '';
                         taskObj.alloc = t.getAttribute('alloc') || 'lambit'; // for enumerators
                     }
