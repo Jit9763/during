@@ -202,7 +202,7 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card">
                             <span class="task-name">${task.name}</span>
-                            ${getDeadlineTag(task.deadline, task.status)}
+                            ${getDeadlineTag(task.deadline, task.status, task.id)}
                             <div class="counter-info">
                                 <span>प्रगति: ${task.completed} / ${task.total}</span>
                                 <span>${percent}%</span>
@@ -220,7 +220,7 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card">
                             <span class="task-name">${task.name}</span>
-                            ${getDeadlineTag(task.deadline, task.status)}
+                            ${getDeadlineTag(task.deadline, task.status, task.id)}
                             <div class="counter-info">
                                 <span>प्रगति: ${task.completed} / ${task.total}</span>
                                 <span>${percent}%</span>
@@ -242,7 +242,7 @@ function renderPage() {
                 taskHtml += `
                     <div class="task-card" style="background: #e3f2fd; border: 1.5px solid var(--secondary);">
                         <span class="task-name" style="color: var(--primary); margin-bottom:5px;"><i class="fas fa-info-circle"></i> ${task.name}</span>
-                        ${getDeadlineTag(task.deadline, 'purn')}
+                        ${getDeadlineTag(task.deadline, 'purn', task.id)}
                         ${pillsHtml}
                     </div>
                 `;
@@ -287,7 +287,7 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card" style="grid-column: 1 / -1;">
                              <span class="task-name">${task.name}</span>
-                             ${getDeadlineTag(task.deadline, task.niyukti === 'purn' && task.uploadedCount >= task.totalCount ? 'purn' : 'lambit')}
+                             ${getDeadlineTag(task.deadline, task.niyukti === 'purn' && task.uploadedCount >= task.totalCount ? 'purn' : 'lambit', task.id)}
                              <div style="margin-bottom:15px; display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:10px;">
                                 <div class="counter-input-group">
                                     <label style="font-size:11px;">कुल संख्या:</label>
@@ -326,7 +326,7 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card" style="grid-column: 1 / -1;">
                             <span class="task-name">${task.name}</span>
-                            ${getDeadlineTag(task.deadline, task.niyukti === 'purn' && task.uploadedCount >= task.totalCount ? 'purn' : 'lambit')}
+                            ${getDeadlineTag(task.deadline, task.niyukti === 'purn' && task.uploadedCount >= task.totalCount ? 'purn' : 'lambit', task.id)}
                             <div style="margin-bottom:10px; font-size:12px; font-weight:700; color:var(--secondary); display:flex; flex-wrap:wrap; gap:15px;">
                                 <span><i class="fas fa-users"></i> कुल: ${task.totalCount}</span>
                                 <span><i class="fas fa-users-cog"></i> Reserve: ${task.reserveCount}</span>
@@ -356,7 +356,7 @@ function renderPage() {
                     let adminInputs = items.map(it => `
                         <div class="task-card">
                             <span class="task-name" style="font-size:14px;">${it.label}</span>
-                            ${getDeadlineTag(task.deadline, task[it.key])}
+                            ${getDeadlineTag(task.deadline, task[it.key], task.id)}
                             <div class="radio-group">
                                 <div class="radio-option"><input type="radio" id="tl-purn-${task.id}-${it.key}" name="tl-${task.id}-${it.key}" value="purn" ${task[it.key] === 'purn' ? 'checked' : ''} onchange="updateGenericField('${task.id}', '${it.key}', this.value)"><label for="tl-purn-${task.id}-${it.key}">पूर्ण</label></div>
                                 <div class="radio-option"><input type="radio" id="tl-apurn-${task.id}-${it.key}" name="tl-${task.id}-${it.key}" value="apurn" ${task[it.key] === 'apurn' ? 'checked' : ''} onchange="updateGenericField('${task.id}', '${it.key}', this.value)"><label for="tl-apurn-${task.id}-${it.key}">अपूर्ण</label></div>
@@ -369,7 +369,7 @@ function renderPage() {
                     let logisHtml = items.map(it => `
                         <div class="task-card">
                             <span class="task-name">${it.label}</span>
-                            ${getDeadlineTag(task.deadline, task[it.key])}
+                            ${getDeadlineTag(task.deadline, task[it.key], task.id)}
                             <span class="status-tag status-${task[it.key]}">${getStatusLabel(task[it.key])}</span>
                         </div>
                     `).join('');
@@ -660,7 +660,7 @@ function renderPage() {
                 totalTasks += 1;
                 totalPurn += (task.checked / task.total);
 
-                let deadlineHtml = task.deadline ? `<div class="deadline-tag"><i class="fas fa-calendar-alt"></i> समय सीमा: ${task.deadline}</div>` : '';
+                let deadlineHtml = getDeadlineTag(task.deadline, task.status, task.id);
 
                 if (isAdminPage) {
                     taskHtml += `
@@ -725,7 +725,7 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card">
                             <span class="task-name">${task.name}</span>
-                            ${task.deadline ? `<div class="deadline-tag"><i class="fas fa-calendar-alt"></i> समय सीमा: ${task.deadline}</div>` : ''}
+                            ${getDeadlineTag(task.deadline, task.status, task.id)}
                             <div class="radio-group">
                                 <div class="radio-option">
                                     <input type="radio" id="purn-${task.id}" name="status-${task.id}" value="purn" ${task.status === 'purn' ? 'checked' : ''} onchange="updateTaskStatus('${task.id}', 'purn')">
@@ -999,18 +999,42 @@ function calculateOverallProgress() {
     updateDailyScheduler();
 }
 
-function getDeadlineTag(deadline, status) {
-    if (!deadline) return '';
-    if (status === 'purn') return `<span style="color:var(--success); font-size:11px;"><i class="fas fa-check-circle"></i> समय पर पूर्ण</span>`;
+function getDeadlineTag(deadline, status, taskId) {
+    let editHtml = '';
+    // Admin page: show editable date input
+    if (isAdminPage && taskId) {
+        editHtml = `<input type="date" class="counter-input" style="width:130px; font-size:11px; padding:3px 5px; margin-right:8px;" value="${deadline || ''}" onchange="updateDeadline('${taskId}', this.value)">`;
+    }
+
+    if (!deadline) return editHtml || '';
     
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    const dl = new Date(deadline);
-    const diff = Math.ceil((dl - today) / (1000 * 60 * 60 * 24));
-    
-    if (diff < 0) return `<span class="deadline-critical"><i class="fas fa-exclamation-triangle"></i>逾期 (${Math.abs(diff)} din)</span>`;
-    if (diff <= 1) return `<span class="deadline-warning"><i class="fas fa-clock"></i> केवल 1 दिन बचा!</span>`;
-    return `<span class="deadline-normal"><i class="fas fa-calendar-alt"></i> ${diff} दिन शेष (Deadline: ${deadline})</span>`;
+    let statusHtml = '';
+    if (status === 'purn') {
+        statusHtml = `<span style="color:var(--success); font-size:11px;"><i class="fas fa-check-circle"></i> समय पर पूर्ण</span>`;
+    } else {
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        const dl = new Date(deadline);
+        const diff = Math.ceil((dl - today) / (1000 * 60 * 60 * 24));
+        
+        if (diff < 0) statusHtml = `<span class="deadline-critical"><i class="fas fa-exclamation-triangle"></i> ${Math.abs(diff)} दिन विलंब</span>`;
+        else if (diff <= 1) statusHtml = `<span class="deadline-warning"><i class="fas fa-clock"></i> केवल 1 दिन बचा!</span>`;
+        else statusHtml = `<span class="deadline-normal"><i class="fas fa-calendar-alt"></i> ${diff} दिन शेष (${deadline})</span>`;
+    }
+
+    return `<div style="display:flex; align-items:center; flex-wrap:wrap; gap:5px; margin:4px 0;">${editHtml}${statusHtml}</div>`;
+}
+
+function updateDeadline(taskId, newDate) {
+    taskData.forEach(cat => {
+        cat.tasks.forEach(t => {
+            if (t.id === taskId) {
+                t.deadline = newDate;
+            }
+        });
+    });
+    calculateOverallProgress();
+    renderPage();
 }
 
 function updateDailyScheduler() {
