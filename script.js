@@ -13,11 +13,13 @@ async function loadData(forceXML = false) {
             // Load from Cloud (Google Sheets)
             const response = await fetch(apiUrl);
             const data = await response.json();
-            if (data.xml) {
+            if (data.xml && data.xml.includes('<category')) {
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(data.xml, "text/xml");
                 parseXMLToData(xmlDoc);
                 return;
+            } else {
+                console.warn("Cloud data is empty, falling back to local files.");
             }
         }
         
@@ -905,7 +907,6 @@ function quickFinishBatch(id, index) {
     calculateOverallProgress();
 }
 
-// 3. Progress Calculation (Category & Overall)
 // 3. Progress Calculation (Category & Overall)
 function calculateOverallProgress() {
     let totalPurnGlobal = 0;
