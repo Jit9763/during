@@ -216,8 +216,12 @@ function renderPage() {
                                     <input type="number" class="counter-input" value="${task.reserveCount}" onchange="updateUserGroupField('${task.id}', 'reserveCount', this.value)">
                                 </div>
                                 <div class="counter-input-group">
-                                    <label style="font-size:11px;">पोर्टल अपलोड:</label>
+                                    <label style="font-size:11px;">पोर्टल अपलोड (Main):</label>
                                     <input type="number" class="counter-input" value="${task.uploadedCount}" onchange="updateUserGroupField('${task.id}', 'uploadedCount', this.value)">
+                                </div>
+                                <div class="counter-input-group">
+                                    <label style="font-size:11px;">पोर्टल अपलोड (Reserve):</label>
+                                    <input type="number" class="counter-input" value="${task.reserveUploadedCount}" onchange="updateUserGroupField('${task.id}', 'reserveUploadedCount', this.value)">
                                 </div>
                                 <div class="counter-input-group">
                                     <label style="font-size:11px;">अपलोड तिथि:</label>
