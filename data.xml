@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <census_plan>
     <category name="प्रशासनिक और मैपिंग (Administrative Mapping)">
-        <task id="1" name="चार्ज प्रोफाइल और ऑफिस विवरण अपडेट करना" status="purn" deadline="2026-04-16" />
-        <task id="info1" name="हाउस लिस्टिंग ब्लॉक (HLB) विवरण" type="info" content="कुल: 242 | ग्रामीण: 242 | शहरी: 0" deadline="2026-04-17" />
-        <task id="2" name="242 हाउस-लिस्टिंग ब्लॉक (HLB) का निर्माण" status="purn" deadline="2026-04-17" />
-        <task id="3" name="39 सुपरवाइजर सर्किलों का निर्माण" status="purn" deadline="2026-04-18" />
+        <task id="1" name="चार्ज प्रोफाइल और ऑफिस विवरण अपडेट करना" status="purn" deadline="2026-04-10" />
+        <task id="info1" name="हाउस लिस्टिंग ब्लॉक (HLB) विवरण" type="info" content="कुल: 242 | ग्रामीण: 242 | शहरी: 0" deadline="2026-04-12" />
+        <task id="2" name="242 हाउस-लिस्टिंग ब्लॉक (HLB) का निर्माण" status="purn" deadline="2026-04-12" />
+        <task id="3" name="39 सुपरवाइजर सर्किलों का निर्माण" status="purn" deadline="2026-04-14" />
+        <task id="cell1" name="जनगणना सेल (Census Cell) विवरण" type="cell-info" staffCount="0" computers="0" printers="0" staffList="[]" deadline="2026-04-14" />
+        <task id="6" name="सभी 242 ब्लॉकों को पोर्टल पर 'Final Freeze' करना" status="lambit" deadline="2026-04-15" />
         <task id="4" name="सभी 242 ब्लॉकों की जियो-टैगिंग (Geo-Tagging)" type="counter" total="242" completed="150" deadline="2026-04-20" />
-        <task id="5" name="सभी 242 ब्लॉकों का सीमांकन (Demarcation)" type="counter" total="242" completed="120" deadline="2026-04-21" />
-        <task id="5b" name="पोर्टल पर HLB विवरण (Description) भरना" status="apurn" deadline="2026-04-22" />
-        <task id="m1" name="हाउस लिस्टिंग मैप (97 Maps) की जांच" type="map-stats" total="97" checked="0" correct="0" incorrect="0" deadline="2026-04-23" status="apurn" />
-        <task id="cell1" name="जनगणना सेल (Census Cell) विवरण" type="cell-info" staffCount="0" computers="0" printers="0" staffList="[]" deadline="2026-04-18" />
-        <task id="6" name="सभी 242 ब्लॉकों को पोर्टल पर 'Final Freeze' करना" status="lambit" deadline="2026-04-24" />
+        <task id="5" name="सभी 242 ब्लॉकों का सीमांकन (Demarcation)" type="counter" total="242" completed="120" deadline="2026-04-22" />
+        <task id="5b" name="पोर्टल पर HLB विवरण (Description) भरना" status="apurn" deadline="2026-04-24" />
+        <task id="m1" name="हाउस लिस्टिंग मैप (97 Maps) की जांच" type="map-stats" total="97" checked="0" correct="0" incorrect="0" deadline="2026-04-27" status="apurn" />
     </category>
     
     <category name="उपयोगकर्ता प्रबंधन (User Management)">
