@@ -1,15 +1,64 @@
 :root {
-    --primary: #1a237e;
-    --secondary: #3949ab;
-    --accent: #ff9800;
-    --success: #2e7d32;
-    --warning: #ef6c00;
-    --danger: #c62828;
-    --bg: #f4f7f9;
-    --card: #ffffff;
-    --text: #2c3e50;
+    --primary: #1e293b;
+    --secondary: #334155;
+    --accent: #3b82f6;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --bg: #f8fafc;
+    --white: #ffffff;
+    --purple: #9c27b0;
     --glass: rgba(255, 255, 255, 0.8);
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+.deadline-critical { color: var(--danger); font-weight: 800; animation: blink 1s infinite; }
+.deadline-warning { color: var(--warning); font-weight: 700; }
+.deadline-normal { color: #64748b; font-size: 11px; }
+
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--accent);
+    padding-left: 15px;
+}
+
+.category-progress-container {
+    width: 150px;
+    background: #e2e8f0;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.category-progress-bar {
+    height: 100%;
+    background: var(--success);
+    transition: width 0.3s ease;
+}
+
+.scheduler-banner {
+    background: var(--primary);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    border-left: 6px solid var(--warning);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 * {

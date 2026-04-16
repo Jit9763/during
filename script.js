@@ -24,7 +24,8 @@ async function loadData(forceXML = false) {
                         id: t.getAttribute('id'),
                         name: t.getAttribute('name'),
                         status: t.getAttribute('status') || 'lambit',
-                        type: t.getAttribute('type') || 'simple'
+                        type: t.getAttribute('type') || 'simple',
+                        deadline: t.getAttribute('deadline') || ''
                     };
                     if (taskObj.type === 'counter') {
                         taskObj.total = parseInt(t.getAttribute('total')) || 242;
@@ -115,7 +116,18 @@ function renderPage() {
         const section = document.createElement('div');
         section.className = 'category-section';
         
-        let taskHtml = `<h2 class="category-title">${cat.category}</h2><div class="task-grid">`;
+        let headerHtml = `
+            <div class="category-header">
+                <h2 class="category-title" style="margin-bottom:0;">${cat.category}</h2>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <div class="category-progress-container">
+                        <div class="category-progress-bar" style="width: ${cat.progress || 0}%"></div>
+                    </div>
+                    <span style="font-size:12px; font-weight:700; color:var(--success);">${cat.progress || 0}%</span>
+                </div>
+            </div>
+        `;
+        let taskHtml = headerHtml + `<div class="task-grid">`;
         
         cat.tasks.forEach((task, taskIdx) => {
             let taskWeight = 1;
@@ -133,6 +145,7 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card">
                             <span class="task-name">${task.name}</span>
+                            ${getDeadlineTag(task.deadline, task.status)}
                             <div class="counter-info">
                                 <span>प्रगति: ${task.completed} / ${task.total}</span>
                                 <span>${percent}%</span>
@@ -150,6 +163,7 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card">
                             <span class="task-name">${task.name}</span>
+                            ${getDeadlineTag(task.deadline, task.status)}
                             <div class="counter-info">
                                 <span>प्रगति: ${task.completed} / ${task.total}</span>
                                 <span>${percent}%</span>
@@ -171,6 +185,7 @@ function renderPage() {
                 taskHtml += `
                     <div class="task-card" style="background: #e3f2fd; border: 1.5px solid var(--secondary);">
                         <span class="task-name" style="color: var(--primary); margin-bottom:5px;"><i class="fas fa-info-circle"></i> ${task.name}</span>
+                        ${getDeadlineTag(task.deadline, 'purn')}
                         ${pillsHtml}
                     </div>
                 `;
@@ -215,7 +230,8 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card" style="grid-column: 1 / -1;">
                              <span class="task-name">${task.name}</span>
-                            <div style="margin-bottom:15px; display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:10px;">
+                             ${getDeadlineTag(task.deadline, task.niyukti === 'purn' && task.uploadedCount >= task.totalCount ? 'purn' : 'lambit')}
+                             <div style="margin-bottom:15px; display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:10px;">
                                 <div class="counter-input-group">
                                     <label style="font-size:11px;">कुल संख्या:</label>
                                     <input type="number" class="counter-input" value="${task.totalCount}" onchange="updateUserGroupField('${task.id}', 'totalCount', this.value)">
@@ -253,6 +269,7 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card" style="grid-column: 1 / -1;">
                             <span class="task-name">${task.name}</span>
+                            ${getDeadlineTag(task.deadline, task.niyukti === 'purn' && task.uploadedCount >= task.totalCount ? 'purn' : 'lambit')}
                             <div style="margin-bottom:10px; font-size:12px; font-weight:700; color:var(--secondary); display:flex; flex-wrap:wrap; gap:15px;">
                                 <span><i class="fas fa-users"></i> कुल: ${task.totalCount}</span>
                                 <span><i class="fas fa-users-cog"></i> Reserve: ${task.reserveCount}</span>
@@ -282,6 +299,7 @@ function renderPage() {
                     let adminInputs = items.map(it => `
                         <div class="task-card">
                             <span class="task-name" style="font-size:14px;">${it.label}</span>
+                            ${getDeadlineTag(task.deadline, task[it.key])}
                             <div class="radio-group">
                                 <div class="radio-option"><input type="radio" id="tl-purn-${task.id}-${it.key}" name="tl-${task.id}-${it.key}" value="purn" ${task[it.key] === 'purn' ? 'checked' : ''} onchange="updateGenericField('${task.id}', '${it.key}', this.value)"><label for="tl-purn-${task.id}-${it.key}">पूर्ण</label></div>
                                 <div class="radio-option"><input type="radio" id="tl-apurn-${task.id}-${it.key}" name="tl-${task.id}-${it.key}" value="apurn" ${task[it.key] === 'apurn' ? 'checked' : ''} onchange="updateGenericField('${task.id}', '${it.key}', this.value)"><label for="tl-apurn-${task.id}-${it.key}">अपूर्ण</label></div>
@@ -294,6 +312,7 @@ function renderPage() {
                     let logisHtml = items.map(it => `
                         <div class="task-card">
                             <span class="task-name">${it.label}</span>
+                            ${getDeadlineTag(task.deadline, task[it.key])}
                             <span class="status-tag status-${task[it.key]}">${getStatusLabel(task[it.key])}</span>
                         </div>
                     `).join('');
@@ -653,6 +672,7 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card">
                             <span class="task-name">${task.name}</span>
+                            ${task.deadline ? `<div class="deadline-tag"><i class="fas fa-calendar-alt"></i> समय सीमा: ${task.deadline}</div>` : ''}
                             <div class="radio-group">
                                 <div class="radio-option">
                                     <input type="radio" id="purn-${task.id}" name="status-${task.id}" value="purn" ${task.status === 'purn' ? 'checked' : ''} onchange="updateTaskStatus('${task.id}', 'purn')">
@@ -870,57 +890,105 @@ function quickFinishBatch(id, index) {
     calculateOverallProgress();
 }
 
+// 3. Progress Calculation (Category & Overall)
+// 3. Progress Calculation (Category & Overall)
 function calculateOverallProgress() {
-    let totalPurn = 0;
-    let totalTasks = 0;
+    let totalPurnGlobal = 0;
+    let totalTasksGlobal = 0;
+
     taskData.forEach(cat => {
+        let catPurn = 0;
+        let catTasks = 0;
+
         cat.tasks.forEach(t => {
             if (t.type === 'counter') {
-                totalTasks += 1;
-                totalPurn += (t.completed / t.total);
+                catTasks += 1;
+                catPurn += (t.completed / t.total) || 0;
             } else if (t.type === 'map-stats') {
-                totalTasks += 1;
-                totalPurn += (t.checked / t.total);
+                catTasks += 1;
+                catPurn += (t.checked / t.total) || 0;
             } else if (t.type === 'user-group') {
                 const subKeys = ['niyukti', 'hlbAlloc', 'idCard', 'mapDistrib', 'reserveId'];
                 if (t.id === 'sup1') subKeys.push('circleAlloc', 'pragnakAlloc');
                 else subKeys.push('alloc');
                 
-                totalTasks += subKeys.length + 2; // +2 for Main and Reserve uploads
-                subKeys.forEach(k => {
-                    if (t[k] === 'purn') totalPurn += 1;
-                });
-                totalPurn += (t.uploadedCount / t.totalCount) || 0;
-                totalPurn += (t.reserveUploadedCount / t.reserveCount) || 0;
+                catTasks += subKeys.length + 2; 
+                subKeys.forEach(k => { if (t[k] === 'purn') catPurn += 1; });
+                catPurn += (t.uploadedCount / t.totalCount) || 0;
+                catPurn += (t.reserveUploadedCount / t.reserveCount) || 0;
             } else if (t.type === 'training-summary') {
-                totalTasks += 1;
-                totalPurn += (t.completedBatches / t.totalBatches);
-            } else if (t.type === 'logistics-checklist') {
-                // Not weighted significantly or combined as one
-                const subKeys = ['internet', 'sound', 'food', 'water'];
-                totalTasks += subKeys.length;
-                subKeys.forEach(k => {
-                    if (t[k] === 'purn') totalPurn += 1;
-                });
+                catTasks += 1;
+                catPurn += (t.completedBatches / t.totalBatches) || 0;
             } else if (t.type === 'training-logistics') {
                 const subKeys = ['centerSelection', 'permissionLetter'];
-                totalTasks += subKeys.length;
-                subKeys.forEach(k => {
-                    if (t[k] === 'purn') totalPurn += 1;
-                });
-            } else if (t.type === 'info' || t.type === 'cell-info') {
-                // skip
-            } else {
-                totalTasks += 1;
-                if (t.status === 'purn') totalPurn += 1;
+                catTasks += subKeys.length;
+                subKeys.forEach(k => { if (t[k] === 'purn') catPurn += 1; });
+            } else if (t.type === 'logistics-checklist') {
+                const subKeys = ['internet', 'sound', 'food', 'water'];
+                catTasks += subKeys.length;
+                subKeys.forEach(k => { if (t[k] === 'purn') catPurn += 1; });
+            } else if (t.type !== 'info' && t.type !== 'cell-info' && t.type !== 'training-centers') {
+                catTasks += 1;
+                if (t.status === 'purn') catPurn += 1;
             }
         });
+
+        cat.progress = catTasks > 0 ? Math.round((catPurn / catTasks) * 100) : 0;
+        totalPurnGlobal += catPurn;
+        totalTasksGlobal += catTasks;
     });
-    const percent = Math.round((totalPurn / totalTasks) * 100);
+
+    const percent = totalTasksGlobal > 0 ? Math.round((totalPurnGlobal / totalTasksGlobal) * 100) : 0;
     const bar = document.getElementById('overall-bar');
     const val = document.getElementById('progress-val');
     if (bar) bar.style.width = percent + '%';
     if (val) val.innerText = percent + '%';
+    
+    updateDailyScheduler();
+}
+
+function getDeadlineTag(deadline, status) {
+    if (!deadline) return '';
+    if (status === 'purn') return `<span style="color:var(--success); font-size:11px;"><i class="fas fa-check-circle"></i> समय पर पूर्ण</span>`;
+    
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const dl = new Date(deadline);
+    const diff = Math.ceil((dl - today) / (1000 * 60 * 60 * 24));
+    
+    if (diff < 0) return `<span class="deadline-critical"><i class="fas fa-exclamation-triangle"></i>逾期 (${Math.abs(diff)} din)</span>`;
+    if (diff <= 1) return `<span class="deadline-warning"><i class="fas fa-clock"></i> केवल 1 दिन बचा!</span>`;
+    return `<span class="deadline-normal"><i class="fas fa-calendar-alt"></i> ${diff} दिन शेष (Deadline: ${deadline})</span>`;
+}
+
+function updateDailyScheduler() {
+    const scheduler = document.getElementById('daily-scheduler');
+    if (!scheduler) return;
+    
+    const today = new Date().toISOString().split('T')[0];
+    const urgentTasks = [];
+    
+    taskData.forEach(cat => {
+        cat.tasks.forEach(t => {
+            if (t.status !== 'purn' && t.deadline && (t.deadline <= today)) {
+                urgentTasks.push(t.name);
+            }
+        });
+    });
+
+    if (urgentTasks.length > 0) {
+        scheduler.innerHTML = `
+            <div class="scheduler-banner">
+                <i class="fas fa-bullhorn fa-2x"></i>
+                <div>
+                    <strong style="display:block; font-size:16px;">आज का मुख्य कार्य (Today's Tasks):</strong>
+                    <span style="font-size:13px;">${urgentTasks.slice(0,2).join(' | ')} ${urgentTasks.length > 2 ? '... (+'+(urgentTasks.length-2)+')' : ''}</span>
+                </div>
+            </div>
+        `;
+    } else {
+        scheduler.innerHTML = '';
+    }
 }
 
 // 5. Reset Data (Sync from XML)
