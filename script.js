@@ -1,11 +1,12 @@
 let taskData = [];
+const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbwTn--CBcO4cqSnFCTSFx2h_uGmPijj-KzqvZxD5sDRmo6870aDwjJrcz6Q4sxaA80Jqw/exec';
 const isAdminPage = window.location.pathname.includes('admin.html');
 
 // 1. Load Data
 async function loadData(forceXML = false) {
-    const apiUrl = localStorage.getItem('census_api_url');
+    let apiUrl = localStorage.getItem('census_api_url') || DEFAULT_API_URL;
     const apiInput = document.getElementById('api-url');
-    if (apiInput) apiInput.value = apiUrl || '';
+    if (apiInput) apiInput.value = apiUrl;
 
     try {
         if (apiUrl && !forceXML) {
