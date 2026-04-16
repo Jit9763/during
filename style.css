@@ -189,6 +189,23 @@ header h1 {
     text-align: center;
 }
 
+/* Info Pills for HLB card */
+.info-btn-group {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.info-pill {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    background: #e3f2fd;
+    color: var(--primary);
+    border: 1px solid var(--secondary);
+}
+
 /* Admin Radio Buttons */
 .radio-group {
     display: flex;
@@ -216,10 +233,10 @@ header h1 {
     transition: 0.2s;
 }
 
-/* Specific radio colors when checked */
-#purn:checked + label { background: var(--success); color: white; }
-#apurn:checked + label { background: var(--warning); color: white; }
-#lambit:checked + label { background: var(--danger); color: white; }
+/* Specific radio colors when checked - Fix: using attribute selector instead of fixed IDs */
+.radio-option input[value="purn"]:checked + label { background: var(--success); color: white; }
+.radio-option input[value="apurn"]:checked + label { background: var(--warning); color: white; }
+.radio-option input[value="lambit"]:checked + label { background: var(--danger); color: white; }
 
 /* Login Page */
 .login-container {

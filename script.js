@@ -104,10 +104,17 @@ function renderPage() {
                     `;
                 }
             } else if (task.type === 'info') {
+                const parts = task.content.split('|');
+                let pillsHtml = '<div class="info-btn-group">';
+                parts.forEach(p => {
+                    pillsHtml += `<span class="info-pill">${p.trim()}</span>`;
+                });
+                pillsHtml += '</div>';
+
                 taskHtml += `
-                    <div class="task-card" style="background: var(--bg); border: 1px dashed var(--secondary);">
-                        <span class="task-name" style="color: var(--secondary);"><i class="fas fa-info-circle"></i> ${task.name}</span>
-                        <p style="font-size: 14px; font-weight: 600;">${task.content}</p>
+                    <div class="task-card" style="background: #e3f2fd; border: 1.5px solid var(--secondary);">
+                        <span class="task-name" style="color: var(--primary); margin-bottom:5px;"><i class="fas fa-info-circle"></i> ${task.name}</span>
+                        ${pillsHtml}
                     </div>
                 `;
             } else {
