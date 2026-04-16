@@ -3,7 +3,23 @@ const isAdminPage = window.location.pathname.includes('admin.html');
 
 // 1. Load Data
 async function loadData(forceXML = false) {
+    const apiUrl = localStorage.getItem('census_api_url');
+    const apiInput = document.getElementById('api-url');
+    if (apiInput) apiInput.value = apiUrl || '';
+
     try {
+        if (apiUrl && !forceXML) {
+            // Load from Cloud (Google Sheets)
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            if (data.xml) {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(data.xml, "text/xml");
+                parseXMLToData(xmlDoc);
+                return;
+            }
+        }
+        
         const localData = localStorage.getItem('census_tasks');
         if (localData && !forceXML) {
             taskData = JSON.parse(localData);
@@ -13,95 +29,92 @@ async function loadData(forceXML = false) {
             const text = await response.text();
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(text, "text/xml");
-            
-            const categories = xmlDoc.getElementsByTagName('category');
-            for (let cat of categories) {
-                let categoryName = cat.getAttribute('name');
-                let tasks = cat.getElementsByTagName('task');
-                let catTasks = [];
-                for (let t of tasks) {
-                    let taskObj = {
-                        id: t.getAttribute('id'),
-                        name: t.getAttribute('name'),
-                        status: t.getAttribute('status') || 'lambit',
-                        type: t.getAttribute('type') || 'simple',
-                        deadline: t.getAttribute('deadline') || ''
-                    };
-                    if (taskObj.type === 'counter') {
-                        taskObj.total = parseInt(t.getAttribute('total')) || 242;
-                        taskObj.completed = parseInt(t.getAttribute('completed')) || 0;
-                    }
-                    if (taskObj.type === 'info') {
-                        taskObj.content = t.getAttribute('content') || '';
-                    }
-                    if (taskObj.type === 'map-stats') {
-                        taskObj.total = parseInt(t.getAttribute('total')) || 97;
-                        taskObj.checked = parseInt(t.getAttribute('checked')) || 0;
-                        taskObj.correct = parseInt(t.getAttribute('correct')) || 0;
-                        taskObj.incorrect = parseInt(t.getAttribute('incorrect')) || 0;
-                        taskObj.deadline = t.getAttribute('deadline') || '';
-                    }
-                    if (taskObj.type === 'cell-info') {
-                        taskObj.staffCount = parseInt(t.getAttribute('staffCount')) || 0;
-                        taskObj.computers = parseInt(t.getAttribute('computers')) || 0;
-                        taskObj.printers = parseInt(t.getAttribute('printers')) || 0;
-                        try {
-                            taskObj.staffList = JSON.parse(t.getAttribute('staffList') || '[]');
-                        } catch (e) {
-                            taskObj.staffList = [];
-                        }
-                    }
-                    if (taskObj.type === 'user-group') {
-                        taskObj.totalCount = parseInt(t.getAttribute('totalCount')) || 0;
-                        taskObj.reserveCount = parseInt(t.getAttribute('reserveCount')) || 0;
-                        taskObj.niyukti = t.getAttribute('niyukti') || 'lambit';
-                        taskObj.circleAlloc = t.getAttribute('circleAlloc') || 'lambit';
-                        taskObj.pragnakAlloc = t.getAttribute('pragnakAlloc') || 'lambit';
-                        taskObj.hlbAlloc = t.getAttribute('hlbAlloc') || 'lambit';
-                        taskObj.idCard = t.getAttribute('idCard') || 'lambit';
-                        taskObj.mapDistrib = t.getAttribute('mapDistrib') || 'lambit';
-                        taskObj.reserveId = t.getAttribute('reserveId') || 'lambit';
-                        taskObj.uploadedCount = parseInt(t.getAttribute('uploadedCount')) || 0;
-                        taskObj.reserveUploadedCount = parseInt(t.getAttribute('reserveUploadedCount')) || 0;
-                        taskObj.portalDeadline = t.getAttribute('portalDeadline') || '';
-                        taskObj.alloc = t.getAttribute('alloc') || 'lambit'; // for enumerators
-                    }
-                    if (taskObj.type === 'training-summary') {
-                        taskObj.totalBatches = parseInt(t.getAttribute('totalBatches')) || 7;
-                        taskObj.completedBatches = parseInt(t.getAttribute('completedBatches')) || 0;
-                        taskObj.totalAttended = parseInt(t.getAttribute('totalAttended')) || 0;
-                        try {
-                            taskObj.batchList = JSON.parse(t.getAttribute('batchList') || '[]');
-                        } catch (e) {
-                            taskObj.batchList = [];
-                        }
-                    }
-                    if (taskObj.type === 'logistics-checklist') {
-                        taskObj.internet = t.getAttribute('internet') || 'lambit';
-                        taskObj.sound = t.getAttribute('sound') || 'lambit';
-                        taskObj.food = t.getAttribute('food') || 'lambit';
-                        taskObj.water = t.getAttribute('water') || 'lambit';
-                    }
-                    if (taskObj.type === 'training-logistics') {
-                        taskObj.centerSelection = t.getAttribute('centerSelection') || 'lambit';
-                        taskObj.permissionLetter = t.getAttribute('permissionLetter') || 'lambit';
-                    }
-                    if (taskObj.type === 'training-centers') {
-                        taskObj.c1 = t.getAttribute('c1') || 'Center 1';
-                        taskObj.c2 = t.getAttribute('c2') || 'Center 2';
-                        taskObj.c3 = t.getAttribute('c3') || 'Center 3';
-                        taskObj.c4 = t.getAttribute('c4') || 'Center 4';
-                    }
-                    catTasks.push(taskObj);
-                }
-                taskData.push({ category: categoryName, tasks: catTasks });
-            }
-            calculateOverallProgress(); // Calculate before first render
-            renderPage();
+            parseXMLToData(xmlDoc);
         }
     } catch (error) {
-        console.error("Error loading XML:", error);
+        console.error("Error loading data:", error);
     }
+}
+
+function parseXMLToData(xmlDoc) {
+    const categories = xmlDoc.getElementsByTagName('category');
+    let newTaskData = [];
+    for (let cat of categories) {
+        let categoryName = cat.getAttribute('name');
+        let tasks = cat.getElementsByTagName('task');
+        let catTasks = [];
+        for (let t of tasks) {
+            let taskObj = {
+                id: t.getAttribute('id'),
+                name: t.getAttribute('name'),
+                status: t.getAttribute('status') || 'lambit',
+                type: t.getAttribute('type') || 'simple',
+                deadline: t.getAttribute('deadline') || ''
+            };
+            
+            if (taskObj.type === 'counter') {
+                taskObj.total = parseInt(t.getAttribute('total')) || 242;
+                taskObj.completed = parseInt(t.getAttribute('completed')) || 0;
+            } else if (taskObj.type === 'info') {
+                taskObj.content = t.getAttribute('content') || '';
+            } else if (taskObj.type === 'map-stats') {
+                taskObj.total = parseInt(t.getAttribute('total')) || 97;
+                taskObj.checked = parseInt(t.getAttribute('checked')) || 0;
+                taskObj.correct = parseInt(t.getAttribute('correct')) || 0;
+                taskObj.incorrect = parseInt(t.getAttribute('incorrect')) || 0;
+            } else if (taskObj.type === 'cell-info') {
+                taskObj.staffCount = parseInt(t.getAttribute('staffCount')) || 0;
+                taskObj.computers = parseInt(t.getAttribute('computers')) || 0;
+                taskObj.printers = parseInt(t.getAttribute('printers')) || 0;
+                try {
+                    taskObj.staffList = JSON.parse(t.getAttribute('staffList') || '[]');
+                } catch (e) {
+                    taskObj.staffList = [];
+                }
+            } else if (taskObj.type === 'user-group') {
+                taskObj.totalCount = parseInt(t.getAttribute('totalCount')) || 0;
+                taskObj.reserveCount = parseInt(t.getAttribute('reserveCount')) || 0;
+                taskObj.niyukti = t.getAttribute('niyukti') || 'lambit';
+                taskObj.circleAlloc = t.getAttribute('circleAlloc') || 'lambit';
+                taskObj.pragnakAlloc = t.getAttribute('pragnakAlloc') || 'lambit';
+                taskObj.hlbAlloc = t.getAttribute('hlbAlloc') || 'lambit';
+                taskObj.idCard = t.getAttribute('idCard') || 'lambit';
+                taskObj.mapDistrib = t.getAttribute('mapDistrib') || 'lambit';
+                taskObj.reserveId = t.getAttribute('reserveId') || 'lambit';
+                taskObj.uploadedCount = parseInt(t.getAttribute('uploadedCount')) || 0;
+                taskObj.reserveUploadedCount = parseInt(t.getAttribute('reserveUploadedCount')) || 0;
+                taskObj.portalDeadline = t.getAttribute('portalDeadline') || '';
+                taskObj.alloc = t.getAttribute('alloc') || 'lambit';
+            } else if (taskObj.type === 'training-summary') {
+                taskObj.totalBatches = parseInt(t.getAttribute('totalBatches')) || 7;
+                taskObj.completedBatches = parseInt(t.getAttribute('completedBatches')) || 0;
+                taskObj.totalAttended = parseInt(t.getAttribute('totalAttended')) || 0;
+                try {
+                    taskObj.batchList = JSON.parse(t.getAttribute('batchList') || '[]');
+                } catch (e) {
+                    taskObj.batchList = [];
+                }
+            } else if (taskObj.type === 'logistics-checklist') {
+                taskObj.internet = t.getAttribute('internet') || 'lambit';
+                taskObj.sound = t.getAttribute('sound') || 'lambit';
+                taskObj.food = t.getAttribute('food') || 'lambit';
+                taskObj.water = t.getAttribute('water') || 'lambit';
+            } else if (taskObj.type === 'training-logistics') {
+                taskObj.centerSelection = t.getAttribute('centerSelection') || 'lambit';
+                taskObj.permissionLetter = t.getAttribute('permissionLetter') || 'lambit';
+            } else if (taskObj.type === 'training-centers') {
+                taskObj.c1 = t.getAttribute('c1') || 'Center 1';
+                taskObj.c2 = t.getAttribute('c2') || 'Center 2';
+                taskObj.c3 = t.getAttribute('c3') || 'Center 3';
+                taskObj.c4 = t.getAttribute('c4') || 'Center 4';
+            }
+            catTasks.push(taskObj);
+        }
+        newTaskData.push({ category: categoryName, tasks: catTasks });
+    }
+    taskData = newTaskData;
+    calculateOverallProgress();
+    renderPage();
 }
 
 // 2. Render Page
@@ -1017,29 +1030,57 @@ function updateDailyScheduler() {
     }
 }
 
-// 5. Reset Data (Sync from XML)
-function resetData() {
-    if (confirm("क्या आप सर्वर से नया डेटा लोड करना चाहते हैं? (इससे आपकी लोकल प्रोग्रेस हट जाएगी)")) {
-        localStorage.removeItem('census_tasks');
-        location.reload();
+// 4. Save Changes
+async function saveChanges() {
+    localStorage.setItem('census_tasks', JSON.stringify(taskData));
+    
+    const apiUrl = localStorage.getItem('census_api_url');
+    if (apiUrl) {
+        await forceCloudSync();
+    } else {
+        alert("बदलाव लोकल मेमोरी में सुरक्षित कर लिए गए हैं। सबके लिए अपडेट करने के लिए क्लाउड लिंक करें या XML एक्सपोर्ट करें।");
     }
 }
 
-// 5. Export XML
-function exportToXML() {
+function saveApiUrl() {
+    const url = document.getElementById('api-url').value;
+    if (url) {
+        localStorage.setItem('census_api_url', url);
+        alert("API लिंक सुरक्षित हो गया है। अब डेटा सिंक करें।");
+    }
+}
+
+async function forceCloudSync() {
+    const apiUrl = localStorage.getItem('census_api_url');
+    if (!apiUrl) {
+        alert("पहले API लिंक डालें!");
+        return;
+    }
+
+    const xml = generateXMLString();
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            mode: 'no-cors', // Apps Script often requires no-cors for simple redirects
+            body: JSON.stringify({ xml: xml })
+        });
+        alert("डेटा क्लाउड (Google Sheets) पर सिंक हो गया है!");
+    } catch (e) {
+        console.error(e);
+        alert("सिंक करने में एरर आया। कृपया URL चेक करें।");
+    }
+}
+
+function generateXMLString() {
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<census_plan>\n`;
     taskData.forEach(cat => {
         xml += `    <category name="${cat.category}">\n`;
         cat.tasks.forEach(task => {
             const dl = task.deadline ? ` deadline="${task.deadline}"` : '';
-            
-            if (task.type === 'counter') {
-                xml += `        <task id="${task.id}" name="${task.name}" type="counter" total="${task.total}" completed="${task.completed}"${dl} />\n`;
-            } else if (task.type === 'info') {
-                xml += `        <task id="${task.id}" name="${task.name}" type="info" content="${task.content}"${dl} />\n`;
-            } else if (task.type === 'map-stats') {
-                xml += `        <task id="${task.id}" name="${task.name}" type="map-stats" total="${task.total}" checked="${task.checked}" correct="${task.correct}" incorrect="${task.incorrect}" status="${task.status}"${dl} />\n`;
-            } else if (task.type === 'cell-info') {
+            if (task.type === 'counter') xml += `        <task id="${task.id}" name="${task.name}" type="counter" total="${task.total}" completed="${task.completed}"${dl} />\n`;
+            else if (task.type === 'info') xml += `        <task id="${task.id}" name="${task.name}" type="info" content="${task.content}"${dl} />\n`;
+            else if (task.type === 'map-stats') xml += `        <task id="${task.id}" name="${task.name}" type="map-stats" total="${task.total}" checked="${task.checked}" correct="${task.correct}" incorrect="${task.incorrect}" status="${task.status}"${dl} />\n`;
+            else if (task.type === 'cell-info') {
                 const staffListJson = JSON.stringify(task.staffList).replace(/"/g, '&quot;');
                 xml += `        <task id="${task.id}" name="${task.name}" type="cell-info" staffCount="${task.staffCount}" computers="${task.computers}" printers="${task.printers}" staffList="${staffListJson}"${dl} />\n`;
             } else if (task.type === 'user-group') {
@@ -1050,21 +1091,27 @@ function exportToXML() {
             } else if (task.type === 'training-summary') {
                 const batchListJson = JSON.stringify(task.batchList).replace(/"/g, '&quot;');
                 xml += `        <task id="${task.id}" name="${task.name}" type="training-summary" totalBatches="${task.totalBatches}" completedBatches="${task.completedBatches}" totalAttended="${task.totalAttended}" batchList="${batchListJson}"${dl} />\n`;
-            } else if (task.type === 'training-logistics') {
-                xml += `        <task id="${task.id}" name="${task.name}" type="training-logistics" centerSelection="${task.centerSelection}" permissionLetter="${task.permissionLetter}"${dl} />\n`;
-            } else if (task.type === 'training-centers') {
-                xml += `        <task id="${task.id}" name="${task.name}" type="training-centers" c1="${task.c1}" c2="${task.c2}" c3="${task.c3}" c4="${task.c4}"${dl} />\n`;
-            } else if (task.type === 'logistics-checklist') {
-                xml += `        <task id="${task.id}" name="${task.name}" type="logistics-checklist" internet="${task.internet}" sound="${task.sound}" food="${task.food}" water="${task.water}"${dl} />\n`;
-            } else {
-                xml += `        <task id="${task.id}" name="${task.name}" status="${task.status}"${dl} />\n`;
-            }
+            } else if (task.type === 'training-logistics') xml += `        <task id="${task.id}" name="${task.name}" type="training-logistics" centerSelection="${task.centerSelection}" permissionLetter="${task.permissionLetter}"${dl} />\n`;
+            else if (task.type === 'training-centers') xml += `        <task id="${task.id}" name="${task.name}" type="training-centers" c1="${task.c1}" c2="${task.c2}" c3="${task.c3}" c4="${task.c4}"${dl} />\n`;
+            else if (task.type === 'logistics-checklist') xml += `        <task id="${task.id}" name="${task.name}" type="logistics-checklist" internet="${task.internet}" sound="${task.sound}" food="${task.food}" water="${task.water}"${dl} />\n`;
+            else xml += `        <task id="${task.id}" name="${task.name}" status="${task.status}"${dl} />\n`;
         });
         xml += `    </category>\n`;
     });
     xml += `</census_plan>`;
-    
-    // Create download link
+    return xml;
+}
+
+// 5. Reset Data
+function resetData() {
+    if (confirm("क्या आप सर्वर से नया डेटा लोड करना चाहते हैं? (इससे आपकी लोकल प्रोग्रेस हट जाएगी)")) {
+        localStorage.removeItem('census_tasks');
+        location.reload();
+    }
+}
+
+function exportToXML() {
+    const xml = generateXMLString();
     const blob = new Blob([xml], { type: 'text/xml' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -1072,7 +1119,7 @@ function exportToXML() {
     a.download = 'data.xml';
     a.click();
     URL.revokeObjectURL(url);
-    alert("डाटा (data.xml) जनरेट हो गया है। कृपया इसे अपने GitHub फोल्डर में रिप्लेस करें।");
+    alert("डाटा (data.xml) जनरेट हो गया है। इसे बैकअप के लिए रखें।");
 }
 
 // Start sequence
