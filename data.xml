@@ -7,6 +7,7 @@
         <task id="3" name="39 सुपरवाइजर सर्किलों का निर्माण" status="purn" />
         <task id="4" name="सभी 242 ब्लॉकों की जियो-टैगिंग (Geo-Tagging)" type="counter" total="242" completed="150" />
         <task id="5" name="सभी 242 ब्लॉकों का सीमांकन (Demarcation)" type="counter" total="242" completed="120" />
+        <task id="5b" name="पोर्टल पर HLB विवरण (Description) भरना" status="apurn" />
         <task id="6" name="सभी 242 ब्लॉकों को पोर्टल पर 'Final Freeze' करना" status="lambit" />
     </category>
     
