@@ -1202,5 +1202,183 @@ function toggleBatchStep(id, bIdx, step) {
     renderPage();
 }
 
+// 7. Generate Formal Report (प्रतिवेदन)
+function generateReport() {
+    const today = new Date();
+    const dateStr = today.toLocaleDateString('hi-IN', { year: 'numeric', month: 'long', day: 'numeric' });
+    
+    // Calculate overall progress
+    let totalP = 0, totalT = 0;
+    taskData.forEach(cat => {
+        cat.tasks.forEach(t => {
+            if (t.type === 'counter') { totalT++; totalP += (t.completed / t.total) || 0; }
+            else if (t.type === 'map-stats') { totalT++; totalP += (t.checked / t.total) || 0; }
+            else if (t.type === 'training-summary') { totalT++; totalP += (t.completedBatches / t.totalBatches) || 0; }
+            else if (t.type === 'logistics-checklist') {
+                ['internet','sound','food','water'].forEach(k => { totalT++; if(t[k]==='purn') totalP++; });
+            } else if (t.type === 'user-group') {
+                const keys = ['niyukti','hlbAlloc','idCard','mapDistrib','reserveId'];
+                if (t.id === 'sup1') keys.push('circleAlloc','pragnakAlloc');
+                else keys.push('alloc');
+                keys.forEach(k => { totalT++; if(t[k]==='purn') totalP++; });
+            } else if (t.type === 'training-logistics') {
+                ['centerSelection','permissionLetter'].forEach(k => { totalT++; if(t[k]==='purn') totalP++; });
+            } else if (t.type !== 'info' && t.type !== 'cell-info' && t.type !== 'training-centers') {
+                totalT++; if(t.status === 'purn') totalP++;
+            }
+        });
+    });
+    const overallPercent = totalT > 0 ? Math.round((totalP / totalT) * 100) : 0;
+
+    // Build category-wise report
+    let categoryReports = '';
+    let catIndex = 1;
+
+    taskData.forEach(cat => {
+        let catName = cat.category;
+        let taskLines = '';
+        let taskNum = 1;
+
+        cat.tasks.forEach(t => {
+            if (t.type === 'info' || t.type === 'training-centers') return;
+
+            let statusText = '';
+            if (t.type === 'counter') {
+                const pct = Math.round((t.completed / t.total) * 100);
+                statusText = `कुल ${t.total} में से ${t.completed} पूर्ण (${pct}%)`;
+            } else if (t.type === 'map-stats') {
+                statusText = `कुल ${t.total} में से ${t.checked} जांच पूर्ण। सही: ${t.correct}, गलत: ${t.incorrect}`;
+            } else if (t.type === 'user-group') {
+                const keys = t.id === 'sup1' 
+                    ? ['niyukti','circleAlloc','pragnakAlloc','hlbAlloc','idCard','mapDistrib','reserveId']
+                    : ['niyukti','alloc','hlbAlloc','idCard','mapDistrib','reserveId'];
+                const done = keys.filter(k => t[k] === 'purn').length;
+                statusText = `कुल: ${t.totalCount}, रिजर्व: ${t.reserveCount}, पोर्टल अपलोड: ${t.uploadedCount}/${t.totalCount}। चरण पूर्ण: ${done}/${keys.length}`;
+            } else if (t.type === 'training-summary') {
+                statusText = `कुल बैच: ${t.totalBatches}, पूर्ण: ${t.completedBatches}, कुल उपस्थिति: ${t.totalAttended}`;
+            } else if (t.type === 'training-logistics') {
+                const s1 = t.centerSelection === 'purn' ? 'पूर्ण' : 'लंबित';
+                const s2 = t.permissionLetter === 'purn' ? 'पूर्ण' : 'लंबित';
+                statusText = `केंद्र चयन: ${s1}, अनुमति पत्र: ${s2}`;
+            } else if (t.type === 'logistics-checklist') {
+                const items = [
+                    { label: 'इंटरनेट', key: 'internet' },
+                    { label: 'साउंड/माइक', key: 'sound' },
+                    { label: 'भोजन', key: 'food' },
+                    { label: 'पेयजल', key: 'water' }
+                ];
+                statusText = items.map(i => `${i.label}: ${t[i.key] === 'purn' ? '✅ पूर्ण' : '⏳ लंबित'}`).join(', ');
+            } else if (t.type === 'cell-info') {
+                statusText = `कार्मिक: ${t.staffCount}, कंप्यूटर: ${t.computers}, प्रिंटर: ${t.printers}`;
+            } else {
+                const label = t.status === 'purn' ? '✅ पूर्ण' : t.status === 'apurn' ? '⚠️ अपूर्ण' : '⏳ लंबित';
+                statusText = `स्थिति: ${label}`;
+            }
+
+            const dlText = t.deadline ? ` (समय सीमा: ${t.deadline})` : '';
+            taskLines += `<tr><td style="padding:6px 10px; border:1px solid #ccc; text-align:center;">${catIndex}.${taskNum}</td><td style="padding:6px 10px; border:1px solid #ccc;">${t.name}${dlText}</td><td style="padding:6px 10px; border:1px solid #ccc;">${statusText}</td></tr>`;
+            taskNum++;
+        });
+
+        if (taskLines) {
+            categoryReports += `
+                <tr style="background:#e8f0fe;">
+                    <td colspan="3" style="padding:8px 10px; border:1px solid #ccc; font-weight:bold; font-size:14px;">
+                        ${catIndex}. ${catName}
+                    </td>
+                </tr>
+                ${taskLines}
+            `;
+            catIndex++;
+        }
+    });
+
+    const reportHTML = `
+    <!DOCTYPE html>
+    <html lang="hi">
+    <head>
+        <meta charset="UTF-8">
+        <title>प्रतिवेदन - जनगणना 2027</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap');
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: 'Noto Sans Devanagari', sans-serif; padding: 40px; color: #1a1a1a; font-size: 13px; line-height: 1.8; }
+            .header { text-align: center; border-bottom: 3px double #1a1a1a; padding-bottom: 15px; margin-bottom: 20px; }
+            .header h1 { font-size: 20px; color: #1a237e; }
+            .header h2 { font-size: 16px; color: #333; margin-top: 5px; }
+            .meta { display: flex; justify-content: space-between; margin-bottom: 20px; }
+            .meta div { font-size: 13px; }
+            .subject { text-align: center; font-weight: 700; font-size: 15px; margin: 15px 0; padding: 8px; background: #f5f5f5; border-radius: 5px; }
+            .body-text { text-align: justify; margin-bottom: 15px; }
+            table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 12px; }
+            th { background: #1a237e; color: white; padding: 8px 10px; border: 1px solid #ccc; text-align: left; }
+            .progress-box { text-align: center; margin: 20px 0; padding: 15px; background: linear-gradient(135deg, #e8f5e9, #f1f8e9); border-radius: 10px; border: 2px solid #4caf50; }
+            .progress-box .pct { font-size: 36px; font-weight: 700; color: #2e7d32; }
+            .signature { margin-top: 50px; display: flex; justify-content: space-between; }
+            .signature div { text-align: center; min-width: 200px; }
+            .signature .line { border-top: 1px solid #333; margin-top: 40px; padding-top: 5px; }
+            @media print { body { padding: 20px; font-size: 12px; } .no-print { display: none; } }
+        </style>
+    </head>
+    <body>
+        <button class="no-print" onclick="window.print()" style="position:fixed; top:15px; right:15px; padding:10px 25px; background:#1a237e; color:white; border:none; border-radius:8px; font-size:14px; cursor:pointer; font-family:inherit; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">🖨️ प्रिंट करें</button>
+
+        <div class="header">
+            <h1>कार्यालय चार्ज अधिकारी, जनगणना 2027</h1>
+            <h2>भिनाय ब्लॉक, जिला अजमेर (राजस्थान)</h2>
+        </div>
+
+        <div class="meta">
+            <div><strong>सेवा में,</strong><br>श्रीमान तहसीलदार महोदय,<br>तहसील भिनाय, जिला अजमेर</div>
+            <div style="text-align:right;"><strong>दिनांक:</strong> ${dateStr}<br><strong>पत्रांक:</strong> भिनाय/जनगणना/2027/${today.getFullYear()}</div>
+        </div>
+
+        <div class="subject">विषय: जनगणना 2027 की पूर्व तैयारी का प्रगति प्रतिवेदन</div>
+
+        <div class="body-text">
+            <p>महोदय,</p>
+            <p>सविनय निवेदन है कि जनगणना 2027 की पूर्व तैयारी के संबंध में भिनाय ब्लॉक की वर्तमान प्रगति का विस्तृत प्रतिवेदन निम्नानुसार प्रस्तुत है:</p>
+        </div>
+
+        <div class="progress-box">
+            <div>समग्र प्रगति (Overall Progress)</div>
+            <div class="pct">${overallPercent}%</div>
+        </div>
+
+        <h3 style="margin:15px 0 5px; color:#1a237e;">📋 श्रेणी-वार विस्तृत विवरण:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:60px;">क्र.सं.</th>
+                    <th>कार्य विवरण</th>
+                    <th style="width:35%;">स्थिति / प्रगति</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${categoryReports}
+            </tbody>
+        </table>
+
+        <div class="body-text" style="margin-top:20px;">
+            <p>अतः उपरोक्त प्रतिवेदन आपकी सेवा में सादर प्रस्तुत है। कृपया अवलोकन कर आवश्यक दिशा-निर्देश प्रदान करने की कृपा करें।</p>
+            <p>सधन्यवाद।</p>
+        </div>
+
+        <div class="signature">
+            <div>
+                <div class="line">चार्ज अधिकारी<br>जनगणना 2027, भिनाय ब्लॉक</div>
+            </div>
+            <div>
+                <div class="line">तहसीलदार<br>तहसील भिनाय, जिला अजमेर</div>
+            </div>
+        </div>
+    </body>
+    </html>`;
+
+    const reportWindow = window.open('', '_blank');
+    reportWindow.document.write(reportHTML);
+    reportWindow.document.close();
+}
+
 // Final Start Sequence
 loadData();
