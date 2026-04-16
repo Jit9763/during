@@ -15,7 +15,8 @@
     
     <category name="उपयोगकर्ता प्रबंधन (User Management)">
         <task id="charge1" name="चार्ज कार्मिक (Charge User) विवरण" type="info" content="चार्ज ऑफिसर और सहायक कर्मचारी" />
-        <task id="sup1" name="पर्यवेक्षक (Supervisors - 39+4) प्रबंधन" type="user-group" 
+        <task id="sup1" name="पर्यवेक्षक (Supervisors) प्रबंधन" type="user-group" 
+            totalCount="39"
             reserveCount="4" 
             niyukti="purn" 
             circleAlloc="purn" 
@@ -24,7 +25,8 @@
             idCard="lambit" 
             mapDistrib="lambit" 
             reserveId="lambit" />
-        <task id="enum1" name="प्रगणक (Enumerators - 237+24) प्रबंधन" type="user-group" 
+        <task id="enum1" name="प्रगणक (Enumerators) प्रबंधन" type="user-group" 
+            totalCount="237"
             reserveCount="24" 
             niyukti="purn" 
             alloc="lambit" 

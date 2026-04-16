@@ -52,6 +52,7 @@ async function loadData() {
                         }
                     }
                     if (taskObj.type === 'user-group') {
+                        taskObj.totalCount = parseInt(t.getAttribute('totalCount')) || 0;
                         taskObj.reserveCount = parseInt(t.getAttribute('reserveCount')) || 0;
                         taskObj.niyukti = t.getAttribute('niyukti') || 'lambit';
                         taskObj.circleAlloc = t.getAttribute('circleAlloc') || 'lambit';
@@ -182,9 +183,15 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card" style="grid-column: 1 / -1;">
                             <span class="task-name">${task.name}</span>
-                            <div style="margin-bottom:10px;">
-                                <label style="font-size:11px; font-weight:700;">Reserve संख्या:</label>
-                                <input type="number" class="counter-input" value="${task.reserveCount}" onchange="updateUserGroupField('${task.id}', 'reserveCount', this.value)">
+                            <div style="margin-bottom:10px; display:flex; gap:15px;">
+                                <div>
+                                    <label style="font-size:11px; font-weight:700;">कुल संख्या:</label>
+                                    <input type="number" class="counter-input" style="width:70px;" value="${task.totalCount}" onchange="updateUserGroupField('${task.id}', 'totalCount', this.value)">
+                                </div>
+                                <div>
+                                    <label style="font-size:11px; font-weight:700;">Reserve संख्या:</label>
+                                    <input type="number" class="counter-input" style="width:70px;" value="${task.reserveCount}" onchange="updateUserGroupField('${task.id}', 'reserveCount', this.value)">
+                                </div>
                             </div>
                             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;">
                                 ${adminInputs}
@@ -202,8 +209,9 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card" style="grid-column: 1 / -1;">
                             <span class="task-name">${task.name}</span>
-                            <div style="margin-bottom:10px; font-size:12px; font-weight:700; color:var(--secondary);">
-                                <i class="fas fa-users-cog"></i> Reserve संख्या: ${task.reserveCount}
+                            <div style="margin-bottom:10px; font-size:12px; font-weight:700; color:var(--secondary); display:flex; gap:15px;">
+                                <span><i class="fas fa-users"></i> कुल संख्या: ${task.totalCount}</span>
+                                <span><i class="fas fa-users-cog"></i> Reserve संख्या: ${task.reserveCount}</span>
                             </div>
                             <div class="status-grid">
                                 ${statusGridHtml}
@@ -591,7 +599,7 @@ function exportData() {
                 const staffListJson = JSON.stringify(task.staffList).replace(/"/g, '&quot;');
                 xml += `        <task id="${task.id}" name="${task.name}" type="cell-info" staffCount="${task.staffCount}" computers="${task.computers}" printers="${task.printers}" staffList="${staffListJson}" />\n`;
             } else if (task.type === 'user-group') {
-                let attrs = `reserveCount="${task.reserveCount}" niyukti="${task.niyukti}" hlbAlloc="${task.hlbAlloc}" idCard="${task.idCard}" mapDistrib="${task.mapDistrib}" reserveId="${task.reserveId}"`;
+                let attrs = `totalCount="${task.totalCount}" reserveCount="${task.reserveCount}" niyukti="${task.niyukti}" hlbAlloc="${task.hlbAlloc}" idCard="${task.idCard}" mapDistrib="${task.mapDistrib}" reserveId="${task.reserveId}"`;
                 if (task.id === 'sup1') attrs += ` circleAlloc="${task.circleAlloc}" pragnakAlloc="${task.pragnakAlloc}"`;
                 else attrs += ` alloc="${task.alloc}"`;
                 xml += `        <task id="${task.id}" name="${task.name}" type="user-group" ${attrs} />\n`;
