@@ -2,15 +2,14 @@ let taskData = [];
 const isAdminPage = window.location.pathname.includes('admin.html');
 
 // 1. Load Data
-async function loadData() {
+async function loadData(forceXML = false) {
     try {
-        // Load from LocalStorage if exists, otherwise from XML
         const localData = localStorage.getItem('census_tasks');
-        if (localData) {
+        if (localData && !forceXML) {
             taskData = JSON.parse(localData);
             renderPage();
         } else {
-            const response = await fetch('data.xml');
+            const response = await fetch('data.xml?v=' + new Date().getTime());
             const text = await response.text();
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(text, "text/xml");
@@ -924,10 +923,12 @@ function calculateOverallProgress() {
     if (val) val.innerText = percent + '%';
 }
 
-// 4. Save Changes
-function saveChanges() {
-    localStorage.setItem('census_tasks', JSON.stringify(taskData));
-    alert("बदलाव सुरक्षित कर लिए गए हैं।");
+// 5. Reset Data (Sync from XML)
+function resetData() {
+    if (confirm("क्या आप सर्वर से नया डेटा लोड करना चाहते हैं? (इससे आपकी लोकल प्रोग्रेस हट जाएगी)")) {
+        localStorage.removeItem('census_tasks');
+        location.reload();
+    }
 }
 
 // 5. Export XML
