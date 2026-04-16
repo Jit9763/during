@@ -62,6 +62,7 @@ async function loadData() {
                         taskObj.mapDistrib = t.getAttribute('mapDistrib') || 'lambit';
                         taskObj.reserveId = t.getAttribute('reserveId') || 'lambit';
                         taskObj.uploadedCount = parseInt(t.getAttribute('uploadedCount')) || 0;
+                        taskObj.reserveUploadedCount = parseInt(t.getAttribute('reserveUploadedCount')) || 0;
                         taskObj.portalDeadline = t.getAttribute('portalDeadline') || '';
                         taskObj.alloc = t.getAttribute('alloc') || 'lambit'; // for enumerators
                     }
@@ -186,7 +187,8 @@ function renderPage() {
                     if (task[st.key] === 'purn') totalPurn += 1;
                 });
 
-                const uploadPercent = Math.round((task.uploadedCount / task.totalCount) * 100) || 0;
+                const portalPercent = Math.round((task.uploadedCount / task.totalCount) * 100) || 0;
+                const reservePortalPercent = Math.round((task.reserveUploadedCount / task.reserveCount) * 100) || 0;
                 let portalDeadlineHtml = task.portalDeadline ? `<div class="deadline-tag" style="margin-top:5px; background:#fff7ed; border-color:#fb923c; color:#ea580c;"><i class="fas fa-upload"></i> पोर्टल अपलोड तिथि: ${task.portalDeadline}</div>` : '';
 
                 if (isAdminPage) {
@@ -241,10 +243,16 @@ function renderPage() {
                             <div style="margin-bottom:10px; font-size:12px; font-weight:700; color:var(--secondary); display:flex; flex-wrap:wrap; gap:15px;">
                                 <span><i class="fas fa-users"></i> कुल: ${task.totalCount}</span>
                                 <span><i class="fas fa-users-cog"></i> Reserve: ${task.reserveCount}</span>
-                                <span style="color:#ea580c;"><i class="fas fa-cloud-upload-alt"></i> पोर्टल अपलोड: ${task.uploadedCount}/${task.totalCount} (${uploadPercent}%)</span>
+                                <span style="color:#ea580c;"><i class="fas fa-cloud-upload-alt"></i> पोर्टल अपलोड: ${task.uploadedCount}/${task.totalCount} (${portalPercent}%)</span>
+                                <span style="color:#9c27b0;"><i class="fas fa-cloud-upload-alt"></i> Reserve अपलोड: ${task.reserveUploadedCount}/${task.reserveCount} (${reservePortalPercent}%)</span>
+                            </div>
+                                <div class="mini-bar" style="width: ${portalPercent}%; background:#fb923c;"></div>
                             </div>
                             <div class="mini-progress-track" style="margin-bottom:10px; height:6px;">
-                                <div class="mini-bar" style="width: ${uploadPercent}%; background:#fb923c;"></div>
+                                <div class="mini-bar" style="width: ${reservePortalPercent}%; background:#9c27b0;"></div>
+                            </div>
+                            <div class="mini-progress-track" style="margin-bottom:10px; height:6px;">
+                                <div class="mini-bar" style="width: ${reservePortalPercent}%; background:#9c27b0;"></div>
                             </div>
                             <div class="status-grid">
                                 ${statusGridHtml}
@@ -817,10 +825,12 @@ function calculateOverallProgress() {
                 if (t.id === 'sup1') subKeys.push('circleAlloc', 'pragnakAlloc');
                 else subKeys.push('alloc');
                 
-                totalTasks += subKeys.length;
+                totalTasks += subKeys.length + 2; // +2 for Main and Reserve uploads
                 subKeys.forEach(k => {
                     if (t[k] === 'purn') totalPurn += 1;
                 });
+                totalPurn += (t.uploadedCount / t.totalCount) || 0;
+                totalPurn += (t.reserveUploadedCount / t.reserveCount) || 0;
             } else if (t.type === 'training-summary') {
                 totalTasks += 1;
                 totalPurn += (t.completedBatches / t.totalBatches);
@@ -868,7 +878,7 @@ function exportData() {
                 const staffListJson = JSON.stringify(task.staffList).replace(/"/g, '&quot;');
                 xml += `        <task id="${task.id}" name="${task.name}" type="cell-info" staffCount="${task.staffCount}" computers="${task.computers}" printers="${task.printers}" staffList="${staffListJson}" />\n`;
             } else if (task.type === 'user-group') {
-                let attrs = `totalCount="${task.totalCount}" reserveCount="${task.reserveCount}" uploadedCount="${task.uploadedCount}" portalDeadline="${task.portalDeadline}" niyukti="${task.niyukti}" hlbAlloc="${task.hlbAlloc}" idCard="${task.idCard}" mapDistrib="${task.mapDistrib}" reserveId="${task.reserveId}"`;
+                let attrs = `totalCount="${task.totalCount}" reserveCount="${task.reserveCount}" uploadedCount="${task.uploadedCount}" reserveUploadedCount="${task.reserveUploadedCount}" portalDeadline="${task.portalDeadline}" niyukti="${task.niyukti}" hlbAlloc="${task.hlbAlloc}" idCard="${task.idCard}" mapDistrib="${task.mapDistrib}" reserveId="${task.reserveId}"`;
                 if (task.id === 'sup1') attrs += ` circleAlloc="${task.circleAlloc}" pragnakAlloc="${task.pragnakAlloc}"`;
                 else attrs += ` alloc="${task.alloc}"`;
                 xml += `        <task id="${task.id}" name="${task.name}" type="user-group" ${attrs} />\n`;
