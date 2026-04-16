@@ -4,43 +4,83 @@ const isAdminPage = window.location.pathname.includes('admin.html');
 
 // 1. Load Data
 async function loadData(forceXML = false) {
+    // Check if a forced XML reload was requested by resetData
+    if (localStorage.getItem('force_xml') === 'true') {
+        forceXML = true;
+        localStorage.removeItem('force_xml');
+    }
     let apiUrl = localStorage.getItem('census_api_url') || DEFAULT_API_URL;
     const apiInput = document.getElementById('api-url');
     if (apiInput) apiInput.value = apiUrl;
 
     try {
-        if (apiUrl && !forceXML) {
-            // Load from Cloud (Google Sheets)
-            const response = await fetch(apiUrl);
-            const data = await response.json();
-            if (data.xml && data.xml.includes('<category')) {
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(data.xml, "text/xml");
-                parseXMLToData(xmlDoc);
-                return;
-            } else {
-                console.warn("Cloud data is empty, falling back to local files.");
+        // STEP 1: Always load base structure from local XML file
+        // This ensures ALL categories (including newly added ones) are present
+        const xmlResponse = await fetch('data.xml?v=' + new Date().getTime());
+        const xmlText = await xmlResponse.text();
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+        parseXMLToData(xmlDoc);
+
+        // STEP 2: If not forcing XML, overlay saved progress
+        // Priority: localStorage FIRST (most recent save on this device), then cloud
+        if (!forceXML) {
+            let savedData = null;
+
+            // 1) Check localStorage FIRST — this has the most recent Save
+            const localData = localStorage.getItem('census_tasks');
+            if (localData) {
+                savedData = JSON.parse(localData);
+            }
+
+            // 2) If no localStorage, try cloud (Google Sheets) for cross-device sync
+            if (!savedData && apiUrl) {
+                try {
+                    const response = await fetch(apiUrl);
+                    const data = await response.json();
+                    if (data.xml && data.xml.includes('<category')) {
+                        const cloudDoc = parser.parseFromString(data.xml, "text/xml");
+                        savedData = parseXMLToArray(cloudDoc);
+                    }
+                } catch(e) {
+                    console.warn("Cloud sync failed.");
+                }
+            }
+
+            // Merge: overlay saved progress onto XML base structure
+            if (savedData) {
+                taskData.forEach(baseCat => {
+                    const savedCat = savedData.find(sc => sc.category === baseCat.category);
+                    if (savedCat) {
+                        baseCat.tasks.forEach(baseTask => {
+                            const savedTask = savedCat.tasks.find(st => st.id === baseTask.id);
+                            if (savedTask) {
+                                Object.keys(savedTask).forEach(key => {
+                                    if (key !== 'id' && key !== 'name' && key !== 'type') {
+                                        baseTask[key] = savedTask[key];
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
             }
         }
-        
-        const localData = localStorage.getItem('census_tasks');
-        if (localData && !forceXML) {
-            taskData = JSON.parse(localData);
-            calculateOverallProgress();
-            renderPage();
-        } else {
-            const response = await fetch('data.xml?v=' + new Date().getTime());
-            const text = await response.text();
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(text, "text/xml");
-            parseXMLToData(xmlDoc);
-        }
+
+        calculateOverallProgress();
+        renderPage();
     } catch (error) {
         console.error("Error loading data:", error);
     }
 }
 
+// Parse XML into taskData (sets global)
 function parseXMLToData(xmlDoc) {
+    taskData = parseXMLToArray(xmlDoc);
+}
+
+// Parse XML and return array (does NOT set global)
+function parseXMLToArray(xmlDoc) {
     const categories = xmlDoc.getElementsByTagName('category');
     let loadedData = [];
     
@@ -117,12 +157,7 @@ function parseXMLToData(xmlDoc) {
         }
         loadedData.push({ category: categoryName, tasks: catTasks });
     }
-    
-    if (loadedData.length > 0) {
-        taskData = loadedData;
-        calculateOverallProgress();
-        renderPage();
-    }
+    return loadedData;
 }
 
 // 2. Render Page
@@ -486,42 +521,38 @@ function renderPage() {
                     `;
                 }
             } else if (task.type === 'logistics-checklist') {
-                const items = [
-                    { label: 'इंटरनेट व्यवस्था', key: 'internet', icon: 'fa-wifi' },
-                    { label: 'साउंड & माइक', key: 'sound', icon: 'fa-microphone' },
-                    { label: 'भोजन & अल्पाहार', key: 'food', icon: 'fa-utensils' },
-                    { label: 'पेयजल व्यवस्था', key: 'water', icon: 'fa-tint' }
-                ];
-                
-                if (isAdminPage) {
-                    let adminInputs = items.map(it => `
-                        <div class="admin-sub-status">
-                            <label>${it.label}</label>
-                            <select onchange="updateUserGroupStatus('${task.id}', '${it.key}', this.value)">
-                                <option value="lambit" ${task[it.key] === 'lambit' ? 'selected' : ''}>Pending</option>
-                                <option value="apurn" ${task[it.key] === 'apurn' ? 'selected' : ''}>Partial</option>
-                                <option value="purn" ${task[it.key] === 'purn' ? 'selected' : ''}>Ready</option>
-                            </select>
-                        </div>
-                    `).join('');
-                    taskHtml += `
-                        <div class="task-card" style="grid-column: 1 / -1;">
-                            <span class="task-name">${task.name}</span>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;">
-                                ${adminInputs}
+                    const items = [
+                        { label: 'WiFi (इंटरनेट)', key: 'internet', icon: 'fa-wifi' },
+                        { label: 'Mic (साउंड)', key: 'sound', icon: 'fa-microphone' },
+                        { label: 'Food (भोजन)', key: 'food', icon: 'fa-utensils' },
+                        { label: 'Water (पानी)', key: 'water', icon: 'fa-tint' }
+                    ];
+                    
+                    if (isAdminPage) {
+                        let selects = items.map(it => `
+                            <div class="admin-sub-status" style="cursor:pointer;" onclick="toggleUserGroupStep('${task.id}', '${it.key}')">
+                                <label>${it.label}</label>
+                                <span class="status-tag status-${task[it.key]}">${task[it.key] === 'purn' ? 'पूर्ण' : 'लंबित'}</span>
                             </div>
-                        </div>
-                    `;
-                } else {
-                    let checklistHtml = items.map(it => `
-                        <div class="logistics-item">
-                            <i class="fas ${it.icon}"></i>
-                            <span>${it.label}</span>
-                            <div class="status-dot dot-${task[it.key]}"></div>
-                        </div>
-                    `).join('');
-                    taskHtml += `<div class="task-card" style="grid-column: 1 / -1;"><span class="task-name">${task.name}</span><div class="logistics-grid">${checklistHtml}</div></div>`;
-                }
+                        `).join('');
+                        taskHtml += `
+                            <div class="task-card" style="grid-column: 1 / -1;">
+                                <span class="task-name">${task.name} (एडमिन व्यू: क्लिक करें)</span>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;">
+                                    ${selects}
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        let checklistHtml = items.map(it => `
+                            <div class="logistics-item">
+                                <i class="fas ${it.icon}"></i>
+                                <span>${it.label}</span>
+                                <div class="status-dot dot-${task[it.key]}"></div>
+                            </div>
+                        `).join('');
+                        taskHtml += `<div class="task-card" style="grid-column: 1 / -1;"><span class="task-name">${task.name}</span><div class="logistics-grid">${checklistHtml}</div></div>`;
+                    }
             } else if (task.type === 'cell-info') {
                 // We don't weight cell info in overall progress if it's just info
                 
@@ -1039,13 +1070,27 @@ function updateDailyScheduler() {
 
 // 4. Save Changes
 async function saveChanges() {
+    // 1) Always save to localStorage (instant, reliable)
     localStorage.setItem('census_tasks', JSON.stringify(taskData));
     
-    const apiUrl = localStorage.getItem('census_api_url');
+    // 2) Always try to sync to Google Sheets (cloud)
+    const apiUrl = localStorage.getItem('census_api_url') || DEFAULT_API_URL;
     if (apiUrl) {
-        await forceCloudSync();
+        try {
+            const xml = generateXMLString();
+            await fetch(apiUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ xml: xml })
+            });
+            alert("✅ बदलाव सुरक्षित हो गए!\n• लोकल मेमोरी: ✅\n• Google Sheets (Cloud): ✅ सिंक भेजा गया");
+        } catch (e) {
+            console.error("Cloud sync error:", e);
+            alert("⚠️ बदलाव लोकल मेमोरी में सुरक्षित हैं।\nCloud सिंक में समस्या: " + e.message);
+        }
     } else {
-        alert("बदलाव लोकल मेमोरी में सुरक्षित कर लिए गए हैं। सबके लिए अपडेट करने के लिए क्लाउड लिंक करें या XML एक्सपोर्ट करें।");
+        alert("✅ बदलाव लोकल मेमोरी में सुरक्षित कर लिए गए हैं।\nCloud sync के लिए API URL डालें।");
     }
 }
 
@@ -1058,7 +1103,7 @@ function saveApiUrl() {
 }
 
 async function forceCloudSync() {
-    const apiUrl = localStorage.getItem('census_api_url');
+    const apiUrl = localStorage.getItem('census_api_url') || DEFAULT_API_URL;
     if (!apiUrl) {
         alert("पहले API लिंक डालें!");
         return;
@@ -1068,7 +1113,8 @@ async function forceCloudSync() {
     try {
         const response = await fetch(apiUrl, {
             method: 'POST',
-            mode: 'no-cors', // Apps Script often requires no-cors for simple redirects
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ xml: xml })
         });
         alert("डेटा क्लाउड (Google Sheets) पर सिंक हो गया है!");
@@ -1111,8 +1157,9 @@ function generateXMLString() {
 
 // 5. Reset Data
 function resetData() {
-    if (confirm("क्या आप सर्वर से नया डेटा लोड करना चाहते हैं? (इससे आपकी लोकल प्रोग्रेस हट जाएगी)")) {
+    if (confirm("क्या आप XML से नया डेटा लोड करना चाहते हैं? (इससे आपकी लोकल प्रोग्रेस हट जाएगी)")) {
         localStorage.removeItem('census_tasks');
+        localStorage.setItem('force_xml', 'true');
         location.reload();
     }
 }
@@ -1130,4 +1177,30 @@ function exportToXML() {
 }
 
 // Start sequence
+// Toggle Handlers for Click-to-Update UI
+function toggleUserGroupStep(id, key) {
+    taskData.forEach(cat => {
+        cat.tasks.forEach(t => {
+            if (t.id === id) {
+                t[key] = t[key] === 'purn' ? 'lambit' : 'purn';
+            }
+        });
+    });
+    calculateOverallProgress();
+    renderPage();
+}
+
+function toggleBatchStep(id, bIdx, step) {
+    taskData.forEach(cat => {
+        cat.tasks.forEach(t => {
+            if (t.id === id) {
+                t.batchList[bIdx][step] = t.batchList[bIdx][step] === 'purn' ? 'lambit' : 'purn';
+            }
+        });
+    });
+    calculateOverallProgress();
+    renderPage();
+}
+
+// Final Start Sequence
 loadData();
