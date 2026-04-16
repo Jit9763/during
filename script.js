@@ -34,6 +34,13 @@ async function loadData() {
                     if (taskObj.type === 'info') {
                         taskObj.content = t.getAttribute('content') || '';
                     }
+                    if (taskObj.type === 'map-stats') {
+                        taskObj.total = parseInt(t.getAttribute('total')) || 97;
+                        taskObj.checked = parseInt(t.getAttribute('checked')) || 0;
+                        taskObj.correct = parseInt(t.getAttribute('correct')) || 0;
+                        taskObj.incorrect = parseInt(t.getAttribute('incorrect')) || 0;
+                        taskObj.deadline = t.getAttribute('deadline') || '';
+                    }
                     catTasks.push(taskObj);
                 }
                 taskData.push({ category: categoryName, tasks: catTasks });
@@ -117,6 +124,68 @@ function renderPage() {
                         ${pillsHtml}
                     </div>
                 `;
+            } else if (task.type === 'map-stats') {
+                const checkedPercent = Math.round((task.checked / task.total) * 100);
+                totalTasks += 1;
+                totalPurn += (task.checked / task.total);
+
+                let deadlineHtml = task.deadline ? `<div class="deadline-tag"><i class="fas fa-calendar-alt"></i> समय सीमा: ${task.deadline}</div>` : '';
+
+                if (isAdminPage) {
+                    taskHtml += `
+                        <div class="task-card">
+                            <span class="task-name">${task.name}</span>
+                            <div class="counter-info">
+                                <span>जांच की गई: ${task.checked} / ${task.total}</span>
+                                <span>${checkedPercent}%</span>
+                            </div>
+                            <div class="mini-progress-track">
+                                <div class="mini-bar" style="width: ${checkedPercent}%"></div>
+                            </div>
+                            <div class="stat-badges">
+                                <span class="stat-pill shi">सही: ${task.correct}</span>
+                                <span class="stat-pill galat">गलत: ${task.incorrect}</span>
+                            </div>
+                            <div style="margin-top:15px; display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+                                <div class="counter-input-group"><label style="font-size:10px;">जांच:</label><input type="number" class="counter-input" value="${task.checked}" onchange="updateMapField('${task.id}', 'checked', this.value)"></div>
+                                <div class="counter-input-group"><label style="font-size:10px;">सही:</label><input type="number" class="counter-input" value="${task.correct}" onchange="updateMapField('${task.id}', 'correct', this.value)"></div>
+                                <div class="counter-input-group"><label style="font-size:10px;">गलत:</label><input type="number" class="counter-input" value="${task.incorrect}" onchange="updateMapField('${task.id}', 'incorrect', this.value)"></div>
+                                <div class="counter-input-group"><label style="font-size:10px;">तारीख:</label><input type="date" class="counter-input" style="width:110px;" value="${task.deadline}" onchange="updateMapField('${task.id}', 'deadline', this.value)"></div>
+                            </div>
+                            <div class="radio-group" style="margin-top:10px;">
+                                <div class="radio-option">
+                                    <input type="radio" id="purn-${task.id}" name="status-${task.id}" value="purn" ${task.status === 'purn' ? 'checked' : ''} onchange="updateTaskStatus('${task.id}', 'purn')">
+                                    <label for="purn-${task.id}">पूर्ण</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="apurn-${task.id}" name="status-${task.id}" value="apurn" ${task.status === 'apurn' ? 'checked' : ''} onchange="updateTaskStatus('${task.id}', 'apurn')">
+                                    <label for="apurn-${task.id}">अपूर्ण</label>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    taskHtml += `
+                        <div class="task-card">
+                            <span class="task-name">${task.name}</span>
+                            <div class="counter-info">
+                                <span>जांच की गई: ${task.checked} / ${task.total}</span>
+                                <span>${checkedPercent}%</span>
+                            </div>
+                            <div class="mini-progress-track">
+                                <div class="mini-bar" style="width: ${checkedPercent}%"></div>
+                            </div>
+                            <div class="stat-badges">
+                                <span class="stat-pill shi">सही: ${task.correct}</span>
+                                <span class="stat-pill galat">गलत: ${task.incorrect}</span>
+                            </div>
+                            ${deadlineHtml}
+                            <div style="margin-top:10px;">
+                                <span class="status-tag status-${task.status}">${getStatusLabel(task.status)}</span>
+                            </div>
+                        </div>
+                    `;
+                }
             } else {
                 totalTasks += taskWeight;
                 if (task.status === 'purn') totalPurn += 1;
@@ -193,6 +262,22 @@ function updateCounterStatus(id, newValue) {
     calculateOverallProgress();
 }
 
+function updateMapField(id, field, value) {
+    taskData.forEach(cat => {
+        cat.tasks.forEach(task => {
+            if (task.id === id) {
+                if (field === 'deadline') {
+                    task.deadline = value;
+                } else {
+                    task[field] = parseInt(value) || 0;
+                    if (task[field] > task.total) task[field] = task.total;
+                }
+            }
+        });
+    });
+    calculateOverallProgress();
+}
+
 function calculateOverallProgress() {
     let totalPurn = 0;
     let totalTasks = 0;
@@ -201,6 +286,11 @@ function calculateOverallProgress() {
             if (t.type === 'counter') {
                 totalTasks += 1;
                 totalPurn += (t.completed / t.total);
+            } else if (t.type === 'map-stats') {
+                totalTasks += 1;
+                totalPurn += (t.checked / t.total);
+            } else if (t.type === 'info') {
+                // skip
             } else {
                 totalTasks += 1;
                 if (t.status === 'purn') totalPurn += 1;
@@ -230,6 +320,8 @@ function exportData() {
                 xml += `        <task id="${task.id}" name="${task.name}" type="counter" total="${task.total}" completed="${task.completed}" />\n`;
             } else if (task.type === 'info') {
                 xml += `        <task id="${task.id}" name="${task.name}" type="info" content="${task.content}" />\n`;
+            } else if (task.type === 'map-stats') {
+                xml += `        <task id="${task.id}" name="${task.name}" type="map-stats" total="${task.total}" checked="${task.checked}" correct="${task.correct}" incorrect="${task.incorrect}" deadline="${task.deadline}" status="${task.status}" />\n`;
             } else {
                 xml += `        <task id="${task.id}" name="${task.name}" status="${task.status}" />\n`;
             }

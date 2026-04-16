@@ -38,5 +38,7 @@
         <task id="21" name="HLO मोबाइल ऐप का सिंक और लॉगिन टेस्ट" status="lambit" />
         <task id="22" name="ब्लॉक क्यूआर कोड (QR Code) वितरण" status="lambit" />
         <task id="23" name="चार्ज रेडीनेस सर्टिफिकेट (CRC) अपलोड" status="lambit" />
+    <category name="मैप जांच और सत्यापन (Map Checking &amp; Verification)">
+        <task id="m1" name="हाउस लिस्टिंग मैप (97 Maps) की जांच" type="map-stats" total="97" checked="0" correct="0" incorrect="0" deadline="" status="apurn" />
     </category>
 </census_plan>

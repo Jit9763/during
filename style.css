@@ -206,6 +206,35 @@ header h1 {
     border: 1px solid var(--secondary);
 }
 
+.stat-badges {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.stat-pill {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.stat-pill.shi { background: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
+.stat-pill.galat { background: #ffebee; color: #c62828; border: 1px solid #c62828; }
+
+.deadline-tag {
+    margin-top: 10px;
+    padding: 8px;
+    background: #fdf2f2;
+    border: 1px dashed var(--danger);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--danger);
+}
+
+.deadline-tag i { margin-right: 5px; }
+
 /* Admin Radio Buttons */
 .radio-group {
     display: flex;
