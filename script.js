@@ -1353,7 +1353,7 @@ function generateReport() {
         </div>
 
         <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-            <div><strong>पत्रांक:</strong> भिनाय/जनगणना/2027/${today.getFullYear()}</div>
+            <div><strong>पत्रांक:</strong> भिनाय/जनगणना/2027/</div>
             <div style="text-align:right;"><strong>दिनांक:</strong> ${dateStr}</div>
         </div>
 
