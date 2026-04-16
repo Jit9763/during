@@ -246,12 +246,10 @@ function renderPage() {
                                 <span style="color:#ea580c;"><i class="fas fa-cloud-upload-alt"></i> पोर्टल अपलोड: ${task.uploadedCount}/${task.totalCount} (${portalPercent}%)</span>
                                 <span style="color:#9c27b0;"><i class="fas fa-cloud-upload-alt"></i> Reserve अपलोड: ${task.reserveUploadedCount}/${task.reserveCount} (${reservePortalPercent}%)</span>
                             </div>
+                            <div class="mini-progress-track" style="margin-bottom:10px; height:6px;">
                                 <div class="mini-bar" style="width: ${portalPercent}%; background:#fb923c;"></div>
                             </div>
-                            <div class="mini-progress-track" style="margin-bottom:10px; height:6px;">
-                                <div class="mini-bar" style="width: ${reservePortalPercent}%; background:#9c27b0;"></div>
-                            </div>
-                            <div class="mini-progress-track" style="margin-bottom:10px; height:6px;">
+                            <div class="mini-progress-track" style="margin-bottom:15px; height:6px;">
                                 <div class="mini-bar" style="width: ${reservePortalPercent}%; background:#9c27b0;"></div>
                             </div>
                             <div class="status-grid">
