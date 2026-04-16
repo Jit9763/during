@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>जनगणना 2027 | पब्लिक डैशबोर्ड - भिनाय ब्लॉक</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>जनगणना 2027: मास्टर प्लान डैशबोर्ड</h1>
+                <p>भिनाय ब्लॉक | सार्वजनिक प्रगति रिपोर्ट पोर्टल</p>
+            </div>
+            <a href="login.html" class="login-btn"><i class="fas fa-lock"></i> एडमिन लॉगिन</a>
+        </header>
+
+        <section class="progress-card">
+            <div class="progress-info">
+                <span>एकीकृत प्रगति (Overall Progress)</span>
+                <span id="progress-val">0%</span>
+            </div>
+            <div class="progress-track">
+                <div id="overall-bar"></div>
+            </div>
+        </section>
+
+        <div id="public-container">
+            <!-- Data will be loaded from data.xml -->
+            <div style="text-align: center; padding: 50px;">
+                <i class="fas fa-sync fa-spin" style="font-size: 40px; color: var(--primary);"></i>
+                <p style="margin-top: 10px;">डेटा लोड हो रहा है...</p>
+            </div>
+        </div>
+
+        <footer style="text-align: center; margin-top: 50px; padding: 20px; color: #666; font-size: 14px; border-top: 1px solid #ddd;">
+            <p>© 2026 जनगणना सेल, भिनाय ब्लॉक। सभी अधिकार सुरक्षित।</p>
+            <p style="margin-top: 5px;">डेटा प्रति सप्ताह अपडेट किया जाता है।</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

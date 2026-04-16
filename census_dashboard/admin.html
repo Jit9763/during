@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>एडमिन पैनल | जनगणना 2027</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <script>
+        // Check authentication
+        if (sessionStorage.getItem('admin_logged_in') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <div class="container">
+        <header>
+            <div>
+                <h1>जनगणना 2027: एडमिन पैनल</h1>
+                <p>भिनाय ब्लॉक | डेटा प्रबंधन पोर्ट</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="login-btn" onclick="logout()">लॉगआउट</button>
+                <a href="index.html" class="login-btn" style="background: var(--accent); color: white;">व्यू डैशबोर्ड</a>
+            </div>
+        </header>
+
+        <section class="progress-card">
+            <div class="progress-info">
+                <span>एकीकृत प्रगति (Admin View)</span>
+                <span id="progress-val">0%</span>
+            </div>
+            <div class="progress-track">
+                <div id="overall-bar"></div>
+            </div>
+        </section>
+
+        <div id="admin-container">
+            <!-- Categories and tasks will be injected here by script.js -->
+            <div style="text-align: center; padding: 50px;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 40px; color: var(--primary);"></i>
+                <p style="margin-top: 10px;">डेटा लोड हो रहा है...</p>
+            </div>
+        </div>
+
+        <div class="admin-footer">
+            <button class="export-btn" onclick="exportData()"><i class="fas fa-file-export"></i> डेटा एक्सपोर्ट (XML)</button>
+            <button class="save-btn" onclick="saveChanges()"><i class="fas fa-save"></i> बदलाव सुरक्षित करें</button>
+        </div>
+    </div>
+
+    <!-- Modal for Export -->
+    <div id="export-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
+        <div style="background:white; padding:30px; border-radius:15px; width:90%; max-width:600px;">
+            <h3>अपडेटेड XML डेटा</h3>
+            <p style="font-size: 13px; margin-bottom: 10px;">नीचे दिए गए कोड को कॉपी करें और अपनी `data.xml` फाइल में पेस्ट करें:</p>
+            <textarea id="xml-output" style="width:100%; height:300px; font-family:monospace; padding:10px; margin-bottom:15px;"></textarea>
+            <button onclick="document.getElementById('export-modal').style.display='none'" class="login-btn" style="width:100%;">बंद करें</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function logout() {
+            sessionStorage.removeItem('admin_logged_in');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

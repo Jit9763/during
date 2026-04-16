@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<census_plan>
+    <category name="प्रशासनिक और मैपिंग (Administrative Mapping)">
+        <task id="1" name="चार्ज प्रोफाइल और ऑफिस विवरण अपडेट करना" status="purn" />
+        <task id="2" name="242 हाउस-लिस्टिंग ब्लॉक (HLB) का निर्माण" status="purn" />
+        <task id="3" name="39 सुपरवाइजर सर्किलों का निर्माण" status="purn" />
+        <task id="4" name="150 ब्लॉकों की जियो-टैगिंग सिंक करना" status="purn" />
+        <task id="5" name="शेष 92 ब्लॉकों की जियो-टैगिंग और सीमांकन" status="apurn" />
+        <task id="6" name="सभी 242 ब्लॉकों को पोर्टल पर 'Final Freeze' करना" status="lambit" />
+    </category>
+    
+    <category name="उपयोगकर्ता प्रबंधन (User Management)">
+        <task id="7" name="पर्यवेक्षकों (39+4) का ऑनलाइन पंजीकरण" status="purn" />
+        <task id="8" name="प्रगणकों (237+24) का ऑनलाइन पंजीकरण" status="purn" />
+        <task id="9" name="कार्मिक टेम्पलेट (Staff Template) बल्क अपलोड" status="apurn" />
+        <task id="10" name="प्रगणकों के एसएमएस पासवर्ड ट्रिगर करना" status="lambit" />
+        <task id="11" name="नियुक्ति पत्र और आईडी कार्ड प्रिंट करना" status="lambit" />
+    </category>
+    
+    <category name="प्रशिक्षण प्रबंधन (Training Management)">
+        <task id="12" name="प्रशिक्षण केंद्रों (4 स्थान) की पोर्टल मैपिंग" status="purn" />
+        <task id="13" name="फील्ड ट्रेनर्स (4) का पंजीकरण" status="purn" />
+        <task id="14" name="6 प्रशिक्षण बैचों का पोर्टल पर निर्माण" status="lambit" />
+        <task id="15" name="अटेंडेंस शीट (Pre-filled) डाउनलोड करना" status="lambit" />
+        <task id="16" name="हस्ताक्षरित अटेंडेंस शीट पोर्टल पर अपलोड करना" status="lambit" />
+    </category>
+    
+    <category name="रसद और वित्त (Logistics &amp; Finance)">
+        <task id="17" name="₹7500 प्रति बैच बजट आवंटन" status="apurn" />
+        <task id="18" name="चाय, पानी और अल्पाहार की व्यवस्था" status="apurn" />
+        <task id="19" name="प्रोजेक्टर, माइक और साउंड सिस्टम व्यवस्था" status="apurn" />
+        <task id="20" name="हाई-स्पीड इंटरनेट और तकनीकी सपोर्ट" status="apurn" />
+    </category>
+    
+    <category name="फील्ड सर्वे तैयारी (Field Survey Readiness)">
+        <task id="21" name="HLO मोबाइल ऐप का सिंक और लॉगिन टेस्ट" status="lambit" />
+        <task id="22" name="ब्लॉक क्यूआर कोड (QR Code) वितरण" status="lambit" />
+        <task id="23" name="चार्ज रेडीनेस सर्टिफिकेट (CRC) अपलोड" status="lambit" />
+    </category>
+</census_plan>

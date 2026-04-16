@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>जनगणना लॉगिन | जनगणना 2027</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-box">
+            <i class="fas fa-user-shield" style="font-size: 50px; color: var(--primary); margin-bottom: 20px;"></i>
+            <h2>एडमिन लॉगिन</h2>
+            <p style="margin-bottom: 20px; color: #666;">प्रबंधन पैनल में प्रवेश के लिए पासवर्ड डालें</p>
+            <input type="password" id="admin-password" placeholder="पासवर्ड डालें">
+            <button onclick="checkLogin()">प्रवेश करें</button>
+            <p id="error-msg" style="color: red; margin-top: 15px; display: none;">गलत पासवर्ड, पुनः प्रयास करें।</p>
+            <div style="margin-top: 30px;">
+                <a href="index.html" style="color: var(--secondary); text-decoration: none;">← वापस डैशबोर्ड पर जाएँ</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkLogin() {
+            const pass = document.getElementById('admin-password').value;
+            if (pass === '1520') {
+                sessionStorage.setItem('admin_logged_in', 'true');
+                window.location.href = 'admin.html';
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
