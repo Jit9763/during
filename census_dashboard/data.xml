@@ -2,10 +2,11 @@
 <census_plan>
     <category name="प्रशासनिक और मैपिंग (Administrative Mapping)">
         <task id="1" name="चार्ज प्रोफाइल और ऑफिस विवरण अपडेट करना" status="purn" />
+        <task id="info1" name="हाउस लिस्टिंग ब्लॉक (HLB) विवरण" type="info" content="कुल 242 ब्लॉक (ग्रामीण: 180, शहरी: 62)" />
         <task id="2" name="242 हाउस-लिस्टिंग ब्लॉक (HLB) का निर्माण" status="purn" />
         <task id="3" name="39 सुपरवाइजर सर्किलों का निर्माण" status="purn" />
-        <task id="4" name="150 ब्लॉकों की जियो-टैगिंग सिंक करना" status="purn" />
-        <task id="5" name="शेष 92 ब्लॉकों की जियो-टैगिंग और सीमांकन" status="apurn" />
+        <task id="4" name="सभी 242 ब्लॉकों की जियो-टैगिंग (Geo-Tagging)" type="counter" total="242" completed="150" />
+        <task id="5" name="सभी 242 ब्लॉकों का सीमांकन (Demarcation)" type="counter" total="242" completed="120" />
         <task id="6" name="सभी 242 ब्लॉकों को पोर्टल पर 'Final Freeze' करना" status="lambit" />
     </category>
     
