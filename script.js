@@ -96,6 +96,7 @@ async function loadData(forceXML = false) {
                 }
                 taskData.push({ category: categoryName, tasks: catTasks });
             }
+            calculateOverallProgress(); // Calculate before first render
             renderPage();
         }
     } catch (error) {
@@ -965,29 +966,54 @@ function updateDailyScheduler() {
     const scheduler = document.getElementById('daily-scheduler');
     if (!scheduler) return;
     
-    const today = new Date().toISOString().split('T')[0];
+    const todayNum = new Date().setHours(0,0,0,0);
     const urgentTasks = [];
     
     taskData.forEach(cat => {
         cat.tasks.forEach(t => {
-            if (t.status !== 'purn' && t.deadline && (t.deadline <= today)) {
-                urgentTasks.push(t.name);
+            if (t.status !== 'purn' && t.deadline) {
+                const dl = new Date(t.deadline).getTime();
+                const diffDays = (dl - todayNum) / (1000 * 60 * 60 * 24);
+                
+                // Show tasks due today, overdue, or due in the next 7 days
+                if (diffDays <= 7) {
+                    urgentTasks.push({ name: t.name, days: diffDays });
+                }
             }
         });
     });
 
     if (urgentTasks.length > 0) {
+        // Sort by urgency
+        urgentTasks.sort((a,b) => a.days - b.days);
+        
+        const taskLabels = urgentTasks.slice(0, 3).map(ut => {
+            let label = ut.name;
+            if (ut.days < 0) label += ` (Overdue!)`;
+            else if (ut.days === 0) label += ` (आज!)`;
+            else label += ` (अगले ${Math.ceil(ut.days)} दिन)`;
+            return label;
+        });
+
         scheduler.innerHTML = `
             <div class="scheduler-banner">
                 <i class="fas fa-bullhorn fa-2x"></i>
                 <div>
-                    <strong style="display:block; font-size:16px;">आज का मुख्य कार्य (Today's Tasks):</strong>
-                    <span style="font-size:13px;">${urgentTasks.slice(0,2).join(' | ')} ${urgentTasks.length > 2 ? '... (+'+(urgentTasks.length-2)+')' : ''}</span>
+                    <strong style="display:block; font-size:16px;">आगामी और लंबित कार्य (Priority Focus):</strong>
+                    <span style="font-size:13px;">${taskLabels.join(' | ')}</span>
                 </div>
             </div>
         `;
     } else {
-        scheduler.innerHTML = '';
+        scheduler.innerHTML = `
+            <div class="scheduler-banner" style="border-color: var(--success);">
+                <i class="fas fa-check-double fa-2x" style="color: var(--success);"></i>
+                <div>
+                    <strong style="display:block; font-size:16px;">सभी कार्य ट्रैक पर हैं!</strong>
+                    <span style="font-size:13px;">आज के लिए कोई तत्काल लंबित कार्य नहीं है।</span>
+                </div>
+            </div>
+        `;
     }
 }
 
