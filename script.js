@@ -82,6 +82,16 @@ async function loadData() {
                         taskObj.food = t.getAttribute('food') || 'lambit';
                         taskObj.water = t.getAttribute('water') || 'lambit';
                     }
+                    if (taskObj.type === 'training-logistics') {
+                        taskObj.centerSelection = t.getAttribute('centerSelection') || 'lambit';
+                        taskObj.permissionLetter = t.getAttribute('permissionLetter') || 'lambit';
+                    }
+                    if (taskObj.type === 'training-centers') {
+                        taskObj.c1 = t.getAttribute('c1') || 'Center 1';
+                        taskObj.c2 = t.getAttribute('c2') || 'Center 2';
+                        taskObj.c3 = t.getAttribute('c3') || 'Center 3';
+                        taskObj.c4 = t.getAttribute('c4') || 'Center 4';
+                    }
                     catTasks.push(taskObj);
                 }
                 taskData.push({ category: categoryName, tasks: catTasks });
@@ -263,6 +273,47 @@ function renderPage() {
                         </div>
                     `;
                 }
+            } else if (task.type === 'training-logistics') {
+                const items = [
+                    { label: 'केंद्र का चयन (Center Selection)', key: 'centerSelection' },
+                    { label: 'अनुमति पत्र (Permission Letter)', key: 'permissionLetter' }
+                ];
+                
+                if (isAdminPage) {
+                    let adminInputs = items.map(it => `
+                        <div class="task-card">
+                            <span class="task-name" style="font-size:14px;">${it.label}</span>
+                            <div class="radio-group">
+                                <div class="radio-option"><input type="radio" id="tl-purn-${task.id}-${it.key}" name="tl-${task.id}-${it.key}" value="purn" ${task[it.key] === 'purn' ? 'checked' : ''} onchange="updateGenericField('${task.id}', '${it.key}', this.value)"><label for="tl-purn-${task.id}-${it.key}">पूर्ण</label></div>
+                                <div class="radio-option"><input type="radio" id="tl-apurn-${task.id}-${it.key}" name="tl-${task.id}-${it.key}" value="apurn" ${task[it.key] === 'apurn' ? 'checked' : ''} onchange="updateGenericField('${task.id}', '${it.key}', this.value)"><label for="tl-apurn-${task.id}-${it.key}">अपूर्ण</label></div>
+                                <div class="radio-option"><input type="radio" id="tl-lambit-${task.id}-${it.key}" name="tl-${task.id}-${it.key}" value="lambit" ${task[it.key] === 'lambit' ? 'checked' : ''} onchange="updateGenericField('${task.id}', '${it.key}', this.value)"><label for="tl-lambit-${task.id}-${it.key}">लंबित</label></div>
+                            </div>
+                        </div>
+                    `).join('');
+                    taskHtml += `<div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; grid-column:1/-1;">${adminInputs}</div>`;
+                } else {
+                    let logisHtml = items.map(it => `
+                        <div class="task-card">
+                            <span class="task-name">${it.label}</span>
+                            <span class="status-tag status-${task[it.key]}">${getStatusLabel(task[it.key])}</span>
+                        </div>
+                    `).join('');
+                    taskHtml += `<div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; grid-column:1/-1;">${logisHtml}</div>`;
+                }
+            } else if (task.type === 'training-centers') {
+                if (isAdminPage) {
+                    taskHtml += `
+                        <div class="task-card" style="grid-column: 1 / -1; background: #fffde7; border: 1px dashed var(--accent);">
+                            <span class="task-name"><i class="fas fa-building"></i> प्रशिक्षण केंद्र नाम प्रबंधन (Training Center Names)</span>
+                            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px;">
+                                <div class="counter-input-group"><label>केंद्र 1:</label><input type="text" class="batch-input" value="${task.c1}" onchange="updateGenericField('${task.id}', 'c1', this.value)"></div>
+                                <div class="counter-input-group"><label>केंद्र 2:</label><input type="text" class="batch-input" value="${task.c2}" onchange="updateGenericField('${task.id}', 'c2', this.value)"></div>
+                                <div class="counter-input-group"><label>केंद्र 3:</label><input type="text" class="batch-input" value="${task.c3}" onchange="updateGenericField('${task.id}', 'c3', this.value)"></div>
+                                <div class="counter-input-group"><label>केंद्र 4:</label><input type="text" class="batch-input" value="${task.c4}" onchange="updateGenericField('${task.id}', 'c4', this.value)"></div>
+                            </div>
+                        </div>
+                    `;
+                }
             } else if (task.type === 'training-summary') {
                 const batchPercent = Math.round((task.completedBatches / task.totalBatches) * 100);
                 
@@ -314,7 +365,16 @@ function renderPage() {
                                     <button class="quick-btn" style="margin-top:10px; display:block;" onclick="quickFinishBatch('${task.id}', ${bIdx})">सब पूर्ण</button>
                                 </td>
                                 <td style="vertical-align:top;"><input type="text" class="batch-input" value="${b.date}" onchange="updateBatchField('${task.id}', ${bIdx}, 'date', this.value)"></td>
-                                <td style="vertical-align:top;"><input type="text" class="batch-input" value="${b.venue}" onchange="updateBatchField('${task.id}', ${bIdx}, 'venue', this.value)"></td>
+                                <td style="vertical-align:top;">
+                                    <select class="batch-input" onchange="updateBatchField('${task.id}', ${bIdx}, 'venue', this.value)">
+                                        <option value="${b.venue}">${b.venue}</option>
+                                        ${(() => {
+                                            const centers = taskData.find(c => c.category.includes('प्रशिक्षण')).tasks.find(t => t.type === 'training-centers');
+                                            if (!centers) return '';
+                                            return [centers.c1, centers.c2, centers.c3, centers.c4].map(cn => `<option value="${cn}" ${b.venue === cn ? 'selected' : ''}>${cn}</option>`).join('');
+                                        })()}
+                                    </select>
+                                </td>
                                 <td style="vertical-align:top;"><input type="text" class="batch-input" value="${b.time}" onchange="updateBatchField('${task.id}', ${bIdx}, 'time', this.value)"></td>
                                 <td style="vertical-align:top; border-left:1px solid #ddd;">${stepControls}</td>
                             </tr>
@@ -843,6 +903,12 @@ function calculateOverallProgress() {
                 subKeys.forEach(k => {
                     if (t[k] === 'purn') totalPurn += 1;
                 });
+            } else if (t.type === 'training-logistics') {
+                const subKeys = ['centerSelection', 'permissionLetter'];
+                totalTasks += subKeys.length;
+                subKeys.forEach(k => {
+                    if (t[k] === 'purn') totalPurn += 1;
+                });
             } else if (t.type === 'info' || t.type === 'cell-info') {
                 // skip
             } else {
@@ -887,6 +953,10 @@ function exportData() {
             } else if (task.type === 'training-summary') {
                 const batchListJson = JSON.stringify(task.batchList).replace(/"/g, '&quot;');
                 xml += `        <task id="${task.id}" name="${task.name}" type="training-summary" totalBatches="${task.totalBatches}" completedBatches="${task.completedBatches}" totalAttended="${task.totalAttended}" batchList="${batchListJson}" />\n`;
+            } else if (task.type === 'training-logistics') {
+                xml += `        <task id="${task.id}" name="${task.name}" type="training-logistics" centerSelection="${task.centerSelection}" permissionLetter="${task.permissionLetter}" />\n`;
+            } else if (task.type === 'training-centers') {
+                xml += `        <task id="${task.id}" name="${task.name}" type="training-centers" c1="${task.c1}" c2="${task.c2}" c3="${task.c3}" c4="${task.c4}" />\n`;
             } else if (task.type === 'logistics-checklist') {
                 xml += `        <task id="${task.id}" name="${task.name}" type="logistics-checklist" internet="${task.internet}" sound="${task.sound}" food="${task.food}" water="${task.water}" />\n`;
             } else {
