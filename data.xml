@@ -9,6 +9,7 @@
         <task id="5" name="सभी 242 ब्लॉकों का सीमांकन (Demarcation)" type="counter" total="242" completed="120" />
         <task id="5b" name="पोर्टल पर HLB विवरण (Description) भरना" status="apurn" />
         <task id="m1" name="हाउस लिस्टिंग मैप (97 Maps) की जांच" type="map-stats" total="97" checked="0" correct="0" incorrect="0" deadline="" status="apurn" />
+        <task id="cell1" name="जनगणना सेल (Census Cell) विवरण" type="cell-info" staffCount="0" computers="0" printers="0" staffList="[]" />
         <task id="6" name="सभी 242 ब्लॉकों को पोर्टल पर 'Final Freeze' करना" status="lambit" />
     </category>
     

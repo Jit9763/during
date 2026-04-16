@@ -235,6 +235,88 @@ header h1 {
 
 .deadline-tag i { margin-right: 5px; }
 
+.deadline-tag i { margin-right: 5px; }
+
+/* Cell Management Stats */
+.cell-stats {
+    display: flex;
+    justify-content: space-around;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-item i {
+    font-size: 20px;
+    color: var(--secondary);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.stat-item span {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.stat-item p {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+}
+
+/* Staff Table */
+.staff-table-container {
+    overflow-x: auto;
+    margin-top: 15px;
+}
+
+.staff-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: white;
+}
+
+.staff-table th, .staff-table td {
+    border: 1px solid #eee;
+    padding: 10px;
+    text-align: left;
+}
+
+.staff-table th {
+    background: #f4f6f8;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.staff-table tr:nth-child(even) {
+    background: #fafafa;
+}
+
+/* Admin Staff Editor */
+.row-action-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.btn-add { background: var(--success); color: white; }
+.btn-remove { background: var(--danger); color: white; }
+
+.staff-input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
 /* Admin Radio Buttons */
 .radio-group {
     display: flex;

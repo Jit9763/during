@@ -41,6 +41,16 @@ async function loadData() {
                         taskObj.incorrect = parseInt(t.getAttribute('incorrect')) || 0;
                         taskObj.deadline = t.getAttribute('deadline') || '';
                     }
+                    if (taskObj.type === 'cell-info') {
+                        taskObj.staffCount = parseInt(t.getAttribute('staffCount')) || 0;
+                        taskObj.computers = parseInt(t.getAttribute('computers')) || 0;
+                        taskObj.printers = parseInt(t.getAttribute('printers')) || 0;
+                        try {
+                            taskObj.staffList = JSON.parse(t.getAttribute('staffList') || '[]');
+                        } catch (e) {
+                            taskObj.staffList = [];
+                        }
+                    }
                     catTasks.push(taskObj);
                 }
                 taskData.push({ category: categoryName, tasks: catTasks });
@@ -124,6 +134,108 @@ function renderPage() {
                         ${pillsHtml}
                     </div>
                 `;
+            } else if (task.type === 'cell-info') {
+                // We don't weight cell info in overall progress if it's just info
+                
+                let staffRowsHtml = '';
+                task.staffList.forEach((s, sIdx) => {
+                    if (isAdminPage) {
+                        staffRowsHtml += `
+                            <tr>
+                                <td><input type="text" class="staff-input" value="${s.name}" onchange="updateStaffDetail('${task.id}', ${sIdx}, 'name', this.value)"></td>
+                                <td><input type="text" class="staff-input" value="${s.pad}" onchange="updateStaffDetail('${task.id}', ${sIdx}, 'pad', this.value)"></td>
+                                <td><input type="text" class="staff-input" value="${s.role}" onchange="updateStaffDetail('${task.id}', ${sIdx}, 'role', this.value)"></td>
+                                <td><button class="row-action-btn btn-remove" onclick="removeStaffRow('${task.id}', ${sIdx})"><i class="fas fa-trash"></i></button></td>
+                            </tr>
+                        `;
+                    } else {
+                        staffRowsHtml += `
+                            <tr>
+                                <td>${s.name}</td>
+                                <td>${s.pad}</td>
+                                <td>${s.role}</td>
+                            </tr>
+                        `;
+                    }
+                });
+
+                if (isAdminPage) {
+                    taskHtml += `
+                        <div class="task-card" style="grid-column: 1 / -1;">
+                            <span class="task-name">${task.name}</span>
+                            <div class="cell-stats">
+                                <div class="stat-item">
+                                    <i class="fas fa-users"></i>
+                                    <input type="number" class="counter-input" value="${task.staffCount}" onchange="updateCellField('${task.id}', 'staffCount', this.value)">
+                                    <p>कुल कार्मिक</p>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-desktop"></i>
+                                    <input type="number" class="counter-input" value="${task.computers}" onchange="updateCellField('${task.id}', 'computers', this.value)">
+                                    <p>कंप्यूटर</p>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-print"></i>
+                                    <input type="number" class="counter-input" value="${task.printers}" onchange="updateCellField('${task.id}', 'printers', this.value)">
+                                    <p>प्रिंटर</p>
+                                </div>
+                            </div>
+                            <div class="staff-table-container">
+                                <table class="staff-table">
+                                    <thead>
+                                        <tr>
+                                            <th>नाम</th>
+                                            <th>पद</th>
+                                            <th>कार्य/भूमिका</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="staff-body-${task.id}">
+                                        ${staffRowsHtml}
+                                    </tbody>
+                                </table>
+                                <button class="row-action-btn btn-add" style="margin-top:10px;" onclick="addStaffRow('${task.id}')"><i class="fas fa-plus"></i> नया कार्मिक जोड़ें</button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    taskHtml += `
+                        <div class="task-card" style="grid-column: 1 / -1;">
+                             <span class="task-name">${task.name}</span>
+                            <div class="cell-stats">
+                                <div class="stat-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>${task.staffCount}</span>
+                                    <p>कुल कार्मिक</p>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-desktop"></i>
+                                    <span>${task.computers}</span>
+                                    <p>कंप्यूटर</p>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-print"></i>
+                                    <span>${task.printers}</span>
+                                    <p>प्रिंटर</p>
+                                </div>
+                            </div>
+                            <div class="staff-table-container">
+                                <table class="staff-table">
+                                    <thead>
+                                        <tr>
+                                            <th>नाम</th>
+                                            <th>पद</th>
+                                            <th>कार्य/भूमिका</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${staffRowsHtml || '<tr><td colspan="3" style="text-align:center;">डेटा उपलब्ध नहीं</td></tr>'}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                }
             } else if (task.type === 'map-stats') {
                 const checkedPercent = Math.round((task.checked / task.total) * 100);
                 totalTasks += 1;
@@ -278,6 +390,51 @@ function updateMapField(id, field, value) {
     calculateOverallProgress();
 }
 
+// Cell Data Functions
+function updateCellField(id, field, value) {
+    taskData.forEach(cat => {
+        cat.tasks.forEach(task => {
+            if (task.id === id) {
+                task[field] = parseInt(value) || 0;
+            }
+        });
+    });
+    // No progress recalculation needed for info types
+}
+
+function addStaffRow(id) {
+    taskData.forEach(cat => {
+        cat.tasks.forEach(task => {
+            if (task.id === id) {
+                if (!task.staffList) task.staffList = [];
+                task.staffList.push({ name: '', pad: '', role: '' });
+            }
+        });
+    });
+    renderPage();
+}
+
+function removeStaffRow(id, index) {
+    taskData.forEach(cat => {
+        cat.tasks.forEach(task => {
+            if (task.id === id) {
+                task.staffList.splice(index, 1);
+            }
+        });
+    });
+    renderPage();
+}
+
+function updateStaffDetail(id, index, field, value) {
+    taskData.forEach(cat => {
+        cat.tasks.forEach(task => {
+            if (task.id === id) {
+                task.staffList[index][field] = value;
+            }
+        });
+    });
+}
+
 function calculateOverallProgress() {
     let totalPurn = 0;
     let totalTasks = 0;
@@ -322,6 +479,9 @@ function exportData() {
                 xml += `        <task id="${task.id}" name="${task.name}" type="info" content="${task.content}" />\n`;
             } else if (task.type === 'map-stats') {
                 xml += `        <task id="${task.id}" name="${task.name}" type="map-stats" total="${task.total}" checked="${task.checked}" correct="${task.correct}" incorrect="${task.incorrect}" deadline="${task.deadline}" status="${task.status}" />\n`;
+            } else if (task.type === 'cell-info') {
+                const staffListJson = JSON.stringify(task.staffList).replace(/"/g, '&quot;');
+                xml += `        <task id="${task.id}" name="${task.name}" type="cell-info" staffCount="${task.staffCount}" computers="${task.computers}" printers="${task.printers}" staffList="${staffListJson}" />\n`;
             } else {
                 xml += `        <task id="${task.id}" name="${task.name}" status="${task.status}" />\n`;
             }
