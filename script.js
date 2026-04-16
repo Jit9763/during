@@ -61,6 +61,8 @@ async function loadData() {
                         taskObj.idCard = t.getAttribute('idCard') || 'lambit';
                         taskObj.mapDistrib = t.getAttribute('mapDistrib') || 'lambit';
                         taskObj.reserveId = t.getAttribute('reserveId') || 'lambit';
+                        taskObj.uploadedCount = parseInt(t.getAttribute('uploadedCount')) || 0;
+                        taskObj.portalDeadline = t.getAttribute('portalDeadline') || '';
                         taskObj.alloc = t.getAttribute('alloc') || 'lambit'; // for enumerators
                     }
                     catTasks.push(taskObj);
@@ -168,6 +170,9 @@ function renderPage() {
                     if (task[st.key] === 'purn') totalPurn += 1;
                 });
 
+                const uploadPercent = Math.round((task.uploadedCount / task.totalCount) * 100) || 0;
+                let portalDeadlineHtml = task.portalDeadline ? `<div class="deadline-tag" style="margin-top:5px; background:#fff7ed; border-color:#fb923c; color:#ea580c;"><i class="fas fa-upload"></i> पोर्टल अपलोड तिथि: ${task.portalDeadline}</div>` : '';
+
                 if (isAdminPage) {
                     let adminInputs = subTasks.map(st => `
                         <div class="admin-sub-status">
@@ -182,15 +187,23 @@ function renderPage() {
 
                     taskHtml += `
                         <div class="task-card" style="grid-column: 1 / -1;">
-                            <span class="task-name">${task.name}</span>
-                            <div style="margin-bottom:10px; display:flex; gap:15px;">
-                                <div>
-                                    <label style="font-size:11px; font-weight:700;">कुल संख्या:</label>
-                                    <input type="number" class="counter-input" style="width:70px;" value="${task.totalCount}" onchange="updateUserGroupField('${task.id}', 'totalCount', this.value)">
+                             <span class="task-name">${task.name}</span>
+                            <div style="margin-bottom:15px; display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:10px;">
+                                <div class="counter-input-group">
+                                    <label style="font-size:11px;">कुल संख्या:</label>
+                                    <input type="number" class="counter-input" value="${task.totalCount}" onchange="updateUserGroupField('${task.id}', 'totalCount', this.value)">
                                 </div>
-                                <div>
-                                    <label style="font-size:11px; font-weight:700;">Reserve संख्या:</label>
-                                    <input type="number" class="counter-input" style="width:70px;" value="${task.reserveCount}" onchange="updateUserGroupField('${task.id}', 'reserveCount', this.value)">
+                                <div class="counter-input-group">
+                                    <label style="font-size:11px;">Reserve:</label>
+                                    <input type="number" class="counter-input" value="${task.reserveCount}" onchange="updateUserGroupField('${task.id}', 'reserveCount', this.value)">
+                                </div>
+                                <div class="counter-input-group">
+                                    <label style="font-size:11px;">पोर्टल अपलोड:</label>
+                                    <input type="number" class="counter-input" value="${task.uploadedCount}" onchange="updateUserGroupField('${task.id}', 'uploadedCount', this.value)">
+                                </div>
+                                <div class="counter-input-group">
+                                    <label style="font-size:11px;">अपलोड तिथि:</label>
+                                    <input type="date" class="counter-input" value="${task.portalDeadline}" onchange="updateUserGroupField('${task.id}', 'portalDeadline', this.value)">
                                 </div>
                             </div>
                             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;">
@@ -209,13 +222,18 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card" style="grid-column: 1 / -1;">
                             <span class="task-name">${task.name}</span>
-                            <div style="margin-bottom:10px; font-size:12px; font-weight:700; color:var(--secondary); display:flex; gap:15px;">
-                                <span><i class="fas fa-users"></i> कुल संख्या: ${task.totalCount}</span>
-                                <span><i class="fas fa-users-cog"></i> Reserve संख्या: ${task.reserveCount}</span>
+                            <div style="margin-bottom:10px; font-size:12px; font-weight:700; color:var(--secondary); display:flex; flex-wrap:wrap; gap:15px;">
+                                <span><i class="fas fa-users"></i> कुल: ${task.totalCount}</span>
+                                <span><i class="fas fa-users-cog"></i> Reserve: ${task.reserveCount}</span>
+                                <span style="color:#ea580c;"><i class="fas fa-cloud-upload-alt"></i> पोर्टल अपलोड: ${task.uploadedCount}/${task.totalCount} (${uploadPercent}%)</span>
+                            </div>
+                            <div class="mini-progress-track" style="margin-bottom:10px; height:6px;">
+                                <div class="mini-bar" style="width: ${uploadPercent}%; background:#fb923c;"></div>
                             </div>
                             <div class="status-grid">
                                 ${statusGridHtml}
                             </div>
+                            ${portalDeadlineHtml}
                         </div>
                     `;
                 }
@@ -536,10 +554,15 @@ function updateUserGroupField(id, key, value) {
     taskData.forEach(cat => {
         cat.tasks.forEach(task => {
             if (task.id === id) {
-                task[key] = parseInt(value) || 0;
+                if (key === 'portalDeadline') {
+                    task.portalDeadline = value;
+                } else {
+                    task[key] = parseInt(value) || 0;
+                }
             }
         });
     });
+    calculateOverallProgress();
 }
 
 function calculateOverallProgress() {
@@ -599,7 +622,7 @@ function exportData() {
                 const staffListJson = JSON.stringify(task.staffList).replace(/"/g, '&quot;');
                 xml += `        <task id="${task.id}" name="${task.name}" type="cell-info" staffCount="${task.staffCount}" computers="${task.computers}" printers="${task.printers}" staffList="${staffListJson}" />\n`;
             } else if (task.type === 'user-group') {
-                let attrs = `totalCount="${task.totalCount}" reserveCount="${task.reserveCount}" niyukti="${task.niyukti}" hlbAlloc="${task.hlbAlloc}" idCard="${task.idCard}" mapDistrib="${task.mapDistrib}" reserveId="${task.reserveId}"`;
+                let attrs = `totalCount="${task.totalCount}" reserveCount="${task.reserveCount}" uploadedCount="${task.uploadedCount}" portalDeadline="${task.portalDeadline}" niyukti="${task.niyukti}" hlbAlloc="${task.hlbAlloc}" idCard="${task.idCard}" mapDistrib="${task.mapDistrib}" reserveId="${task.reserveId}"`;
                 if (task.id === 'sup1') attrs += ` circleAlloc="${task.circleAlloc}" pragnakAlloc="${task.pragnakAlloc}"`;
                 else attrs += ` alloc="${task.alloc}"`;
                 xml += `        <task id="${task.id}" name="${task.name}" type="user-group" ${attrs} />\n`;
