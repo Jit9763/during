@@ -74,10 +74,6 @@ async function loadData() {
                             taskObj.batchList = [];
                         }
                     }
-                    if (taskObj.type === 'finance-tracker') {
-                        taskObj.allocated = parseInt(t.getAttribute('allocated')) || 0;
-                        taskObj.paid = parseInt(t.getAttribute('paid')) || 0;
-                    }
                     if (taskObj.type === 'logistics-checklist') {
                         taskObj.internet = t.getAttribute('internet') || 'lambit';
                         taskObj.sound = t.getAttribute('sound') || 'lambit';
@@ -375,33 +371,6 @@ function renderPage() {
                                     <tbody>${batchRows}</tbody>
                                 </table>
                             </div>
-                        </div>
-                    `;
-                }
-            } else if (task.type === 'finance-tracker') {
-                const payPercent = Math.round((task.paid / task.allocated) * 100) || 0;
-                totalTasks += 1;
-                totalPurn += (task.status === 'purn' ? 1 : (task.status === 'apurn' ? 0.5 : 0));
-
-                if (isAdminPage) {
-                    taskHtml += `
-                        <div class="task-card">
-                            <span class="task-name">${task.name}</span>
-                            <div class="counter-input-group"><label>कुल आवंटन (₹):</label><input type="number" class="counter-input" value="${task.allocated}" onchange="updateGenericField('${task.id}', 'allocated', this.value)"></div>
-                            <div class="counter-input-group"><label>कुल भुगतान (₹):</label><input type="number" class="counter-input" value="${task.paid}" onchange="updateGenericField('${task.id}', 'paid', this.value)"></div>
-                            <div class="radio-group" style="margin-top:10px;">
-                                <div class="radio-option"><input type="radio" id="f-purn-${task.id}" name="f-status-${task.id}" value="purn" ${task.status === 'purn' ? 'checked' : ''} onchange="updateTaskStatus('${task.id}', 'purn')"><label for="f-purn-${task.id}">पूर्ण</label></div>
-                                <div class="radio-option"><input type="radio" id="f-apurn-${task.id}" name="f-status-${task.id}" value="apurn" ${task.status === 'apurn' ? 'checked' : ''} onchange="updateTaskStatus('${task.id}', 'apurn')"><label for="f-apurn-${task.id}">अपूर्ण</label></div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    taskHtml += `
-                        <div class="task-card">
-                            <span class="task-name">${task.name}</span>
-                            <div class="finance-info"><span>आवंटन: ₹${task.allocated}</span><span style="color:var(--success);">भुगतान: ₹${task.paid}</span></div>
-                            <div class="mini-progress-track" style="margin-top:5px;"><div class="mini-bar" style="width: ${payPercent}%; background:var(--success);"></div></div>
-                            <div style="margin-top:10px;"><span class="status-tag status-${task.status}">${getStatusLabel(task.status)}</span></div>
                         </div>
                     `;
                 }
@@ -854,9 +823,6 @@ function calculateOverallProgress() {
             } else if (t.type === 'training-summary') {
                 totalTasks += 1;
                 totalPurn += (t.completedBatches / t.totalBatches);
-            } else if (t.type === 'finance-tracker') {
-                totalTasks += 1;
-                totalPurn += (t.status === 'purn' ? 1 : (t.status === 'apurn' ? 0.5 : 0));
             } else if (t.type === 'logistics-checklist') {
                 // Not weighted significantly or combined as one
                 const subKeys = ['internet', 'sound', 'food', 'water'];
@@ -908,8 +874,6 @@ function exportData() {
             } else if (task.type === 'training-summary') {
                 const batchListJson = JSON.stringify(task.batchList).replace(/"/g, '&quot;');
                 xml += `        <task id="${task.id}" name="${task.name}" type="training-summary" totalBatches="${task.totalBatches}" completedBatches="${task.completedBatches}" totalAttended="${task.totalAttended}" batchList="${batchListJson}" />\n`;
-            } else if (task.type === 'finance-tracker') {
-                xml += `        <task id="${task.id}" name="${task.name}" type="finance-tracker" allocated="${task.allocated}" paid="${task.paid}" status="${task.status}" />\n`;
             } else if (task.type === 'logistics-checklist') {
                 xml += `        <task id="${task.id}" name="${task.name}" type="logistics-checklist" internet="${task.internet}" sound="${task.sound}" food="${task.food}" water="${task.water}" />\n`;
             } else {

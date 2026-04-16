@@ -44,7 +44,6 @@
     </category>
     
     <category name="रसद और वित्त (Logistics &amp; Finance)">
-        <task id="l-budget" name="बजट आवंटन और भुगतान स्थिति" type="finance-tracker" allocated="45000" paid="0" status="apurn" />
         <task id="l-fac" name="केंद्र व्यवस्थाएं (Facilities Readiness)" type="logistics-checklist" internet="lambit" sound="purn" food="apurn" water="purn" />
     </category>
     
