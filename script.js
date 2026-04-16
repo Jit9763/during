@@ -26,6 +26,7 @@ async function loadData(forceXML = false) {
         const localData = localStorage.getItem('census_tasks');
         if (localData && !forceXML) {
             taskData = JSON.parse(localData);
+            calculateOverallProgress();
             renderPage();
         } else {
             const response = await fetch('data.xml?v=' + new Date().getTime());
@@ -41,7 +42,8 @@ async function loadData(forceXML = false) {
 
 function parseXMLToData(xmlDoc) {
     const categories = xmlDoc.getElementsByTagName('category');
-    let newTaskData = [];
+    let loadedData = [];
+    
     for (let cat of categories) {
         let categoryName = cat.getAttribute('name');
         let tasks = cat.getElementsByTagName('task');
@@ -113,11 +115,14 @@ function parseXMLToData(xmlDoc) {
             }
             catTasks.push(taskObj);
         }
-        newTaskData.push({ category: categoryName, tasks: catTasks });
+        loadedData.push({ category: categoryName, tasks: catTasks });
     }
-    taskData = newTaskData;
-    calculateOverallProgress();
-    renderPage();
+    
+    if (loadedData.length > 0) {
+        taskData = loadedData;
+        calculateOverallProgress();
+        renderPage();
+    }
 }
 
 // 2. Render Page
