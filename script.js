@@ -269,36 +269,66 @@ function renderPage() {
                 const attendPercent = Math.round((task.totalAttended / totalExpected) * 100);
                 
                 // Recalculate completedBatches from batchList
-                const completedCount = task.batchList.filter(b => b.status === 'purn').length;
+                const completedCount = task.batchList.filter(b => 
+                    b.nirm === 'purn' && b.alloc === 'purn' && b.down === 'purn' && 
+                    b.verify === 'purn' && b.up === 'purn'
+                ).length;
                 task.completedBatches = completedCount;
                 
                 totalTasks += 1;
                 totalPurn += (task.completedBatches / task.totalBatches);
 
+                const steps = [
+                    { key: 'nirm', label: 'बैच निर्माण' },
+                    { key: 'alloc', label: 'ट्रेनर अलॉटमेंट' },
+                    { key: 'down', label: 'शीट डाउनलोड' },
+                    { key: 'verify', label: 'डेटा वेरिफिकेशन' },
+                    { key: 'up', label: 'शीट अपलोड' }
+                ];
+
                 let batchRows = task.batchList.map((b, bIdx) => {
+                    const isFullyDone = b.nirm === 'purn' && b.alloc === 'purn' && b.down === 'purn' && b.verify === 'purn' && b.up === 'purn';
+                    
                     if (isAdminPage) {
+                        const stepControls = steps.map(s => `
+                            <div style="margin-bottom:5px;">
+                                <label style="font-size:9px; font-weight:700;">${s.label}:</label>
+                                <select class="batch-status-select" style="font-size:10px;" onchange="updateBatchStepStatus('${task.id}', ${bIdx}, '${s.key}', this.value)">
+                                    <option value="lambit" ${b[s.key] === 'lambit' ? 'selected' : ''}>Pending</option>
+                                    <option value="purn" ${b[s.key] === 'purn' ? 'selected' : ''}>Done</option>
+                                </select>
+                            </div>
+                        `).join('');
+
                         return `
                             <tr>
-                                <td>Batch ${b.id}</td>
-                                <td><input type="text" class="batch-input" value="${b.date}" onchange="updateBatchField('${task.id}', ${bIdx}, 'date', this.value)"></td>
-                                <td><input type="text" class="batch-input" value="${b.venue}" onchange="updateBatchField('${task.id}', ${bIdx}, 'venue', this.value)"></td>
-                                <td><input type="text" class="batch-input" value="${b.time}" onchange="updateBatchField('${task.id}', ${bIdx}, 'time', this.value)"></td>
-                                <td>
-                                    <select class="batch-status-select" onchange="updateBatchStatus('${task.id}', ${bIdx}, this.value)">
-                                        <option value="lambit" ${b.status === 'lambit' ? 'selected' : ''}>Pending</option>
-                                        <option value="purn" ${b.status === 'purn' ? 'selected' : ''}>Done</option>
-                                    </select>
+                                <td style="vertical-align:top;">
+                                    <b>Batch ${b.id}</b>
+                                    <button class="quick-btn" style="margin-top:10px; display:block;" onclick="quickFinishBatch('${task.id}', ${bIdx})">सब पूर्ण</button>
                                 </td>
+                                <td style="vertical-align:top;"><input type="text" class="batch-input" value="${b.date}" onchange="updateBatchField('${task.id}', ${bIdx}, 'date', this.value)"></td>
+                                <td style="vertical-align:top;"><input type="text" class="batch-input" value="${b.venue}" onchange="updateBatchField('${task.id}', ${bIdx}, 'venue', this.value)"></td>
+                                <td style="vertical-align:top;"><input type="text" class="batch-input" value="${b.time}" onchange="updateBatchField('${task.id}', ${bIdx}, 'time', this.value)"></td>
+                                <td style="vertical-align:top; border-left:1px solid #ddd;">${stepControls}</td>
                             </tr>
                         `;
                     } else {
+                        const stepDots = steps.map(s => `
+                            <div class="step-dot ${b[s.key] === 'purn' ? 'done' : ''}"><div class="step-tool">${s.label}</div></div>
+                        `).join('');
+
                         return `
                             <tr>
                                 <td style="font-weight:700;">Batch ${b.id}</td>
                                 <td>${b.date}</td>
-                                <td><i class="fas fa-map-marker-alt" style="color:var(--secondary);"></i> ${b.venue}</td>
-                                <td><i class="fas fa-clock" style="color:#666;"></i> ${b.time}</td>
-                                <td><span class="status-tag status-${b.status}" style="padding:2px 5px; font-size:9px;">${b.status === 'purn' ? 'Done' : 'Pending'}</span></td>
+                                <td>${b.venue}</td>
+                                <td>${b.time}</td>
+                                <td>
+                                    <div class="batch-progress-wrapper">${stepDots}</div>
+                                    <div style="font-size:9px; margin-top:2px; color:${isFullyDone ? 'var(--success)' : '#666'};">
+                                        ${isFullyDone ? '<b>पूर्ण (Completed)</b>' : 'प्रक्रिया जारी (In Progress)'}
+                                    </div>
+                                </td>
                             </tr>
                         `;
                     }
@@ -768,6 +798,33 @@ function updateBatchStatus(id, index, value) {
                 task.batchList[index].status = value;
                 const completed = task.batchList.filter(b => b.status === 'purn').length;
                 task.completedBatches = completed;
+            }
+        });
+    });
+    calculateOverallProgress();
+}
+
+function updateBatchStepStatus(id, index, stepKey, value) {
+    taskData.forEach(cat => {
+        cat.tasks.forEach(task => {
+            if (task.id === id) {
+                task.batchList[index][stepKey] = value;
+            }
+        });
+    });
+    calculateOverallProgress();
+}
+
+function quickFinishBatch(id, index) {
+    taskData.forEach(cat => {
+        cat.tasks.forEach(task => {
+            if (task.id === id) {
+                const b = task.batchList[index];
+                b.nirm = 'purn';
+                b.alloc = 'purn';
+                b.down = 'purn';
+                b.verify = 'purn';
+                b.up = 'purn';
             }
         });
     });
