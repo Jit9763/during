@@ -61,9 +61,23 @@ async function loadData() {
                         taskObj.idCard = t.getAttribute('idCard') || 'lambit';
                         taskObj.mapDistrib = t.getAttribute('mapDistrib') || 'lambit';
                         taskObj.reserveId = t.getAttribute('reserveId') || 'lambit';
-                        taskObj.uploadedCount = parseInt(t.getAttribute('uploadedCount')) || 0;
                         taskObj.portalDeadline = t.getAttribute('portalDeadline') || '';
                         taskObj.alloc = t.getAttribute('alloc') || 'lambit'; // for enumerators
+                    }
+                    if (taskObj.type === 'training-summary') {
+                        taskObj.totalBatches = parseInt(t.getAttribute('totalBatches')) || 6;
+                        taskObj.completedBatches = parseInt(t.getAttribute('completedBatches')) || 0;
+                        taskObj.totalAttended = parseInt(t.getAttribute('totalAttended')) || 0;
+                    }
+                    if (taskObj.type === 'finance-tracker') {
+                        taskObj.allocated = parseInt(t.getAttribute('allocated')) || 0;
+                        taskObj.paid = parseInt(t.getAttribute('paid')) || 0;
+                    }
+                    if (taskObj.type === 'logistics-checklist') {
+                        taskObj.internet = t.getAttribute('internet') || 'lambit';
+                        taskObj.sound = t.getAttribute('sound') || 'lambit';
+                        taskObj.food = t.getAttribute('food') || 'lambit';
+                        taskObj.water = t.getAttribute('water') || 'lambit';
                     }
                     catTasks.push(taskObj);
                 }
@@ -236,6 +250,119 @@ function renderPage() {
                             ${portalDeadlineHtml}
                         </div>
                     `;
+                }
+            } else if (task.type === 'training-summary') {
+                const batchPercent = Math.round((task.completedBatches / task.totalBatches) * 100);
+                
+                // Fetch dynamic total from User Management Section
+                let totalExpected = 0;
+                taskData.forEach(c => c.tasks.forEach(t => {
+                    if (t.id === 'sup1' || t.id === 'enum1') totalExpected += (t.totalCount + t.reserveCount);
+                }));
+                if (totalExpected === 0) totalExpected = 276; // Fallback
+                
+                const attendPercent = Math.round((task.totalAttended / totalExpected) * 100);
+                
+                totalTasks += 1;
+                totalPurn += (task.completedBatches / task.totalBatches);
+
+                if (isAdminPage) {
+                    taskHtml += `
+                        <div class="task-card" style="grid-column: 1 / -1; border-left: 5px solid var(--secondary);">
+                            <span class="task-name">${task.name}</span>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:10px;">
+                                <div class="counter-input-group">
+                                    <label>पूर्ण बैच (बैच 6 में से):</label>
+                                    <input type="number" class="counter-input" value="${task.completedBatches}" min="0" max="${task.totalBatches}" onchange="updateGenericField('${task.id}', 'completedBatches', this.value)">
+                                </div>
+                                <div class="counter-input-group">
+                                    <label>कुल उपस्थिति (Expected: ${totalExpected}):</label>
+                                    <input type="number" class="counter-input" value="${task.totalAttended}" onchange="updateGenericField('${task.id}', 'totalAttended', this.value)">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    taskHtml += `
+                        <div class="task-card" style="grid-column: 1 / -1; border-left: 5px solid var(--secondary);">
+                            <span class="task-name">${task.name}</span>
+                            <div class="counter-info" style="margin-top:10px;">
+                                <span><i class="fas fa-chalkboard-teacher"></i> पूर्ण बैच: ${task.completedBatches} / ${task.totalBatches}</span>
+                                <span>${batchPercent}%</span>
+                            </div>
+                            <div class="mini-progress-track"><div class="mini-bar" style="width: ${batchPercent}%"></div></div>
+                            
+                            <div class="counter-info" style="margin-top:15px;">
+                                <span><i class="fas fa-user-check"></i> कुल उपस्थिति: ${task.totalAttended} / ${totalExpected}</span>
+                                <span>${attendPercent}%</span>
+                            </div>
+                            <div class="mini-progress-track"><div class="mini-bar" style="width: ${attendPercent}%; background: #9c27b0;"></div></div>
+                        </div>
+                    `;
+                }
+            } else if (task.type === 'finance-tracker') {
+                const payPercent = Math.round((task.paid / task.allocated) * 100) || 0;
+                totalTasks += 1;
+                totalPurn += (task.status === 'purn' ? 1 : (task.status === 'apurn' ? 0.5 : 0));
+
+                if (isAdminPage) {
+                    taskHtml += `
+                        <div class="task-card">
+                            <span class="task-name">${task.name}</span>
+                            <div class="counter-input-group"><label>कुल आवंटन (₹):</label><input type="number" class="counter-input" value="${task.allocated}" onchange="updateGenericField('${task.id}', 'allocated', this.value)"></div>
+                            <div class="counter-input-group"><label>कुल भुगतान (₹):</label><input type="number" class="counter-input" value="${task.paid}" onchange="updateGenericField('${task.id}', 'paid', this.value)"></div>
+                            <div class="radio-group" style="margin-top:10px;">
+                                <div class="radio-option"><input type="radio" id="f-purn-${task.id}" name="f-status-${task.id}" value="purn" ${task.status === 'purn' ? 'checked' : ''} onchange="updateTaskStatus('${task.id}', 'purn')"><label for="f-purn-${task.id}">पूर्ण</label></div>
+                                <div class="radio-option"><input type="radio" id="f-apurn-${task.id}" name="f-status-${task.id}" value="apurn" ${task.status === 'apurn' ? 'checked' : ''} onchange="updateTaskStatus('${task.id}', 'apurn')"><label for="f-apurn-${task.id}">अपूर्ण</label></div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    taskHtml += `
+                        <div class="task-card">
+                            <span class="task-name">${task.name}</span>
+                            <div class="finance-info"><span>आवंटन: ₹${task.allocated}</span><span style="color:var(--success);">भुगतान: ₹${task.paid}</span></div>
+                            <div class="mini-progress-track" style="margin-top:5px;"><div class="mini-bar" style="width: ${payPercent}%; background:var(--success);"></div></div>
+                            <div style="margin-top:10px;"><span class="status-tag status-${task.status}">${getStatusLabel(task.status)}</span></div>
+                        </div>
+                    `;
+                }
+            } else if (task.type === 'logistics-checklist') {
+                const items = [
+                    { label: 'इंटरनेट व्यवस्था', key: 'internet', icon: 'fa-wifi' },
+                    { label: 'साउंड & माइक', key: 'sound', icon: 'fa-microphone' },
+                    { label: 'भोजन & अल्पाहार', key: 'food', icon: 'fa-utensils' },
+                    { label: 'पेयजल व्यवस्था', key: 'water', icon: 'fa-tint' }
+                ];
+                
+                if (isAdminPage) {
+                    let adminInputs = items.map(it => `
+                        <div class="admin-sub-status">
+                            <label>${it.label}</label>
+                            <select onchange="updateUserGroupStatus('${task.id}', '${it.key}', this.value)">
+                                <option value="lambit" ${task[it.key] === 'lambit' ? 'selected' : ''}>Pending</option>
+                                <option value="apurn" ${task[it.key] === 'apurn' ? 'selected' : ''}>Partial</option>
+                                <option value="purn" ${task[it.key] === 'purn' ? 'selected' : ''}>Ready</option>
+                            </select>
+                        </div>
+                    `).join('');
+                    taskHtml += `
+                        <div class="task-card" style="grid-column: 1 / -1;">
+                            <span class="task-name">${task.name}</span>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;">
+                                ${adminInputs}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    let checklistHtml = items.map(it => `
+                        <div class="logistics-item">
+                            <i class="fas ${it.icon}"></i>
+                            <span>${it.label}</span>
+                            <div class="status-dot dot-${task[it.key]}"></div>
+                        </div>
+                    `).join('');
+                    taskHtml += `<div class="task-card" style="grid-column: 1 / -1;"><span class="task-name">${task.name}</span><div class="logistics-grid">${checklistHtml}</div></div>`;
                 }
             } else if (task.type === 'cell-info') {
                 // We don't weight cell info in overall progress if it's just info
@@ -565,6 +692,17 @@ function updateUserGroupField(id, key, value) {
     calculateOverallProgress();
 }
 
+function updateGenericField(id, key, value) {
+    taskData.forEach(cat => {
+        cat.tasks.forEach(task => {
+            if (task.id === id) {
+                task[key] = parseInt(value) || 0;
+            }
+        });
+    });
+    calculateOverallProgress();
+}
+
 function calculateOverallProgress() {
     let totalPurn = 0;
     let totalTasks = 0;
@@ -581,6 +719,19 @@ function calculateOverallProgress() {
                 if (t.id === 'sup1') subKeys.push('circleAlloc', 'pragnakAlloc');
                 else subKeys.push('alloc');
                 
+                totalTasks += subKeys.length;
+                subKeys.forEach(k => {
+                    if (t[k] === 'purn') totalPurn += 1;
+                });
+            } else if (t.type === 'training-summary') {
+                totalTasks += 1;
+                totalPurn += (t.completedBatches / t.totalBatches);
+            } else if (t.type === 'finance-tracker') {
+                totalTasks += 1;
+                totalPurn += (t.status === 'purn' ? 1 : (t.status === 'apurn' ? 0.5 : 0));
+            } else if (t.type === 'logistics-checklist') {
+                // Not weighted significantly or combined as one
+                const subKeys = ['internet', 'sound', 'food', 'water'];
                 totalTasks += subKeys.length;
                 subKeys.forEach(k => {
                     if (t[k] === 'purn') totalPurn += 1;
@@ -626,6 +777,12 @@ function exportData() {
                 if (task.id === 'sup1') attrs += ` circleAlloc="${task.circleAlloc}" pragnakAlloc="${task.pragnakAlloc}"`;
                 else attrs += ` alloc="${task.alloc}"`;
                 xml += `        <task id="${task.id}" name="${task.name}" type="user-group" ${attrs} />\n`;
+            } else if (task.type === 'training-summary') {
+                xml += `        <task id="${task.id}" name="${task.name}" type="training-summary" totalBatches="${task.totalBatches}" completedBatches="${task.completedBatches}" totalAttended="${task.totalAttended}" />\n`;
+            } else if (task.type === 'finance-tracker') {
+                xml += `        <task id="${task.id}" name="${task.name}" type="finance-tracker" allocated="${task.allocated}" paid="${task.paid}" status="${task.status}" />\n`;
+            } else if (task.type === 'logistics-checklist') {
+                xml += `        <task id="${task.id}" name="${task.name}" type="logistics-checklist" internet="${task.internet}" sound="${task.sound}" food="${task.food}" water="${task.water}" />\n`;
             } else {
                 xml += `        <task id="${task.id}" name="${task.name}" status="${task.status}" />\n`;
             }
