@@ -404,8 +404,8 @@ function renderPage() {
                         `;
                     } else {
                         const stepDots = steps.map((s, idx) => `
-                            <div class="step-dot ${b[s.key] === 'purn' ? 'done' : ''}" style="display:flex; align-items:center; justify-content:center;">
-                                <span style="font-size:9px; font-weight:bold; color:${b[s.key] === 'purn' ? 'white' : '#666'};">${idx + 1}</span>
+                            <div class="step-dot ${b[s.key] === 'purn' ? 'done' : ''}" style="display:flex; align-items:center; justify-content:center; width:20px; height:20px;">
+                                <span style="font-size:11px; font-weight:bold; color:${b[s.key] === 'purn' ? 'white' : '#666'};">${idx + 1}</span>
                                 <div class="step-tool">${idx + 1}. ${s.label}</div>
                             </div>
                         `).join('');
@@ -445,8 +445,8 @@ function renderPage() {
                                 </table>
                             </div>
                             <!-- Legend for dots -->
-                            <div class="batch-legend" style="margin-top:10px; padding-top:8px; border-top:1px dashed #eee; display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
-                                ${steps.map((s, idx) => `<span style="font-size:9px; color:#666;"><b>${idx + 1}:</b> ${s.label}</span>`).join('')}
+                            <div class="batch-legend" style="margin-top:12px; padding-top:10px; border-top:1px dashed #ddd; display:flex; flex-wrap:wrap; gap:12px; justify-content:center;">
+                                ${steps.map((s, idx) => `<span style="font-size:12px; color:#444;"><b>${idx + 1}:</b> ${s.label}</span>`).join('')}
                             </div>
                         </div>
                     `;
@@ -473,8 +473,8 @@ function renderPage() {
                                 </table>
                             </div>
                             <!-- Legend for dots -->
-                            <div class="batch-legend" style="margin-top:10px; padding-top:8px; border-top:1px dashed #eee; display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
-                                ${steps.map((s, idx) => `<span style="font-size:9px; color:#666;"><b>${idx + 1}:</b> ${s.label}</span>`).join('')}
+                            <div class="batch-legend" style="margin-top:12px; padding-top:10px; border-top:1px dashed #ddd; display:flex; flex-wrap:wrap; gap:12px; justify-content:center;">
+                                ${steps.map((s, idx) => `<span style="font-size:12px; color:#444;"><b>${idx + 1}:</b> ${s.label}</span>`).join('')}
                             </div>
                         </div>
                     `;
