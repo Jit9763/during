@@ -472,6 +472,10 @@ function renderPage() {
                                     <tbody>${batchRows}</tbody>
                                 </table>
                             </div>
+                            <!-- Legend for dots -->
+                            <div class="batch-legend" style="margin-top:10px; padding-top:8px; border-top:1px dashed #eee; display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
+                                ${steps.map((s, idx) => `<span style="font-size:9px; color:#666;"><b>${idx + 1}:</b> ${s.label}</span>`).join('')}
+                            </div>
                         </div>
                     `;
                 }
