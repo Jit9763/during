@@ -59,7 +59,7 @@
         <!-- Sticky Footer Action Bar -->
         <div class="admin-action-bar">
             <button class="action-btn btn-save" onclick="saveChanges()"><i class="fas fa-save"></i> Save</button>
-            <button class="action-btn btn-export" onclick="exportToXML()"><i class="fas fa-file-export"></i> XML</button>
+            <button class="action-btn btn-export" onclick="exportToJSON()"><i class="fas fa-file-export"></i> Backup</button>
             <button class="action-btn btn-report" onclick="generateReport()"><i class="fas fa-file-alt"></i> रिपोर्ट</button>
             <button class="action-btn btn-reset" onclick="resetData()"><i class="fas fa-sync"></i> Reset</button>
         </div>
@@ -68,9 +68,9 @@
     <!-- Modal for Export -->
     <div id="export-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
         <div style="background:white; padding:30px; border-radius:15px; width:90%; max-width:600px;">
-            <h3>अपडेटेड XML डेटा</h3>
-            <p style="font-size: 13px; margin-bottom: 10px;">नीचे दिए गए कोड को कॉपी करें और अपनी `data.xml` फाइल में पेस्ट करें:</p>
-            <textarea id="xml-output" style="width:100%; height:300px; font-family:monospace; padding:10px; margin-bottom:15px;"></textarea>
+            <h3>बैकअप डेटा (JSON)</h3>
+            <p style="font-size: 13px; margin-bottom: 10px;">आपका डेटा सुरक्षित रूप से डाउनलोड हो गया है। आप इसे Google Sheets के विकल्प के रूप में रख सकते हैं।</p>
+            <textarea id="xml-output" style="display:none;"></textarea>
             <button onclick="document.getElementById('export-modal').style.display='none'" class="login-btn" style="width:100%;">बंद करें</button>
         </div>
     </div>

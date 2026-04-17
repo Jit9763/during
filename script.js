@@ -1,164 +1,112 @@
 let taskData = [];
-const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbwTn--CBcO4cqSnFCTSFx2h_uGmPijj-KzqvZxD5sDRmo6870aDwjJrcz6Q4sxaA80Jqw/exec';
+const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbzdxSYpTIbQEMfBOSSRDQKFWFOC6RWmf2YiW82miETl29uXW-U72zOVubKols-hl8qIew/exec';
 const isAdminPage = window.location.pathname.includes('admin.html');
 
 // 1. Load Data
-async function loadData(forceXML = false) {
-    // Check if a forced XML reload was requested by resetData
-    if (localStorage.getItem('force_xml') === 'true') {
-        forceXML = true;
-        localStorage.removeItem('force_xml');
+const TASK_STRUCTURE = [
+    {
+        category: "प्रशासनिक और मैपिंग (Administrative Mapping)",
+        tasks: [
+            { id: "1", name: "चार्ज प्रोफाइल और ऑफिस विवरण अपडेट करना", status: "purn", type: "simple", deadline: "2026-04-10" },
+            { id: "info1", name: "हाउस लिस्टिंग ब्लॉक (HLB) विवरण", type: "info", content: "कुल: 242 | ग्रामीण: 242 | शहरी: 0", deadline: "2026-04-12" },
+            { id: "2", name: "242 हाउस-लिस्टिंग ब्लॉक (HLB) का निर्माण", status: "purn", type: "simple", deadline: "2026-04-12" },
+            { id: "3", name: "39 सुपरवाइजर सर्किलों का निर्माण", status: "purn", type: "simple", deadline: "2026-04-14" },
+            { id: "cell1", name: "जनगणना सेल (Census Cell) विवरण", type: "cell-info", staffCount: 0, computers: 0, printers: 0, staffList: [], deadline: "2026-04-14" },
+            { id: "6", name: "सभी 242 ब्लॉकों को पोर्टल पर 'Final Freeze' करना", status: "lambit", type: "simple", deadline: "2026-04-15" },
+            { id: "4", name: "सभी 242 ब्लॉकों की जियो-टैगिंग (Geo-Tagging)", type: "counter", total: 242, completed: 150, deadline: "2026-04-20" },
+            { id: "5", name: "सभी 242 ब्लॉकों का सीमांकन (Demarcation)", type: "counter", total: 242, completed: 120, deadline: "2026-04-22" },
+            { id: "5b", name: "पोर्टल पर HLB विवरण (Description) भरना", status: "apurn", type: "simple", deadline: "2026-04-24" },
+            { id: "m1", name: "हाउस लिस्टिंग मैप (97 Maps) की जांच", type: "map-stats", total: 97, checked: 0, correct: 0, incorrect: 0, deadline: "2026-04-27", status: "apurn" }
+        ]
+    },
+    {
+        category: "उपयोगकर्ता प्रबंधन (User Management)",
+        tasks: [
+            { id: "charge1", name: "चार्ज कार्मिक (Charge User) विवरण", type: "info", content: "चार्ज ऑफिसर और सहायक कर्मचारी", deadline: "2026-04-18" },
+            { id: "sup1", name: "पर्यवेक्षक (Supervisors) प्रबंधन", type: "user-group", totalCount: 39, reserveCount: 4, uploadedCount: 0, reserveUploadedCount: 0, niyukti: "purn", circleAlloc: "purn", pragnakAlloc: "lambit", hlbAlloc: "lambit", idCard: "lambit", mapDistrib: "lambit", reserveId: "lambit", deadline: "2026-04-25" },
+            { id: "enum1", name: "प्रगणक (Enumerators) प्रबंधन", type: "user-group", totalCount: 237, reserveCount: 24, uploadedCount: 0, reserveUploadedCount: 0, niyukti: "purn", alloc: "lambit", hlbAlloc: "lambit", idCard: "lambit", mapDistrib: "lambit", reserveId: "lambit", deadline: "2026-04-26" }
+        ]
+    },
+    {
+        category: "प्रशिक्षण प्रबंधन (Training Management)",
+        tasks: [
+            { id: "t-centers", name: "प्रशिक्षण केंद्र प्रबंधन (Center Management)", type: "training-centers", c1: "रा.उ.मा.वि. देवलिया कला सभागार", c2: "रा.उ.मा.वि. नगोला सभागार", c3: "भिनाय पंचायत सभागार", c4: "रा.उ.मा.वि. बांदनवाड़ा सभागार", deadline: "2026-04-20" },
+            { id: "t-logis", name: "प्रशिक्षण रसद (Training Logistics)", type: "training-logistics", centerSelection: "lambit", permissionLetter: "lambit", deadline: "2026-04-25" },
+            { id: "13", name: "FIELD Trainners (4) का पंजीकरण और प्रशिक्षण", status: "purn", type: "simple", deadline: "2026-04-15" },
+            { id: "t-batch", name: "प्रशिक्षण बैच पोर्टल कार्य और उपस्थिति", type: "training-summary", totalBatches: 7, completedBatches: 0, totalAttended: 0, batchList: [{"id":1,"date":"1-3 May","venue":"रा.उ.मा.वि. देवलिया कला सभागार","time":"8:00 AM - 5:00 PM","nirm":"lambit","alloc":"lambit","down":"lambit","verify":"lambit","up":"lambit"},{"id":2,"date":"1-3 May","venue":"रा.उ.मा.वि. नगोला सभागार","time":"8:00 AM - 5:00 PM","nirm":"lambit","alloc":"lambit","down":"lambit","verify":"lambit","up":"lambit"},{"id":3,"date":"4-5 May","venue":"भिनाय पंचायत सभागार","time":"8:00 AM - 5:00 PM","nirm":"lambit","alloc":"lambit","down":"lambit","verify":"lambit","up":"lambit"},{"id":4,"date":"4-5 May","venue":"रा.उ.मा.वि. बांदनवाड़ा सभागार","time":"8:00 AM - 5:00 PM","nirm":"lambit","alloc":"lambit","down":"lambit","verify":"lambit","up":"lambit"},{"id":5,"date":"6-7 May","venue":"रा.उ.मा.वि. देवलिया कला सभागार","time":"8:00 AM - 5:00 PM","nirm":"lambit","alloc":"lambit","down":"lambit","verify":"lambit","up":"lambit"},{"id":6,"date":"6-7 May","venue":"रा.उ.मा.वि. नगोला सभागार","time":"8:00 AM - 5:00 PM","nirm":"lambit","alloc":"lambit","down":"lambit","verify":"lambit","up":"lambit"},{"id":7,"date":"8-10 May","venue":"भिनाय पंचायत सभागार","time":"8:00 AM - 5:00 PM","nirm":"lambit","alloc":"lambit","down":"lambit","verify":"lambit","up":"lambit"}], deadline: "2026-05-15" },
+            { id: "16", name: "हस्ताक्षरित अटेंडेंस शीट पोर्टल पर अपलोड करना", status: "lambit", type: "simple", deadline: "2026-05-20" }
+        ]
+    },
+    {
+        category: "रसद और वित्त (Logistics & Finance)",
+        tasks: [
+            { id: "l-fac", name: "केंद्र व्यवस्थाएं (Facilities Readiness)", type: "logistics-checklist", internet: "lambit", sound: "purn", food: "apurn", water: "purn", deadline: "2026-04-27" }
+        ]
+    },
+    {
+        category: "FIELD SURVEY तैयारी (Field Survey Readiness)",
+        tasks: [
+            { id: "21", name: "HLO मोबाइल ऐप का सिंक और लॉगिन टेस्ट", status: "lambit", type: "simple", deadline: "2026-06-15" },
+            { id: "22", name: "ब्लॉक क्यूआर कोड (QR Code) वितरण", status: "lambit", type: "simple", deadline: "2026-06-20" },
+            { id: "23", name: "चार्ज रेडीनेस सर्टिफिकेट (CRC) अपलोड", status: "lambit", type: "simple", deadline: "2026-06-25" }
+        ]
     }
+];
+
+// 1. Load Data
+async function loadData() {
     let apiUrl = localStorage.getItem('census_api_url') || DEFAULT_API_URL;
     const apiInput = document.getElementById('api-url');
     if (apiInput) apiInput.value = apiUrl;
 
+    // Use hardcoded structure as base
+    taskData = JSON.parse(JSON.stringify(TASK_STRUCTURE));
+
     try {
-        // STEP 1: Always load base structure from local XML file
-        // This ensures ALL categories (including newly added ones) are present
-        const xmlResponse = await fetch('data.xml?v=' + new Date().getTime());
-        const xmlText = await xmlResponse.text();
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-        parseXMLToData(xmlDoc);
+        let savedValues = null;
 
-        // STEP 2: If not forcing XML, overlay saved progress
-        // Priority: localStorage FIRST (most recent save on this device), then cloud
-        if (!forceXML) {
-            let savedData = null;
-
-            // 1) Check localStorage FIRST — this has the most recent Save
-            const localData = localStorage.getItem('census_tasks');
-            if (localData) {
-                savedData = JSON.parse(localData);
-            }
-
-            // 2) If no localStorage, try cloud (Google Sheets) for cross-device sync
-            if (!savedData && apiUrl) {
-                try {
-                    const response = await fetch(apiUrl);
-                    const data = await response.json();
-                    if (data.xml && data.xml.includes('<category')) {
-                        const cloudDoc = parser.parseFromString(data.xml, "text/xml");
-                        savedData = parseXMLToArray(cloudDoc);
-                    }
-                } catch(e) {
-                    console.warn("Cloud sync failed.");
+        // 1) Try cloud (Google Sheets)
+        if (apiUrl) {
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                if (data && data.values) {
+                    savedValues = data.values;
                 }
+            } catch(e) {
+                console.warn("Cloud sync failed, trying localStorage.");
             }
+        }
 
-            // Merge: overlay saved progress onto XML base structure
-            if (savedData) {
-                taskData.forEach(baseCat => {
-                    const savedCat = savedData.find(sc => sc.category === baseCat.category);
-                    if (savedCat) {
-                        baseCat.tasks.forEach(baseTask => {
-                            const savedTask = savedCat.tasks.find(st => st.id === baseTask.id);
-                            if (savedTask) {
-                                Object.keys(savedTask).forEach(key => {
-                                    if (key !== 'id' && key !== 'name' && key !== 'type') {
-                                        baseTask[key] = savedTask[key];
-                                    }
-                                });
-                            }
-                        });
+        // 2) Check localStorage if cloud failed
+        if (!savedValues) {
+            const localData = localStorage.getItem('census_tasks_values');
+            if (localData) {
+                savedValues = JSON.parse(localData);
+            }
+        }
+
+        // Merge: overlay saved values onto the structure
+        if (savedValues) {
+            taskData.forEach(cat => {
+                cat.tasks.forEach(task => {
+                    if (savedValues[task.id]) {
+                        Object.assign(task, savedValues[task.id]);
                     }
                 });
-            }
+            });
         }
 
         calculateOverallProgress();
         renderPage();
     } catch (error) {
         console.error("Error loading data:", error);
+        calculateOverallProgress();
+        renderPage();
     }
 }
 
-// Parse XML into taskData (sets global)
-function parseXMLToData(xmlDoc) {
-    taskData = parseXMLToArray(xmlDoc);
-}
-
-// Parse XML and return array (does NOT set global)
-function parseXMLToArray(xmlDoc) {
-    const categories = xmlDoc.getElementsByTagName('category');
-    let loadedData = [];
-    
-    for (let cat of categories) {
-        let categoryName = cat.getAttribute('name');
-        let tasks = cat.getElementsByTagName('task');
-        let catTasks = [];
-        for (let t of tasks) {
-            let taskObj = {
-                id: t.getAttribute('id'),
-                name: t.getAttribute('name'),
-                status: t.getAttribute('status') || 'lambit',
-                type: t.getAttribute('type') || 'simple',
-                deadline: t.getAttribute('deadline') || ''
-            };
-            
-            if (taskObj.type === 'counter') {
-                taskObj.total = parseInt(t.getAttribute('total')) || 242;
-                taskObj.completed = parseInt(t.getAttribute('completed')) || 0;
-            } else if (taskObj.type === 'info') {
-                taskObj.content = t.getAttribute('content') || '';
-            } else if (taskObj.type === 'map-stats') {
-                taskObj.total = parseInt(t.getAttribute('total')) || 97;
-                taskObj.checked = parseInt(t.getAttribute('checked')) || 0;
-                taskObj.correct = parseInt(t.getAttribute('correct')) || 0;
-                taskObj.incorrect = parseInt(t.getAttribute('incorrect')) || 0;
-            } else if (taskObj.type === 'cell-info') {
-                taskObj.staffCount = parseInt(t.getAttribute('staffCount')) || 0;
-                taskObj.computers = parseInt(t.getAttribute('computers')) || 0;
-                taskObj.printers = parseInt(t.getAttribute('printers')) || 0;
-                try {
-                    taskObj.staffList = JSON.parse(t.getAttribute('staffList') || '[]');
-                } catch (e) {
-                    taskObj.staffList = [];
-                }
-            } else if (taskObj.type === 'user-group') {
-                taskObj.totalCount = parseInt(t.getAttribute('totalCount')) || 0;
-                taskObj.reserveCount = parseInt(t.getAttribute('reserveCount')) || 0;
-                taskObj.niyukti = t.getAttribute('niyukti') || 'lambit';
-                taskObj.circleAlloc = t.getAttribute('circleAlloc') || 'lambit';
-                taskObj.pragnakAlloc = t.getAttribute('pragnakAlloc') || 'lambit';
-                taskObj.hlbAlloc = t.getAttribute('hlbAlloc') || 'lambit';
-                taskObj.idCard = t.getAttribute('idCard') || 'lambit';
-                taskObj.mapDistrib = t.getAttribute('mapDistrib') || 'lambit';
-                taskObj.reserveId = t.getAttribute('reserveId') || 'lambit';
-                taskObj.uploadedCount = parseInt(t.getAttribute('uploadedCount')) || 0;
-                taskObj.reserveUploadedCount = parseInt(t.getAttribute('reserveUploadedCount')) || 0;
-                taskObj.portalDeadline = t.getAttribute('portalDeadline') || '';
-                taskObj.alloc = t.getAttribute('alloc') || 'lambit';
-            } else if (taskObj.type === 'training-summary') {
-                taskObj.totalBatches = parseInt(t.getAttribute('totalBatches')) || 7;
-                taskObj.completedBatches = parseInt(t.getAttribute('completedBatches')) || 0;
-                taskObj.totalAttended = parseInt(t.getAttribute('totalAttended')) || 0;
-                try {
-                    taskObj.batchList = JSON.parse(t.getAttribute('batchList') || '[]');
-                } catch (e) {
-                    taskObj.batchList = [];
-                }
-            } else if (taskObj.type === 'logistics-checklist') {
-                taskObj.internet = t.getAttribute('internet') || 'lambit';
-                taskObj.sound = t.getAttribute('sound') || 'lambit';
-                taskObj.food = t.getAttribute('food') || 'lambit';
-                taskObj.water = t.getAttribute('water') || 'lambit';
-            } else if (taskObj.type === 'training-logistics') {
-                taskObj.centerSelection = t.getAttribute('centerSelection') || 'lambit';
-                taskObj.permissionLetter = t.getAttribute('permissionLetter') || 'lambit';
-            } else if (taskObj.type === 'training-centers') {
-                taskObj.c1 = t.getAttribute('c1') || 'Center 1';
-                taskObj.c2 = t.getAttribute('c2') || 'Center 2';
-                taskObj.c3 = t.getAttribute('c3') || 'Center 3';
-                taskObj.c4 = t.getAttribute('c4') || 'Center 4';
-            }
-            catTasks.push(taskObj);
-        }
-        loadedData.push({ category: categoryName, tasks: catTasks });
-    }
-    return loadedData;
-}
+// XML Parsing logic removed as we now use direct JS structure
 
 // 2. Render Page
 function renderPage() {
@@ -1094,21 +1042,26 @@ function updateDailyScheduler() {
 
 // 4. Save Changes
 async function saveChanges() {
-    // 1) Always save to localStorage (instant, reliable)
-    localStorage.setItem('census_tasks', JSON.stringify(taskData));
+    // 1) Always save values only to localStorage
+    const valuesOnly = {};
+    taskData.forEach(cat => {
+        cat.tasks.forEach(t => {
+            const { id, name, type, ...values } = t;
+            valuesOnly[id] = values;
+        });
+    });
+    localStorage.setItem('census_tasks_values', JSON.stringify(valuesOnly));
     
-    // 2) Always try to sync to Google Sheets (cloud)
+    // 2) Always try to sync values to Google Sheets (cloud)
     const apiUrl = localStorage.getItem('census_api_url') || DEFAULT_API_URL;
     if (apiUrl) {
         try {
-            const xml = generateXMLString();
             await fetch(apiUrl, {
                 method: 'POST',
                 mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ xml: xml })
+                body: JSON.stringify({ values: valuesOnly })
             });
-            alert("✅ बदलाव सुरक्षित हो गए!\n• लोकल मेमोरी: ✅\n• Google Sheets (Cloud): ✅ सिंक भेजा गया");
+            alert("✅ बदलाव सुरक्षित हो गए!\n• लोकल मेमोरी: ✅\n• Google Sheets (Cloud): ✅ डेटा भेज दिया गया");
         } catch (e) {
             console.error("Cloud sync error:", e);
             alert("⚠️ बदलाव लोकल मेमोरी में सुरक्षित हैं।\nCloud सिंक में समस्या: " + e.message);
@@ -1133,71 +1086,53 @@ async function forceCloudSync() {
         return;
     }
 
-    const xml = generateXMLString();
+    const valuesOnly = {};
+    taskData.forEach(cat => {
+        cat.tasks.forEach(t => {
+            const { id, name, type, ...values } = t;
+            valuesOnly[id] = values;
+        });
+    });
+
     try {
-        const response = await fetch(apiUrl, {
+        await fetch(apiUrl, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ xml: xml })
+            body: JSON.stringify({ values: valuesOnly })
         });
-        alert("डेटा क्लाउड (Google Sheets) पर सिंक हो गया है!");
+        alert("डेटा क्लाउड (Google Sheets) पर भेज दिया गया है!");
     } catch (e) {
         console.error(e);
         alert("सिंक करने में एरर आया। कृपया URL चेक करें।");
     }
 }
 
-function generateXMLString() {
-    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<census_plan>\n`;
-    taskData.forEach(cat => {
-        xml += `    <category name="${cat.category}">\n`;
-        cat.tasks.forEach(task => {
-            const dl = task.deadline ? ` deadline="${task.deadline}"` : '';
-            if (task.type === 'counter') xml += `        <task id="${task.id}" name="${task.name}" type="counter" total="${task.total}" completed="${task.completed}"${dl} />\n`;
-            else if (task.type === 'info') xml += `        <task id="${task.id}" name="${task.name}" type="info" content="${task.content}"${dl} />\n`;
-            else if (task.type === 'map-stats') xml += `        <task id="${task.id}" name="${task.name}" type="map-stats" total="${task.total}" checked="${task.checked}" correct="${task.correct}" incorrect="${task.incorrect}" status="${task.status}"${dl} />\n`;
-            else if (task.type === 'cell-info') {
-                const staffListJson = JSON.stringify(task.staffList).replace(/"/g, '&quot;');
-                xml += `        <task id="${task.id}" name="${task.name}" type="cell-info" staffCount="${task.staffCount}" computers="${task.computers}" printers="${task.printers}" staffList="${staffListJson}"${dl} />\n`;
-            } else if (task.type === 'user-group') {
-                let attrs = `totalCount="${task.totalCount}" reserveCount="${task.reserveCount}" uploadedCount="${task.uploadedCount}" reserveUploadedCount="${task.reserveUploadedCount}" portalDeadline="${task.portalDeadline}" niyukti="${task.niyukti}" hlbAlloc="${task.hlbAlloc}" idCard="${task.idCard}" mapDistrib="${task.mapDistrib}" reserveId="${task.reserveId}"`;
-                if (task.id === 'sup1') attrs += ` circleAlloc="${task.circleAlloc}" pragnakAlloc="${task.pragnakAlloc}"`;
-                else attrs += ` alloc="${task.alloc}"`;
-                xml += `        <task id="${task.id}" name="${task.name}" type="user-group" ${attrs}${dl} />\n`;
-            } else if (task.type === 'training-summary') {
-                const batchListJson = JSON.stringify(task.batchList).replace(/"/g, '&quot;');
-                xml += `        <task id="${task.id}" name="${task.name}" type="training-summary" totalBatches="${task.totalBatches}" completedBatches="${task.completedBatches}" totalAttended="${task.totalAttended}" batchList="${batchListJson}"${dl} />\n`;
-            } else if (task.type === 'training-logistics') xml += `        <task id="${task.id}" name="${task.name}" type="training-logistics" centerSelection="${task.centerSelection}" permissionLetter="${task.permissionLetter}"${dl} />\n`;
-            else if (task.type === 'training-centers') xml += `        <task id="${task.id}" name="${task.name}" type="training-centers" c1="${task.c1}" c2="${task.c2}" c3="${task.c3}" c4="${task.c4}"${dl} />\n`;
-            else if (task.type === 'logistics-checklist') xml += `        <task id="${task.id}" name="${task.name}" type="logistics-checklist" internet="${task.internet}" sound="${task.sound}" food="${task.food}" water="${task.water}"${dl} />\n`;
-            else xml += `        <task id="${task.id}" name="${task.name}" status="${task.status}"${dl} />\n`;
-        });
-        xml += `    </category>\n`;
-    });
-    xml += `</census_plan>`;
-    return xml;
-}
+// XML Generation logic removed
 
 // 5. Reset Data
 function resetData() {
-    if (confirm("क्या आप XML से नया डेटा लोड करना चाहते हैं? (इससे आपकी लोकल प्रोग्रेस हट जाएगी)")) {
-        localStorage.removeItem('census_tasks');
-        localStorage.setItem('force_xml', 'true');
+    if (confirm("क्या आप डेटा को रीसेट करना चाहते हैं? (इससे आपकी लोकल प्रोग्रेस हट जाएगी)")) {
+        localStorage.removeItem('census_tasks_values');
         location.reload();
     }
 }
 
-function exportToXML() {
-    const xml = generateXMLString();
-    const blob = new Blob([xml], { type: 'text/xml' });
+function exportToJSON() {
+    const valuesOnly = {};
+    taskData.forEach(cat => {
+        cat.tasks.forEach(t => {
+            const { id, name, type, ...values } = t;
+            valuesOnly[id] = values;
+        });
+    });
+    const blob = new Blob([JSON.stringify({ values: valuesOnly }, null, 4)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'data.xml';
+    a.download = 'census_backup.json';
     a.click();
     URL.revokeObjectURL(url);
-    alert("डाटा (data.xml) जनरेट हो गया है। इसे बैकअप के लिए रखें।");
+    alert("डाटा बैकअप (JSON) जनरेट हो गया है।");
 }
 
 // Start sequence
