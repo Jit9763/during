@@ -403,8 +403,11 @@ function renderPage() {
                             </tr>
                         `;
                     } else {
-                        const stepDots = steps.map(s => `
-                            <div class="step-dot ${b[s.key] === 'purn' ? 'done' : ''}"><div class="step-tool">${s.label}</div></div>
+                        const stepDots = steps.map((s, idx) => `
+                            <div class="step-dot ${b[s.key] === 'purn' ? 'done' : ''}" style="display:flex; align-items:center; justify-content:center;">
+                                <span style="font-size:9px; font-weight:bold; color:${b[s.key] === 'purn' ? 'white' : '#666'};">${idx + 1}</span>
+                                <div class="step-tool">${idx + 1}. ${s.label}</div>
+                            </div>
                         `).join('');
 
                         return `
@@ -440,6 +443,10 @@ function renderPage() {
                                     <thead><tr><th>Batch</th><th>Date</th><th>Venue (जगह)</th><th>Time (समय)</th><th>Status</th></tr></thead>
                                     <tbody>${batchRows}</tbody>
                                 </table>
+                            </div>
+                            <!-- Legend for dots -->
+                            <div class="batch-legend" style="margin-top:10px; padding-top:8px; border-top:1px dashed #eee; display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
+                                ${steps.map((s, idx) => `<span style="font-size:9px; color:#666;"><b>${idx + 1}:</b> ${s.label}</span>`).join('')}
                             </div>
                         </div>
                     `;
