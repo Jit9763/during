@@ -523,6 +523,7 @@ function renderPage() {
                                 <td><input type="text" class="staff-input" value="${s.name}" onchange="updateStaffDetail('${task.id}', ${sIdx}, 'name', this.value)"></td>
                                 <td><input type="text" class="staff-input" value="${s.pad}" onchange="updateStaffDetail('${task.id}', ${sIdx}, 'pad', this.value)"></td>
                                 <td><input type="text" class="staff-input" value="${s.role}" onchange="updateStaffDetail('${task.id}', ${sIdx}, 'role', this.value)"></td>
+                                <td><input type="text" class="staff-input" value="${s.mobile || ''}" onchange="updateStaffDetail('${task.id}', ${sIdx}, 'mobile', this.value)"></td>
                                 <td><button class="row-action-btn btn-remove" onclick="removeStaffRow('${task.id}', ${sIdx})"><i class="fas fa-trash"></i></button></td>
                             </tr>
                         `;
@@ -532,6 +533,7 @@ function renderPage() {
                                 <td>${s.name}</td>
                                 <td>${s.pad}</td>
                                 <td>${s.role}</td>
+                                <td>${s.mobile || ''}</td>
                             </tr>
                         `;
                     }
@@ -565,7 +567,8 @@ function renderPage() {
                                             <th>नाम</th>
                                             <th>पद</th>
                                             <th>कार्य/भूमिका</th>
-                                            <th>Action</th>
+                                            <th>मोबाइल नंबर</th>
+                                            ${isAdminPage ? '<th>Action</th>' : ''}
                                         </tr>
                                     </thead>
                                     <tbody id="staff-body-${task.id}">
@@ -604,10 +607,11 @@ function renderPage() {
                                             <th>नाम</th>
                                             <th>पद</th>
                                             <th>कार्य/भूमिका</th>
+                                            <th>मोबाइल नंबर</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        ${staffRowsHtml || '<tr><td colspan="3" style="text-align:center;">डेटा उपलब्ध नहीं</td></tr>'}
+                                        ${staffRowsHtml || '<tr><td colspan="4" style="text-align:center;">डेटा उपलब्ध नहीं</td></tr>'}
                                     </tbody>
                                 </table>
                             </div>
@@ -786,7 +790,7 @@ function addStaffRow(id) {
         cat.tasks.forEach(task => {
             if (task.id === id) {
                 if (!task.staffList) task.staffList = [];
-                task.staffList.push({ name: '', pad: '', role: '' });
+                task.staffList.push({ name: '', pad: '', role: '', mobile: '' });
             }
         });
     });
