@@ -1000,21 +1000,50 @@ function updateDeadline(taskId, newDate) {
     renderPage();
 }
 
+function isTaskPending(t) {
+    // Exclude informational types from priority focus
+    if (t.type === 'info' || t.type === 'cell-info' || t.type === 'training-centers') return false;
+    
+    // Check completion based on task type
+    if (t.type === 'counter') return t.completed < t.total;
+    if (t.type === 'map-stats') return t.checked < t.total;
+    if (t.type === 'training-summary') return t.completedBatches < t.totalBatches;
+    
+    if (t.type === 'user-group') {
+        const subKeys = ['niyukti', 'hlbAlloc', 'idCard', 'mapDistrib', 'reserveId'];
+        if (t.id === 'sup1') subKeys.push('circleAlloc', 'pragnakAlloc');
+        else subKeys.push('alloc');
+        
+        const allStepsDone = subKeys.every(k => t[k] === 'purn');
+        const allUploadsDone = t.uploadedCount >= t.totalCount && (t.reserveUploadedCount || 0) >= (t.reserveCount || 0);
+        return !allStepsDone || !allUploadsDone;
+    }
+    
+    if (t.type === 'training-logistics') return t.centerSelection !== 'purn' || t.permissionLetter !== 'purn';
+    if (t.type === 'logistics-checklist') return ['internet', 'sound', 'food', 'water'].some(k => t[k] !== 'purn');
+    
+    // Default for simple and others
+    return t.status !== 'purn';
+}
+
 function updateDailyScheduler() {
     const scheduler = document.getElementById('daily-scheduler');
     if (!scheduler) return;
     
-    const todayNum = new Date().setHours(0,0,0,0);
+    const now = new Date();
+    const todayNum = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
     const urgentTasks = [];
     
     taskData.forEach(cat => {
         cat.tasks.forEach(t => {
-            if (t.status !== 'purn' && t.deadline) {
-                const dl = new Date(t.deadline).getTime();
-                const diffDays = (dl - todayNum) / (1000 * 60 * 60 * 24);
+            if (isTaskPending(t) && t.deadline) {
+                const dlDate = new Date(t.deadline);
+                // Ensure we compare only the date part
+                const dlNum = new Date(dlDate.getFullYear(), dlDate.getMonth(), dlDate.getDate()).getTime();
+                const diffDays = Math.round((dlNum - todayNum) / (1000 * 60 * 60 * 24));
                 
-                // Show tasks due today, overdue, or due in the next 7 days
-                if (diffDays <= 7) {
+                // Show tasks overdue, due today, or due in the next 10 days
+                if (diffDays <= 10) {
                     urgentTasks.push({ name: t.name, days: diffDays });
                 }
             }
@@ -1022,29 +1051,43 @@ function updateDailyScheduler() {
     });
 
     if (urgentTasks.length > 0) {
-        // Sort by urgency
+        // Sort by urgency: most overdue first, then closest deadline
         urgentTasks.sort((a,b) => a.days - b.days);
         
-        const taskLabels = urgentTasks.slice(0, 3).map(ut => {
-            let label = ut.name;
-            if (ut.days < 0) label += ` (Overdue!)`;
-            else if (ut.days === 0) label += ` (आज!)`;
-            else label += ` (अगले ${Math.ceil(ut.days)} दिन)`;
-            return label;
+        const taskLabels = urgentTasks.slice(0, 5).map(ut => {
+            let labelStyle = "";
+            let text = ut.name;
+            let icon = '<i class="fas fa-calendar-day"></i>';
+            
+            if (ut.days < 0) {
+                labelStyle = "color: #ff4d4d; font-weight: bold;";
+                text += ` (विलंब: ${Math.abs(ut.days)} दिन)`;
+                icon = '<i class="fas fa-exclamation-circle"></i>';
+            } else if (ut.days === 0) {
+                labelStyle = "color: #ff9800; font-weight: bold;";
+                text += ` (आज!)`;
+                icon = '<i class="fas fa-clock"></i>';
+            } else {
+                text += ` (अगले ${ut.days} दिन)`;
+            }
+            
+            return `<span style="display: inline-flex; align-items: center; gap: 5px; ${labelStyle}">${icon} ${text}</span>`;
         });
 
         scheduler.innerHTML = `
             <div class="scheduler-banner">
-                <i class="fas fa-bullhorn fa-2x"></i>
-                <div>
-                    <strong style="display:block; font-size:16px;">आगामी और लंबित कार्य (Priority Focus):</strong>
-                    <span style="font-size:13px;">${taskLabels.join(' | ')}</span>
+                <i class="fas fa-bullhorn fa-2x" style="color: var(--warning); animation: blink 2s infinite;"></i>
+                <div style="flex:1;">
+                    <strong style="display:block; font-size:16px; margin-bottom:5px;">आगामी और लंबित कार्य (Priority Focus):</strong>
+                    <div style="display:flex; flex-wrap:wrap; gap:10px 20px; font-size:13px;">
+                        ${taskLabels.join('<span style="color:rgba(255,255,255,0.3)">|</span>')}
+                    </div>
                 </div>
             </div>
         `;
     } else {
         scheduler.innerHTML = `
-            <div class="scheduler-banner" style="border-color: var(--success);">
+            <div class="scheduler-banner" style="border-color: var(--success); background: #f0fdf4; color: #166534;">
                 <i class="fas fa-check-double fa-2x" style="color: var(--success);"></i>
                 <div>
                     <strong style="display:block; font-size:16px;">सभी कार्य ट्रैक पर हैं!</strong>
