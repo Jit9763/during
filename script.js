@@ -114,8 +114,6 @@ function renderPage() {
     if (!container) return;
     
     container.innerHTML = '';
-    let totalPurn = 0;
-    let totalTasks = 0;
 
     taskData.forEach((cat, catIdx) => {
         const section = document.createElement('div');
@@ -141,8 +139,6 @@ function renderPage() {
             if (task.type === 'counter') {
                 taskWeight = 1; // Treat one tracker as one unit of weight for overall progress
                 taskPurnCount = task.completed / task.total;
-                totalTasks += taskWeight;
-                totalPurn += taskPurnCount;
 
                 const percent = Math.round((task.completed / task.total) * 100);
                 
@@ -150,7 +146,7 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card">
                             <span class="task-name">${task.name}</span>
-                            ${getDeadlineTag(task.deadline, task.status, task.id)}
+                            ${getDeadlineTag(task.deadline, isTaskComplete(task) ? 'purn' : task.status, task.id)}
                             <div class="counter-info">
                                 <span>प्रगति: ${task.completed} / ${task.total}</span>
                                 <span>${percent}%</span>
@@ -168,7 +164,7 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card">
                             <span class="task-name">${task.name}</span>
-                            ${getDeadlineTag(task.deadline, task.status, task.id)}
+                            ${getDeadlineTag(task.deadline, isTaskComplete(task) ? 'purn' : task.status, task.id)}
                             <div class="counter-info">
                                 <span>प्रगति: ${task.completed} / ${task.total}</span>
                                 <span>${percent}%</span>
@@ -210,11 +206,6 @@ function renderPage() {
                     subTasks.splice(1, 0, { label: 'आवंटन', key: 'alloc' });
                 }
 
-                // Calculate group progress
-                totalTasks += subTasks.length;
-                subTasks.forEach(st => {
-                    if (task[st.key] === 'purn') totalPurn += 1;
-                });
 
                 const portalPercent = Math.round((task.uploadedCount / task.totalCount) * 100) || 0;
                 const reservePortalPercent = Math.round((task.reserveUploadedCount / task.reserveCount) * 100) || 0;
@@ -235,7 +226,7 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card" style="grid-column: 1 / -1;">
                              <span class="task-name">${task.name}</span>
-                             ${getDeadlineTag(task.deadline, task.niyukti === 'purn' && task.uploadedCount >= task.totalCount ? 'purn' : 'lambit', task.id)}
+                             ${getDeadlineTag(task.deadline, isTaskComplete(task) ? 'purn' : 'lambit', task.id)}
                              <div style="margin-bottom:15px; display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:10px;">
                                 <div class="counter-input-group">
                                     <label style="font-size:11px;">कुल संख्या:</label>
@@ -274,7 +265,7 @@ function renderPage() {
                     taskHtml += `
                         <div class="task-card" style="grid-column: 1 / -1;">
                             <span class="task-name">${task.name}</span>
-                            ${getDeadlineTag(task.deadline, task.niyukti === 'purn' && task.uploadedCount >= task.totalCount ? 'purn' : 'lambit', task.id)}
+                            ${getDeadlineTag(task.deadline, isTaskComplete(task) ? 'purn' : 'lambit', task.id)}
                             <div style="margin-bottom:10px; font-size:12px; font-weight:700; color:var(--secondary); display:flex; flex-wrap:wrap; gap:15px;">
                                 <span><i class="fas fa-users"></i> कुल: ${task.totalCount}</span>
                                 <span><i class="fas fa-users-cog"></i> Reserve: ${task.reserveCount}</span>
@@ -356,8 +347,6 @@ function renderPage() {
                 ).length;
                 task.completedBatches = completedCount;
                 
-                totalTasks += 1;
-                totalPurn += (task.completedBatches / task.totalBatches);
 
                 const steps = [
                     { key: 'nirm', label: 'बैच निर्माण' },
@@ -620,10 +609,8 @@ function renderPage() {
                 }
             } else if (task.type === 'map-stats') {
                 const checkedPercent = Math.round((task.checked / task.total) * 100);
-                totalTasks += 1;
-                totalPurn += (task.checked / task.total);
 
-                let deadlineHtml = getDeadlineTag(task.deadline, task.status, task.id);
+                let deadlineHtml = getDeadlineTag(task.deadline, isTaskComplete(task) ? 'purn' : task.status, task.id);
 
                 if (isAdminPage) {
                     taskHtml += `
@@ -681,14 +668,12 @@ function renderPage() {
                     `;
                 }
             } else {
-                totalTasks += taskWeight;
-                if (task.status === 'purn') totalPurn += 1;
                 
                 if (isAdminPage) {
                     taskHtml += `
                         <div class="task-card">
                             <span class="task-name">${task.name}</span>
-                            ${getDeadlineTag(task.deadline, task.status, task.id)}
+                            ${getDeadlineTag(task.deadline, isTaskComplete(task) ? 'purn' : task.status, task.id)}
                             <div class="radio-group">
                                 <div class="radio-option">
                                     <input type="radio" id="purn-${task.id}" name="status-${task.id}" value="purn" ${task.status === 'purn' ? 'checked' : ''} onchange="updateTaskStatus('${task.id}', 'purn')">
@@ -721,10 +706,6 @@ function renderPage() {
         container.appendChild(section);
     });
 
-    // Update Progress Bar
-    const percent = Math.round((totalPurn / totalTasks) * 100);
-    document.getElementById('overall-bar').style.width = percent + '%';
-    document.getElementById('progress-val').innerText = percent + '%';
 }
 
 function getStatusLabel(status) {
@@ -734,6 +715,11 @@ function getStatusLabel(status) {
 }
 
 // 3. Update Status (Admin Only)
+function onDataChange() {
+    calculateOverallProgress();
+    renderPage();
+}
+
 function updateTaskStatus(id, newStatus) {
     taskData.forEach(cat => {
         cat.tasks.forEach(task => {
@@ -742,7 +728,7 @@ function updateTaskStatus(id, newStatus) {
             }
         });
     });
-    calculateOverallProgress();
+    onDataChange();
 }
 
 function updateCounterStatus(id, newValue) {
@@ -754,7 +740,7 @@ function updateCounterStatus(id, newValue) {
             }
         });
     });
-    calculateOverallProgress();
+    onDataChange();
 }
 
 function updateMapField(id, field, value) {
@@ -770,7 +756,7 @@ function updateMapField(id, field, value) {
             }
         });
     });
-    calculateOverallProgress();
+    onDataChange();
 }
 
 // Cell Data Functions
@@ -827,7 +813,7 @@ function updateUserGroupStatus(id, key, value) {
             }
         });
     });
-    calculateOverallProgress();
+    onDataChange();
 }
 
 function updateUserGroupField(id, key, value) {
@@ -842,18 +828,18 @@ function updateUserGroupField(id, key, value) {
             }
         });
     });
-    calculateOverallProgress();
+    onDataChange();
 }
 
 function updateGenericField(id, key, value) {
     taskData.forEach(cat => {
         cat.tasks.forEach(task => {
             if (task.id === id) {
-                task[key] = parseInt(value) || 0;
+                task[key] = isNaN(parseInt(value)) ? value : parseInt(value);
             }
         });
     });
-    calculateOverallProgress();
+    onDataChange();
 }
 
 function updateBatchField(id, index, field, value) {
@@ -864,6 +850,7 @@ function updateBatchField(id, index, field, value) {
             }
         });
     });
+    onDataChange();
 }
 
 function updateBatchStatus(id, index, value) {
@@ -871,12 +858,10 @@ function updateBatchStatus(id, index, value) {
         cat.tasks.forEach(task => {
             if (task.id === id) {
                 task.batchList[index].status = value;
-                const completed = task.batchList.filter(b => b.status === 'purn').length;
-                task.completedBatches = completed;
             }
         });
     });
-    calculateOverallProgress();
+    onDataChange();
 }
 
 function updateBatchStepStatus(id, index, stepKey, value) {
@@ -887,7 +872,7 @@ function updateBatchStepStatus(id, index, stepKey, value) {
             }
         });
     });
-    calculateOverallProgress();
+    onDataChange();
 }
 
 function quickFinishBatch(id, index) {
@@ -903,10 +888,60 @@ function quickFinishBatch(id, index) {
             }
         });
     });
-    calculateOverallProgress();
+    onDataChange();
 }
 
 // 3. Progress Calculation (Category & Overall)
+function getTaskProgress(t) {
+    let purn = 0;
+    let total = 0;
+
+    if (t.type === 'counter') {
+        total = 1;
+        purn = (t.completed / t.total) || 0;
+    } else if (t.type === 'map-stats') {
+        total = 1;
+        purn = (t.checked / t.total) || 0;
+    } else if (t.type === 'user-group') {
+        const subKeys = ['niyukti', 'hlbAlloc', 'idCard', 'mapDistrib', 'reserveId'];
+        if (t.id === 'sup1') subKeys.push('circleAlloc', 'pragnakAlloc');
+        else subKeys.push('alloc');
+        
+        total = subKeys.length + 2; 
+        subKeys.forEach(k => { if (t[k] === 'purn') purn += 1; });
+        purn += (t.uploadedCount / t.totalCount) || 0;
+        purn += (t.reserveUploadedCount / t.reserveCount) || 0;
+    } else if (t.type === 'training-summary') {
+        // Recalculate completed batches on the fly
+        const completedCount = t.batchList.filter(b => 
+            b.nirm === 'purn' && b.alloc === 'purn' && b.down === 'purn' && 
+            b.verify === 'purn' && b.up === 'purn'
+        ).length;
+        t.completedBatches = completedCount;
+        
+        total = 1;
+        purn = (t.completedBatches / t.totalBatches) || 0;
+    } else if (t.type === 'training-logistics') {
+        const subKeys = ['centerSelection', 'permissionLetter'];
+        total = subKeys.length;
+        subKeys.forEach(k => { if (t[k] === 'purn') purn += 1; });
+    } else if (t.type === 'logistics-checklist') {
+        const subKeys = ['internet', 'sound', 'food', 'water'];
+        total = subKeys.length;
+        subKeys.forEach(k => { if (t[k] === 'purn') purn += 1; });
+    } else if (t.type !== 'info' && t.type !== 'cell-info' && t.type !== 'training-centers') {
+        total = 1;
+        if (t.status === 'purn') purn = 1;
+    }
+    return { purn, total };
+}
+
+function isTaskComplete(t) {
+    if (t.type === 'info' || t.type === 'cell-info' || t.type === 'training-centers') return true;
+    const prog = getTaskProgress(t);
+    return prog.total > 0 && prog.purn >= prog.total;
+}
+
 function calculateOverallProgress() {
     let totalPurnGlobal = 0;
     let totalTasksGlobal = 0;
@@ -916,36 +951,9 @@ function calculateOverallProgress() {
         let catTasks = 0;
 
         cat.tasks.forEach(t => {
-            if (t.type === 'counter') {
-                catTasks += 1;
-                catPurn += (t.completed / t.total) || 0;
-            } else if (t.type === 'map-stats') {
-                catTasks += 1;
-                catPurn += (t.checked / t.total) || 0;
-            } else if (t.type === 'user-group') {
-                const subKeys = ['niyukti', 'hlbAlloc', 'idCard', 'mapDistrib', 'reserveId'];
-                if (t.id === 'sup1') subKeys.push('circleAlloc', 'pragnakAlloc');
-                else subKeys.push('alloc');
-                
-                catTasks += subKeys.length + 2; 
-                subKeys.forEach(k => { if (t[k] === 'purn') catPurn += 1; });
-                catPurn += (t.uploadedCount / t.totalCount) || 0;
-                catPurn += (t.reserveUploadedCount / t.reserveCount) || 0;
-            } else if (t.type === 'training-summary') {
-                catTasks += 1;
-                catPurn += (t.completedBatches / t.totalBatches) || 0;
-            } else if (t.type === 'training-logistics') {
-                const subKeys = ['centerSelection', 'permissionLetter'];
-                catTasks += subKeys.length;
-                subKeys.forEach(k => { if (t[k] === 'purn') catPurn += 1; });
-            } else if (t.type === 'logistics-checklist') {
-                const subKeys = ['internet', 'sound', 'food', 'water'];
-                catTasks += subKeys.length;
-                subKeys.forEach(k => { if (t[k] === 'purn') catPurn += 1; });
-            } else if (t.type !== 'info' && t.type !== 'cell-info' && t.type !== 'training-centers') {
-                catTasks += 1;
-                if (t.status === 'purn') catPurn += 1;
-            }
+            const prog = getTaskProgress(t);
+            catPurn += prog.purn;
+            catTasks += prog.total;
         });
 
         cat.progress = catTasks > 0 ? Math.round((catPurn / catTasks) * 100) : 0;
@@ -996,8 +1004,7 @@ function updateDeadline(taskId, newDate) {
             }
         });
     });
-    calculateOverallProgress();
-    renderPage();
+    onDataChange();
 }
 
 function isTaskPending(t) {
@@ -1100,6 +1107,9 @@ function updateDailyScheduler() {
 
 // 4. Save Changes
 async function saveChanges() {
+    const btn = document.querySelector('.btn-save');
+    const originalHTML = btn.innerHTML;
+    
     // 1) Always save values only to localStorage
     const valuesOnly = {};
     taskData.forEach(cat => {
@@ -1114,14 +1124,24 @@ async function saveChanges() {
     const apiUrl = localStorage.getItem('census_api_url') || DEFAULT_API_URL;
     if (apiUrl) {
         try {
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            btn.disabled = true;
+
             await fetch(apiUrl, {
                 method: 'POST',
                 mode: 'no-cors',
                 body: JSON.stringify({ values: valuesOnly })
             });
-            alert("✅ बदलाव सुरक्षित हो गए!\n• लोकल मेमोरी: ✅\n• Google Sheets (Cloud): ✅ डेटा भेज दिया गया");
+            
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+                alert("✅ बदलाव सुरक्षित हो गए!\n• लोकल मेमोरी: ✅\n• Google Sheets (Cloud): ✅ डेटा भेज दिया गया");
+            }, 500);
         } catch (e) {
             console.error("Cloud sync error:", e);
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
             alert("⚠️ बदलाव लोकल मेमोरी में सुरक्षित हैं।\nCloud सिंक में समस्या: " + e.message);
         }
     } else {
@@ -1203,8 +1223,7 @@ function toggleUserGroupStep(id, key) {
             }
         });
     });
-    calculateOverallProgress();
-    renderPage();
+    onDataChange();
 }
 
 function toggleBatchStep(id, bIdx, step) {
@@ -1215,8 +1234,7 @@ function toggleBatchStep(id, bIdx, step) {
             }
         });
     });
-    calculateOverallProgress();
-    renderPage();
+    onDataChange();
 }
 
 // 7. Generate Formal Report (प्रतिवेदन)
@@ -1224,25 +1242,13 @@ function generateReport() {
     const today = new Date();
     const dateStr = today.toLocaleDateString('hi-IN', { year: 'numeric', month: 'long', day: 'numeric' });
     
-    // Calculate overall progress
+    // Calculate overall progress using unified logic
     let totalP = 0, totalT = 0;
     taskData.forEach(cat => {
         cat.tasks.forEach(t => {
-            if (t.type === 'counter') { totalT++; totalP += (t.completed / t.total) || 0; }
-            else if (t.type === 'map-stats') { totalT++; totalP += (t.checked / t.total) || 0; }
-            else if (t.type === 'training-summary') { totalT++; totalP += (t.completedBatches / t.totalBatches) || 0; }
-            else if (t.type === 'logistics-checklist') {
-                ['internet','sound','food','water'].forEach(k => { totalT++; if(t[k]==='purn') totalP++; });
-            } else if (t.type === 'user-group') {
-                const keys = ['niyukti','hlbAlloc','idCard','mapDistrib','reserveId'];
-                if (t.id === 'sup1') keys.push('circleAlloc','pragnakAlloc');
-                else keys.push('alloc');
-                keys.forEach(k => { totalT++; if(t[k]==='purn') totalP++; });
-            } else if (t.type === 'training-logistics') {
-                ['centerSelection','permissionLetter'].forEach(k => { totalT++; if(t[k]==='purn') totalP++; });
-            } else if (t.type !== 'info' && t.type !== 'cell-info' && t.type !== 'training-centers') {
-                totalT++; if(t.status === 'purn') totalP++;
-            }
+            const prog = getTaskProgress(t);
+            totalP += prog.purn;
+            totalT += prog.total;
         });
     });
     const overallPercent = totalT > 0 ? Math.round((totalP / totalT) * 100) : 0;
@@ -1266,13 +1272,50 @@ function generateReport() {
             } else if (t.type === 'map-stats') {
                 statusText = `कुल ${t.total} में से ${t.checked} जांच पूर्ण। सही: ${t.correct}, गलत: ${t.incorrect}`;
             } else if (t.type === 'user-group') {
+                const stepLabels = {
+                    niyukti: "नियुक्ति",
+                    circleAlloc: "सर्किल",
+                    pragnakAlloc: "प्रगणक",
+                    alloc: "आवंटन",
+                    hlbAlloc: "HLB",
+                    idCard: "ID कार्ड",
+                    mapDistrib: "मैप",
+                    reserveId: "रिजर्व"
+                };
                 const keys = t.id === 'sup1' 
                     ? ['niyukti','circleAlloc','pragnakAlloc','hlbAlloc','idCard','mapDistrib','reserveId']
                     : ['niyukti','alloc','hlbAlloc','idCard','mapDistrib','reserveId'];
-                const done = keys.filter(k => t[k] === 'purn').length;
-                statusText = `कुल: ${t.totalCount}, रिजर्व: ${t.reserveCount}, पोर्टल अपलोड: ${t.uploadedCount}/${t.totalCount}। चरण पूर्ण: ${done}/${keys.length}`;
+                
+                const stepsHtml = keys.map(k => {
+                    const isDone = t[k] === 'purn';
+                    return `<span style="white-space:nowrap; color:${isDone ? '#059669' : '#999'}; font-size:10px;">${isDone ? '●' : '○'} ${stepLabels[k] || k}</span>`;
+                }).join(' ');
+
+                statusText = `
+                    <div style="font-weight:bold; margin-bottom:4px;">कुल: ${t.totalCount}, पोर्टल अपलोड: ${t.uploadedCount}/${t.totalCount}</div>
+                    <div style="line-height:1.2;">${stepsHtml}</div>
+                `;
             } else if (t.type === 'training-summary') {
-                statusText = `कुल बैच: ${t.totalBatches}, पूर्ण: ${t.completedBatches}, कुल उपस्थिति: ${t.totalAttended}`;
+                const stepLabels = ["निर्माण", "अलॉट", "शीट", "जांच", "अपलोड"];
+                const batchDetails = t.batchList.map(b => {
+                    const steps = ["nirm", "alloc", "down", "verify", "up"];
+                    const stepsHtml = steps.map((s, idx) => {
+                        const isDone = b[s] === 'purn';
+                        return `<span style="color:${isDone ? '#059669' : '#999'}; margin-right:4px;">${isDone ? '●' : '○'}${stepLabels[idx]}</span>`;
+                    }).join('');
+
+                    const isFullyDone = b.nirm==='purn' && b.alloc==='purn' && b.down==='purn' && b.verify==='purn' && b.up==='purn';
+                    return `
+                        <div style="font-size:10px; margin-bottom:2px; border-bottom:1px solid #f0f0f0; padding-bottom:1px;">
+                            <b>Batch ${b.id}:</b> ${stepsHtml} ${isFullyDone ? '<b style="color:#059669;">[पूर्ण]</b>' : ''}
+                        </div>
+                    `;
+                }).join('');
+                
+                statusText = `
+                    <div style="font-weight:bold; margin-bottom:4px;">बैच: ${t.totalBatches}, पूर्ण: ${t.completedBatches}, उपस्थिति: ${t.totalAttended}</div>
+                    <div style="line-height:1.2;">${batchDetails}</div>
+                `;
             } else if (t.type === 'training-logistics') {
                 const s1 = t.centerSelection === 'purn' ? 'पूर्ण' : 'लंबित';
                 const s2 = t.permissionLetter === 'purn' ? 'पूर्ण' : 'लंबित';
