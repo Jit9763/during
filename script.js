@@ -76,7 +76,7 @@ const valueLabelPlugin = {
     }
 };
 Chart.register(valueLabelPlugin);
-const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbzdxSYpTIbQEMfBOSSRDQKFWFOC6RWmf2YiW82miETl29uXW-U72zOVubKols-hl8qIew/exec';
+const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbxSppzuPWvQ-nykpUIz6YkRagJlbfaKBC61cH-apwvcQlXyOu_leF9pKv_sfY0EzovDaQ/exec';
 const isAdminPage = window.location.pathname.includes('admin.html');
 
 let activeCensusTab = 'progress'; // 'progress' | 'directory'

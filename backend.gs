@@ -19,7 +19,88 @@ function _openSheet(name) {
 }
 
 /* ---------- GET ---------- */
-function doGet(e) {
+// ----- New: Serve latest PDF from Drive folder -----
+function getLatestPdfFromFolder(){
+  const folderId = '1EKPJ5N9w1QLeSMBCMrIUt33C9c2fb4R9';
+  const folder = DriveApp.getFolderById(folderId);
+  const files = folder.getFilesByType(MimeType.PDF);
+  let latestFile = null;
+  let latestDate = new Date(0);
+  while(files.hasNext()){
+    const f = files.next();
+    const mod = f.getLastUpdated();
+    if(mod > latestDate){
+      latestDate = mod;
+      latestFile = f;
+    }
+  }
+  if(!latestFile) return null;
+  // Ensure public access
+  latestFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  // Return a direct download URL (can be used in iframe)
+  return 'https://drive.google.com/uc?export=download&id=' + latestFile.getId();
+}
+
+// ----- Modified doGet to handle folderPdf param -----
+function doGet(e){
+  try{
+    // Serve latest PDF from Drive folder when ?folderPdf=1
+    if(e.parameter && e.parameter.folderPdf){
+      const url = getLatestPdfFromFolder();
+      if(!url){
+        return ContentService.createTextOutput(JSON.stringify({status:'error',message:'No PDF found in folder'}))
+          .setMimeType(ContentService.MimeType.JSON)
+          .setHeader('Access-Control-Allow-Origin','*');
+      }
+      return ContentService.createTextOutput(JSON.stringify({publicUrl:url,status:'success'}))
+        .setMimeType(ContentService.MimeType.JSON)
+        .setHeader('Access-Control-Allow-Origin','*');
+    }
+    // Existing PDF endpoint (if needed)
+    if(e.parameter && e.parameter.pdf){
+      const pdfSheet = _openSheet(SHEET_PDF);
+      const b64 = pdfSheet.getRange('A1').getValue() || '';
+      if(!b64){
+        return ContentService.createTextOutput('PDF उपलब्ध नहीं')
+          .setMimeType(ContentService.MimeType.TEXT)
+          .setHeader('Access-Control-Allow-Origin','*');
+      }
+      const decoded = Utilities.base64Decode(b64);
+      const blob = Utilities.newBlob(decoded,'application/pdf','report.pdf');
+      return ContentService.createBinaryOutput(blob.getBytes())
+        .setMimeType(ContentService.MimeType.PDF)
+        .setHeader('Access-Control-Allow-Origin','*')
+        .setHeader('Content-Disposition','inline; filename="report.pdf"');
+    }
+    // ----- Normal data request (all data) -----
+    const tasksSheet   = _openSheet(SHEET_TASKS);
+    const censusSheet  = _openSheet(SHEET_CENSUS_DATA);
+    const overallSheet = _openSheet(SHEET_OVERALL);
+    const pdfSheet     = _openSheet(SHEET_PDF);
+    // ... (rest of existing code unchanged) ...
+    const taskVals   = tasksSheet.getDataRange().getValues();
+    const taskHeader = taskVals.shift();
+    const tasksObj   = {};
+    taskVals.forEach(row=>{const obj={};taskHeader.forEach((h,i)=>obj[h]=row[i]);if(obj.id)tasksObj[obj.id]=obj;});
+    const censusVals   = censusSheet.getDataRange().getValues();
+    const censusHeader = censusVals.shift();
+    const censusArr    = censusVals.map(row=>{const o={};censusHeader.forEach((h,i)=>o[h]=row[i]);return o;});
+    const overallVals   = overallSheet.getDataRange().getValues();
+    const overallHeader = overallVals.shift();
+    const overallObj    = {};
+    overallVals.forEach(row=>{overallHeader.forEach((h,i)=>overallObj[h]=row[i]);});
+    const pdfData = pdfSheet.getRange('A1').getValue() || null;
+    const response = {values:tasksObj,censusData:censusArr,overallStats:overallObj,pdfData:pdfData,status:'success'};
+    return ContentService.createTextOutput(JSON.stringify(response))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader('Access-Control-Allow-Origin','*');
+  }catch(err){
+    return ContentService.createTextOutput(JSON.stringify({status:'error',message:err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader('Access-Control-Allow-Origin','*');
+  }
+}
+
   try {
     // If a specific PDF request is made (e.g., ?pdf=1), serve the PDF binary directly
     if (e.parameter && e.parameter.pdf) {
