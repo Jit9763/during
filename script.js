@@ -3277,10 +3277,9 @@ async function confirmDriveUpload(){
             if(data.error){
                 throw new Error(data.error);
             }
-const link = document.getElementById('pdf-download-link');
-            link.href = DEFAULT_API_URL + '?pdf=1';
-            statusSpan.innerHTML = '<i class="fas fa-check-circle"></i> Uploaded!';
+statusSpan.innerHTML = '<i class="fas fa-check-circle"></i> Uploaded!';
             statusSpan.style.color = '#10b981';
+            // After upload, reload the latest PDF from the Drive folder
             loadLatestPdf();
         } catch(err){
             console.error(err);
@@ -3291,11 +3290,20 @@ const link = document.getElementById('pdf-download-link');
     reader.readAsBinaryString(selectedPdfFile);
     closeDriveModal();
 }
-function loadLatestPdf() {
+async function loadLatestPdf() {
     const link = document.getElementById('pdf-download-link');
     const iframe = document.getElementById('pdf-iframe');
-    if (link && iframe) {
-        iframe.src = link.href !== '#' ? link.href : '';
+    try {
+        const resp = await fetch(`${DEFAULT_API_URL}?folderPdf=1`);
+        const data = await resp.json();
+        if (data.publicUrl) {
+            link.href = data.publicUrl;
+            if (iframe) iframe.src = data.publicUrl;
+        } else {
+            console.warn('No PDF URL returned from folder endpoint');
+        }
+    } catch (err) {
+        console.error('Failed to load latest PDF:', err);
     }
 }
 
