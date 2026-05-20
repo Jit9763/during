@@ -3297,8 +3297,9 @@ async function loadLatestPdf() {
         const resp = await fetch(`${DEFAULT_API_URL}?folderPdf=1`);
         const data = await resp.json();
         if (data.publicUrl) {
-            link.href = data.publicUrl;
-            if (iframe) iframe.src = data.publicUrl;
+            const bustUrl = `${data.publicUrl}?t=${Date.now()}`;
+            link.href = bustUrl;
+            if (iframe) iframe.src = bustUrl;
         } else {
             console.warn('No PDF URL returned from folder endpoint');
         }

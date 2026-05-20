@@ -38,7 +38,7 @@ function getLatestPdfFromFolder(){
   // Ensure public access
   latestFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   // Return a direct download URL (can be used in iframe)
-  return 'https://drive.google.com/uc?export=download&id=' + latestFile.getId();
+  return 'https://drive.google.com/file/d/' + latestFile.getId() + '/preview';
 }
 
 // ----- Modified doGet to handle folderPdf param -----
