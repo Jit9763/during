@@ -1,5 +1,11 @@
-.DS_Store
-Thumbs.db
-node_modules/
-.env
-*.log
+# Git ignore for large/unnecessary files
+# Excel data
+*.xlsx
+# Installer binaries
+*.msi
+# PDF uploads folder
+pdf/
+# CSV data files
+*.csv
+# API response dump
+api_response.json

@@ -1,0 +1,15 @@
+
+let taskData = [];
+// Custom plugin to display data values on doughnut chart slices
+const valueLabelPlugin = {
+    id: 'valueLabel',
+    afterDraw: (chart) => {
+        const ctx = chart.ctx;
+        const leftPositions = [];
+        const rightPositions = [];
+
+        chart.data.datasets.forEach((dataset, i) => {
+            const meta = chart.getDatasetMeta(i);
+            meta.data.forEach((element, index) => {
+                const value = dataset.data[index];
+                if (!value ||
