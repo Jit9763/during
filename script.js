@@ -3246,3 +3246,57 @@ function renderReportPanel() {
     iframe.contentWindow.document.close();
 }
 
+// Existing code continues
+
+// PDF Upload Functions
+function closeDriveModal(){
+    document.getElementById('pdf-drive-modal').style.display = 'none';
+}
+
+async function confirmDriveUpload(){
+    const folderId = document.getElementById('drive-folder-id').value.trim();
+    if(!selectedPdfFile){
+        alert('No PDF selected');
+        return;
+    }
+    const statusSpan = document.getElementById('pdf-upload-status');
+    statusSpan.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        const base64 = btoa(e.target.result);
+        const payload = { fileName: selectedPdfFile.name, fileData: base64 };
+        const endpoint = 'https://script.google.com/macros/s/AKfycbwWC2cm-O_0B5VGoX6V_vZvV9DEwS3AsKuS8AQ7tV5fPaRfpmux_8MN_cviXSAetQmX1w/exec';
+        try {
+            const resp = await fetch(endpoint, {
+                method: 'POST',
+                mode: 'cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await resp.json();
+            if(data.error){
+                throw new Error(data.error);
+            }
+const link = document.getElementById('pdf-download-link');
+            link.href = DEFAULT_API_URL + '?pdf=1';
+            statusSpan.innerHTML = '<i class="fas fa-check-circle"></i> Uploaded!';
+            statusSpan.style.color = '#10b981';
+            loadLatestPdf();
+        } catch(err){
+            console.error(err);
+            statusSpan.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Upload failed';
+            statusSpan.style.color = '#ef4444';
+        }
+    };
+    reader.readAsBinaryString(selectedPdfFile);
+    closeDriveModal();
+}
+function loadLatestPdf() {
+    const link = document.getElementById('pdf-download-link');
+    const iframe = document.getElementById('pdf-iframe');
+    if (link && iframe) {
+        iframe.src = link.href !== '#' ? link.href : '';
+    }
+}
+
+window.addEventListener('DOMContentLoaded', loadLatestPdf);
