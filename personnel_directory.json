@@ -1,0 +1,2812 @@
+[
+  {
+    "role": "Supervisor",
+    "name": "Trilok Chand Bhambhi",
+    "mobile": "8233559209",
+    "supervisor_circle": 1,
+    "supervisor_name": "Trilok Chand Bhambhi",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Shimbhu Dayal Gurjar",
+    "mobile": "9887845200",
+    "supervisor_circle": 1,
+    "supervisor_name": "Trilok Chand Bhambhi",
+    "hlb_new": 1,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Sheela Chaudhary",
+    "mobile": "9680525376",
+    "supervisor_circle": 1,
+    "supervisor_name": "Trilok Chand Bhambhi",
+    "hlb_new": 2,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Rajesh Kumar Rajput",
+    "mobile": "7891997521",
+    "supervisor_circle": 1,
+    "supervisor_name": "Trilok Chand Bhambhi",
+    "hlb_new": 25,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Satyanarayan Bairwa",
+    "mobile": "7742356796",
+    "supervisor_circle": 1,
+    "supervisor_name": "Trilok Chand Bhambhi",
+    "hlb_new": 26,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "VINOD KUMAR SARWAL",
+    "mobile": "9829121678",
+    "supervisor_circle": 1,
+    "supervisor_name": "Trilok Chand Bhambhi",
+    "hlb_new": 37,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "SHRAVAN LAL GURJAR",
+    "mobile": "9784067462",
+    "supervisor_circle": 1,
+    "supervisor_name": "Trilok Chand Bhambhi",
+    "hlb_new": 38,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Sanjay Vyas",
+    "mobile": "8504884191",
+    "supervisor_circle": 2,
+    "supervisor_name": "Sanjay Vyas",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ram Singh Chaudhary",
+    "mobile": "9784935705",
+    "supervisor_circle": 2,
+    "supervisor_name": "Sanjay Vyas",
+    "hlb_new": 39,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Kumawat Pratishtha",
+    "mobile": "7725988808",
+    "supervisor_circle": 2,
+    "supervisor_name": "Sanjay Vyas",
+    "hlb_new": 40,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Hanuman Prasad Jat",
+    "mobile": "9928668009",
+    "supervisor_circle": 2,
+    "supervisor_name": "Sanjay Vyas",
+    "hlb_new": 41,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "PRITAM KUMAR JAIN",
+    "mobile": "9251006751",
+    "supervisor_circle": 2,
+    "supervisor_name": "Sanjay Vyas",
+    "hlb_new": 42,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Hanuman Prasad Jat",
+    "mobile": "9928668009",
+    "supervisor_circle": 2,
+    "supervisor_name": "Sanjay Vyas",
+    "hlb_new": 43,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ramprasad Lakshkar",
+    "mobile": "9602372311",
+    "supervisor_circle": 2,
+    "supervisor_name": "Sanjay Vyas",
+    "hlb_new": 44,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Babu Lal Regar",
+    "mobile": "9929486062",
+    "supervisor_circle": 2,
+    "supervisor_name": "Sanjay Vyas",
+    "hlb_new": 45,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Mahavir Prasad Jangid",
+    "mobile": "9799312619",
+    "supervisor_circle": 3,
+    "supervisor_name": "Mahavir Prasad Jangid",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Vaibhav Raj Mehra",
+    "mobile": "8209227928",
+    "supervisor_circle": 3,
+    "supervisor_name": "Mahavir Prasad Jangid",
+    "hlb_new": 19,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Roshan Sharma",
+    "mobile": "9649597272",
+    "supervisor_circle": 3,
+    "supervisor_name": "Mahavir Prasad Jangid",
+    "hlb_new": 21,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Chhotu Lal Bairwa",
+    "mobile": "9001622734",
+    "supervisor_circle": 3,
+    "supervisor_name": "Mahavir Prasad Jangid",
+    "hlb_new": 27,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Santosh Kumar",
+    "mobile": "9602216973",
+    "supervisor_circle": 3,
+    "supervisor_name": "Mahavir Prasad Jangid",
+    "hlb_new": 28,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Anurag Ranwa",
+    "mobile": "9772777032",
+    "supervisor_circle": 3,
+    "supervisor_name": "Mahavir Prasad Jangid",
+    "hlb_new": 29,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ashish Kumar Sharma",
+    "mobile": "8094834260",
+    "supervisor_circle": 3,
+    "supervisor_name": "Mahavir Prasad Jangid",
+    "hlb_new": 30,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Shivprakash Lunia",
+    "mobile": "9772270806",
+    "supervisor_circle": 4,
+    "supervisor_name": "Shivprakash Lunia",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Dharmendra Yadav",
+    "mobile": "9057193493",
+    "supervisor_circle": 4,
+    "supervisor_name": "Shivprakash Lunia",
+    "hlb_new": 3,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Anil Kumar Sankhla",
+    "mobile": "9982277858",
+    "supervisor_circle": 4,
+    "supervisor_name": "Shivprakash Lunia",
+    "hlb_new": 4,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Kishan gopal chhipa",
+    "mobile": "9460546296",
+    "supervisor_circle": 4,
+    "supervisor_name": "Shivprakash Lunia",
+    "hlb_new": 5,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "SHREEBALLABH PAREEK",
+    "mobile": "8890774112",
+    "supervisor_circle": 4,
+    "supervisor_name": "Shivprakash Lunia",
+    "hlb_new": 6,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Anil Kumar Joshi",
+    "mobile": "9602089382",
+    "supervisor_circle": 4,
+    "supervisor_name": "Shivprakash Lunia",
+    "hlb_new": 7,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Arjun Kumar Jangid",
+    "mobile": "7737190405",
+    "supervisor_circle": 4,
+    "supervisor_name": "Shivprakash Lunia",
+    "hlb_new": 8,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Mukesh Kumar Rawat",
+    "mobile": "9799203204",
+    "supervisor_circle": 5,
+    "supervisor_name": "Mukesh Kumar Rawat",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Deepak",
+    "mobile": "8696090350",
+    "supervisor_circle": 5,
+    "supervisor_name": "Mukesh Rawat",
+    "hlb_new": 9,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Surender Kumar",
+    "mobile": "7726874490",
+    "supervisor_circle": 5,
+    "supervisor_name": "Mukesh Rawat",
+    "hlb_new": 10,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Dashrath Vaishnav",
+    "mobile": "9602719043",
+    "supervisor_circle": 5,
+    "supervisor_name": "Mukesh Rawat",
+    "hlb_new": 11,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Surendra Kumar Kharol",
+    "mobile": "9829947871",
+    "supervisor_circle": 5,
+    "supervisor_name": "Mukesh Rawat",
+    "hlb_new": 12,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Satyanarayan Khatik",
+    "mobile": "9929947564",
+    "supervisor_circle": 5,
+    "supervisor_name": "Mukesh Rawat",
+    "hlb_new": 13,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Gangavishan Prajapat",
+    "mobile": "7742549519",
+    "supervisor_circle": 6,
+    "supervisor_name": "Gangavishan Prajapat",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Dharmichand Mali",
+    "mobile": "9928849417",
+    "supervisor_circle": 6,
+    "supervisor_name": "Gangavishan Prajapat",
+    "hlb_new": 31,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Pawan Kumar Dhumas",
+    "mobile": "9887882133",
+    "supervisor_circle": 6,
+    "supervisor_name": "Gangavishan Prajapat",
+    "hlb_new": 32,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Vimal Kumar Jangid",
+    "mobile": "9602727316",
+    "supervisor_circle": 6,
+    "supervisor_name": "Gangavishan Prajapat",
+    "hlb_new": 33,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Manoj Kumar",
+    "mobile": "9785225734",
+    "supervisor_circle": 6,
+    "supervisor_name": "Gangavishan Prajapat",
+    "hlb_new": 34,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Murlidhar Vaishnav",
+    "mobile": "9829649846",
+    "supervisor_circle": 6,
+    "supervisor_name": "Gangavishan Prajapat",
+    "hlb_new": 35,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Bhupendra Singh Rathore",
+    "mobile": "9649173100",
+    "supervisor_circle": 6,
+    "supervisor_name": "Gangavishan Prajapat",
+    "hlb_new": 36,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Sandeep Bagrani",
+    "mobile": "9602564649",
+    "supervisor_circle": 7,
+    "supervisor_name": "Sandeep Bagrani",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ram Prasad Bhambhi",
+    "mobile": "9784344547",
+    "supervisor_circle": 7,
+    "supervisor_name": "Sandeep Bagrani",
+    "hlb_new": 18,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Shivraj",
+    "mobile": "7737880781",
+    "supervisor_circle": 7,
+    "supervisor_name": "Sandeep Bagrani",
+    "hlb_new": 20,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Giriraj Chaudhary",
+    "mobile": "7597685500",
+    "supervisor_circle": 7,
+    "supervisor_name": "Sandeep Bagrani",
+    "hlb_new": 55,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Abdul Halim Kha",
+    "mobile": "9214540786",
+    "supervisor_circle": 7,
+    "supervisor_name": "Sandeep Bagrani",
+    "hlb_new": 56,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Rangalal Gurjar",
+    "mobile": "9829014609",
+    "supervisor_circle": 7,
+    "supervisor_name": "Sandeep Bagrani",
+    "hlb_new": 57,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Chotu Lal Jat",
+    "mobile": "9571857537",
+    "supervisor_circle": 8,
+    "supervisor_name": "Chotu Lal Jat",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ram Dayal",
+    "mobile": "8432781245",
+    "supervisor_circle": 8,
+    "supervisor_name": "Chhotu Lal Jat",
+    "hlb_new": 22,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Hans Raj Gurjar",
+    "mobile": "9649918501",
+    "supervisor_circle": 8,
+    "supervisor_name": "Chhotu Lal Jat",
+    "hlb_new": 23,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Rohit Kumar Jangid",
+    "mobile": "9530141501",
+    "supervisor_circle": 8,
+    "supervisor_name": "Chhotu Lal Jat",
+    "hlb_new": 24,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Bhanwar Lal Regar",
+    "mobile": "9001077090",
+    "supervisor_circle": 8,
+    "supervisor_name": "Chhotu Lal Jat",
+    "hlb_new": 46,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Kana Ram",
+    "mobile": "9887322580",
+    "supervisor_circle": 8,
+    "supervisor_name": "Chhotu Lal Jat",
+    "hlb_new": 53,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Mumtaz Ali Khan",
+    "mobile": "9587868688",
+    "supervisor_circle": 8,
+    "supervisor_name": "Chhotu Lal Jat",
+    "hlb_new": 54,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Dharmendra Singh Rathore",
+    "mobile": "9414550823",
+    "supervisor_circle": 9,
+    "supervisor_name": "Dharmendra Singh Rathore",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Bhanwar Lal",
+    "mobile": "9602067373",
+    "supervisor_circle": 9,
+    "supervisor_name": "Dharmendra Singh Rathore",
+    "hlb_new": 47,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Avinash Prasad Vaishnava",
+    "mobile": "8769453569",
+    "supervisor_circle": 9,
+    "supervisor_name": "Dharmendra Singh Rathore",
+    "hlb_new": 48,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Lakhan Vaishnav",
+    "mobile": "7229982532",
+    "supervisor_circle": 9,
+    "supervisor_name": "Dharmendra Singh Rathore",
+    "hlb_new": 49,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Harish Kumar Vaishnav",
+    "mobile": "9799266968",
+    "supervisor_circle": 9,
+    "supervisor_name": "Dharmendra Singh Rathore",
+    "hlb_new": 50,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Hansraj Lalria",
+    "mobile": "9950323099",
+    "supervisor_circle": 9,
+    "supervisor_name": "Dharmendra Singh Rathore",
+    "hlb_new": 51,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ashok Kumar Jat",
+    "mobile": "9799013052",
+    "supervisor_circle": 9,
+    "supervisor_name": "Dharmendra Singh Rathore",
+    "hlb_new": 52,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "LALIT KISHORE PAREEK",
+    "mobile": "9414550520",
+    "supervisor_circle": 10,
+    "supervisor_name": "LALIT KISHORE PAREEK",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Lokendra Singh Chauhan",
+    "mobile": "7727077125",
+    "supervisor_circle": 10,
+    "supervisor_name": "Lalit Kishore Pareek",
+    "hlb_new": 114,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Pushpakant Parik",
+    "mobile": "9784206585",
+    "supervisor_circle": 10,
+    "supervisor_name": "Lalit Kishore Pareek",
+    "hlb_new": 115,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Rameshwar Lal Danga",
+    "mobile": "9828036988",
+    "supervisor_circle": 10,
+    "supervisor_name": "Lalit Kishore Pareek",
+    "hlb_new": 116,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ankur Ojha",
+    "mobile": "9413379419",
+    "supervisor_circle": 10,
+    "supervisor_name": "Lalit Kishore Pareek",
+    "hlb_new": 117,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Raghuveer Jangid",
+    "mobile": "9829709525",
+    "supervisor_circle": 10,
+    "supervisor_name": "Lalit Kishore Pareek",
+    "hlb_new": 118,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Mohammad Rafiq",
+    "mobile": "9928168738",
+    "supervisor_circle": 10,
+    "supervisor_name": "Lalit Kishore Pareek",
+    "hlb_new": 119,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Muralidhar Sadhu",
+    "mobile": "9680315441",
+    "supervisor_circle": 11,
+    "supervisor_name": "Muralidhar Sadhu",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Rajendra kumar",
+    "mobile": "7891442527",
+    "supervisor_circle": 11,
+    "supervisor_name": "Muralidhar Sadhu",
+    "hlb_new": 58,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Akshay Kumar Sukariya",
+    "mobile": "7737672857",
+    "supervisor_circle": 11,
+    "supervisor_name": "Muralidhar Sadhu",
+    "hlb_new": 59,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ramswaroop Jangid",
+    "mobile": "9667881532",
+    "supervisor_circle": 11,
+    "supervisor_name": "Muralidhar Sadhu",
+    "hlb_new": 60,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Devendra Prajapat",
+    "mobile": "9929681065",
+    "supervisor_circle": 11,
+    "supervisor_name": "Muralidhar Sadhu",
+    "hlb_new": 61,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Jitendra Kumar Sharma",
+    "mobile": "8107848825",
+    "supervisor_circle": 11,
+    "supervisor_name": "Muralidhar Sadhu",
+    "hlb_new": 65,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Omprakash Sharma",
+    "mobile": "9829663748",
+    "supervisor_circle": 11,
+    "supervisor_name": "Muralidhar Sadhu",
+    "hlb_new": 112,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Devendra Prajapat",
+    "mobile": "9929681065",
+    "supervisor_circle": 11,
+    "supervisor_name": "Muralidhar Sadhu",
+    "hlb_new": 113,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Mukesh Chandra Gurjar",
+    "mobile": "9413457331",
+    "supervisor_circle": 12,
+    "supervisor_name": "Mukesh Chandra Gurjar",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ramniwas Bairwa",
+    "mobile": "9001649861",
+    "supervisor_circle": 12,
+    "supervisor_name": "Mukesh Chandra Gurjar",
+    "hlb_new": 14,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Deepak Kumar Sen",
+    "mobile": "9414551356",
+    "supervisor_circle": 12,
+    "supervisor_name": "Mukesh Chandra Gurjar",
+    "hlb_new": 15,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "SUKHA SINGH RAWAT",
+    "mobile": "9784359031",
+    "supervisor_circle": 12,
+    "supervisor_name": "Mukesh Chandra Gurjar",
+    "hlb_new": 16,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Debi Singh Shekhawat",
+    "mobile": "9829964771",
+    "supervisor_circle": 12,
+    "supervisor_name": "Mukesh Chandra Gurjar",
+    "hlb_new": 17,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Jeetram Jat",
+    "mobile": "7690984985",
+    "supervisor_circle": 12,
+    "supervisor_name": "Mukesh Chandra Gurjar",
+    "hlb_new": 62,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "SULTAN LAL MEENA",
+    "mobile": "9511502151",
+    "supervisor_circle": 12,
+    "supervisor_name": "Mukesh Chandra Gurjar",
+    "hlb_new": 63,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "SULTAN LAL MEENA",
+    "mobile": "9511502151",
+    "supervisor_circle": 12,
+    "supervisor_name": "Mukesh Chandra Gurjar",
+    "hlb_new": 64,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ramniwas Bairwa",
+    "mobile": "9001649861",
+    "supervisor_circle": 12,
+    "supervisor_name": "Mukesh Chandra Gurjar",
+    "hlb_new": 66,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Dilip Singh Rathore",
+    "mobile": "9414348489",
+    "supervisor_circle": 13,
+    "supervisor_name": "Dilip Singh Rathore",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Pukhraj Bairwa",
+    "mobile": "9799624820",
+    "supervisor_circle": 13,
+    "supervisor_name": "Dilip Singh Rathore",
+    "hlb_new": 84,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Sunil Kumar Meghwanshi",
+    "mobile": "9571478807",
+    "supervisor_circle": 13,
+    "supervisor_name": "Dilip Singh Rathore",
+    "hlb_new": 85,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Azharuddin mansuri",
+    "mobile": "9887941433",
+    "supervisor_circle": 13,
+    "supervisor_name": "Dilip Singh Rathore",
+    "hlb_new": 86,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Chetan Hinduniya",
+    "mobile": "8003774404",
+    "supervisor_circle": 13,
+    "supervisor_name": "Dilip Singh Rathore",
+    "hlb_new": 87,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ramesh chand Kahar",
+    "mobile": "9784736253",
+    "supervisor_circle": 13,
+    "supervisor_name": "Dilip Singh Rathore",
+    "hlb_new": 88,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Omprakash choudhary",
+    "mobile": "8955082954",
+    "supervisor_circle": 13,
+    "supervisor_name": "Dilip Singh Rathore",
+    "hlb_new": 89,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Dilip Singh Rathore",
+    "mobile": "9667718413",
+    "supervisor_circle": 14,
+    "supervisor_name": "Dilip Singh Rathore",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Prem Chand",
+    "mobile": "7597814008",
+    "supervisor_circle": 14,
+    "supervisor_name": "Dilip Singh Rathore",
+    "hlb_new": 92,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Raghunath Choudhary",
+    "mobile": "9799295594",
+    "supervisor_circle": 14,
+    "supervisor_name": "Dilip Singh Rathore",
+    "hlb_new": 93,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Anand Kumar Udai",
+    "mobile": "9462070865",
+    "supervisor_circle": 14,
+    "supervisor_name": "Dilip Singh Rathore",
+    "hlb_new": 94,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "ROHIT MALAKAR",
+    "mobile": "7073390819",
+    "supervisor_circle": 14,
+    "supervisor_name": "Dilip Singh Rathore",
+    "hlb_new": 95,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Lalit Kishore Sharma",
+    "mobile": "8104466893",
+    "supervisor_circle": 14,
+    "supervisor_name": "Dilip Singh Rathore",
+    "hlb_new": 96,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Shanti Lal Sadhu",
+    "mobile": "9079123989",
+    "supervisor_circle": 14,
+    "supervisor_name": "Dilip Singh Rathore",
+    "hlb_new": 97,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Dinesh Kumar Kumawat",
+    "mobile": "9829896189",
+    "supervisor_circle": 15,
+    "supervisor_name": "Dinesh Kumar Kumawat",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Mohan Lal Sain",
+    "mobile": "9950228244",
+    "supervisor_circle": 15,
+    "supervisor_name": "Dinesh Kumar Kumawat",
+    "hlb_new": 90,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Pramod Kumar Sharma",
+    "mobile": "9784206704",
+    "supervisor_circle": 15,
+    "supervisor_name": "Dinesh Kumar Kumawat",
+    "hlb_new": 91,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ishwar Lal Vaishnav",
+    "mobile": "9982831441",
+    "supervisor_circle": 15,
+    "supervisor_name": "Dinesh Kumar Kumawat",
+    "hlb_new": 98,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Jasraj Gurjar",
+    "mobile": "9664187494",
+    "supervisor_circle": 15,
+    "supervisor_name": "Dinesh Kumar Kumawat",
+    "hlb_new": 99,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Jamnalal jat",
+    "mobile": "9636070167",
+    "supervisor_circle": 15,
+    "supervisor_name": "Dinesh Kumar Kumawat",
+    "hlb_new": 100,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Kavita Kumari Meena",
+    "mobile": "8003047045",
+    "supervisor_circle": 15,
+    "supervisor_name": "Dinesh Kumar Kumawat",
+    "hlb_new": 101,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Jamnalal jat",
+    "mobile": "9636070167",
+    "supervisor_circle": 15,
+    "supervisor_name": "Dinesh Kumar Kumawat",
+    "hlb_new": 103,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Arvind Kumar Sen",
+    "mobile": "9799250075",
+    "supervisor_circle": 16,
+    "supervisor_name": "Arvind Kumar Sen",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Mohammad Ilyas",
+    "mobile": "8890363439",
+    "supervisor_circle": 16,
+    "supervisor_name": "Arvind Kumar Sen",
+    "hlb_new": 79,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "ABDUL MOHSIN KHAN",
+    "mobile": "9269313486",
+    "supervisor_circle": 16,
+    "supervisor_name": "Arvind Kumar Sen",
+    "hlb_new": 80,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Chandmal Chandel",
+    "mobile": "8290291038",
+    "supervisor_circle": 16,
+    "supervisor_name": "Arvind Kumar Sen",
+    "hlb_new": 81,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Arjun Khatik",
+    "mobile": "9414550655",
+    "supervisor_circle": 16,
+    "supervisor_name": "Arvind Kumar Sen",
+    "hlb_new": 82,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Paras Mal Vaishav",
+    "mobile": "9660070722",
+    "supervisor_circle": 16,
+    "supervisor_name": "Arvind Kumar Sen",
+    "hlb_new": 83,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Nisar Ahmad",
+    "mobile": "9660514516",
+    "supervisor_circle": 16,
+    "supervisor_name": "Arvind Kumar Sen",
+    "hlb_new": 102,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Ramdayal Regar",
+    "mobile": "9928748496",
+    "supervisor_circle": 17,
+    "supervisor_name": "Ramdayal Regar",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ajay Singh Devra",
+    "mobile": "9571189634",
+    "supervisor_circle": 17,
+    "supervisor_name": "Ramdayal Regar",
+    "hlb_new": 67,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ram Gopal Bairwa",
+    "mobile": "9928278227",
+    "supervisor_circle": 17,
+    "supervisor_name": "Ramdayal Regar",
+    "hlb_new": 68,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Sandeep Bokoliya",
+    "mobile": "9256821687",
+    "supervisor_circle": 17,
+    "supervisor_name": "Ramdayal Regar",
+    "hlb_new": 69,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Dharmendra Kumar Vaishnav",
+    "mobile": "9079219657",
+    "supervisor_circle": 17,
+    "supervisor_name": "Ramdayal Regar",
+    "hlb_new": 70,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Rinku Jat",
+    "mobile": "8440066025",
+    "supervisor_circle": 17,
+    "supervisor_name": "Ramdayal Regar",
+    "hlb_new": 71,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Devendra Kumawat",
+    "mobile": "7413064396",
+    "supervisor_circle": 17,
+    "supervisor_name": "Ramdayal Regar",
+    "hlb_new": 72,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Omvrat",
+    "mobile": "7597732890",
+    "supervisor_circle": 18,
+    "supervisor_name": "Omvrat",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Akash Saini",
+    "mobile": "7976385935",
+    "supervisor_circle": 18,
+    "supervisor_name": "Omvrat",
+    "hlb_new": 73,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Dhanraj Bairwa",
+    "mobile": "9414749131",
+    "supervisor_circle": 18,
+    "supervisor_name": "Omvrat",
+    "hlb_new": 74,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Sajjan Singh Gaur",
+    "mobile": "8619276061",
+    "supervisor_circle": 18,
+    "supervisor_name": "Omvrat",
+    "hlb_new": 75,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Pawan Kumar Joshi",
+    "mobile": "9928862564",
+    "supervisor_circle": 18,
+    "supervisor_name": "Omvrat",
+    "hlb_new": 76,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Radheshyam Jangid",
+    "mobile": "9829329326",
+    "supervisor_circle": 18,
+    "supervisor_name": "Omvrat",
+    "hlb_new": 77,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Bhartaraj Meena",
+    "mobile": "8504000948",
+    "supervisor_circle": 18,
+    "supervisor_name": "Omvrat",
+    "hlb_new": 78,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Rang Lal Bairwa",
+    "mobile": "9252170173",
+    "supervisor_circle": 19,
+    "supervisor_name": "Rang Lal Bairwa",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Vishnu Gurjar",
+    "mobile": "9828772624",
+    "supervisor_circle": 19,
+    "supervisor_name": "Rang Lal Bairwa",
+    "hlb_new": 110,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "vinod bhambhi",
+    "mobile": "9694930126",
+    "supervisor_circle": 19,
+    "supervisor_name": "Rang Lal Bairwa",
+    "hlb_new": 111,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Surendra Kumar Lohiya",
+    "mobile": "9079993404",
+    "supervisor_circle": 19,
+    "supervisor_name": "Rang Lal Bairwa",
+    "hlb_new": 127,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "LAXMAN KUMAR BAIRWA",
+    "mobile": "6378819934",
+    "supervisor_circle": 19,
+    "supervisor_name": "Rang Lal Bairwa",
+    "hlb_new": 128,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "vinod bhambhi",
+    "mobile": "9694930126",
+    "supervisor_circle": 19,
+    "supervisor_name": "Rang Lal Bairwa",
+    "hlb_new": 129,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Kuldeep Mishra",
+    "mobile": "7610000617",
+    "supervisor_circle": 19,
+    "supervisor_name": "Rang Lal Bairwa",
+    "hlb_new": 175,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Abhishek Sharma",
+    "mobile": "9983785241",
+    "supervisor_circle": 19,
+    "supervisor_name": "Rang Lal Bairwa",
+    "hlb_new": 177,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "MANA LAL MALI",
+    "mobile": "9680218716",
+    "supervisor_circle": 20,
+    "supervisor_name": "MANA LAL MALI",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Sunil Kumar Gauttam",
+    "mobile": "9680309694",
+    "supervisor_circle": 20,
+    "supervisor_name": "Mana Lal Mali",
+    "hlb_new": 120,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Dileep Singh Kaviya",
+    "mobile": "7976180461",
+    "supervisor_circle": 20,
+    "supervisor_name": "Mana Lal Mali",
+    "hlb_new": 121,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Gopal Mali",
+    "mobile": "9829839625",
+    "supervisor_circle": 20,
+    "supervisor_name": "Mana Lal Mali",
+    "hlb_new": 122,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Balram Choudhary",
+    "mobile": "8003754501",
+    "supervisor_circle": 20,
+    "supervisor_name": "Mana Lal Mali",
+    "hlb_new": 123,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Surendra Singh Rathore",
+    "mobile": "7300180369",
+    "supervisor_circle": 20,
+    "supervisor_name": "Mana Lal Mali",
+    "hlb_new": 124,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Gopal Mali",
+    "mobile": "9829839625",
+    "supervisor_circle": 20,
+    "supervisor_name": "Mana Lal Mali",
+    "hlb_new": 125,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Bhanwar Lal Sharma",
+    "mobile": "9829850973",
+    "supervisor_circle": 20,
+    "supervisor_name": "Mana Lal Mali",
+    "hlb_new": 126,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Nitish Kumar Sukaria",
+    "mobile": "9783650727",
+    "supervisor_circle": 21,
+    "supervisor_name": "Nitish Kumar Sukaria",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Mahender Kumar",
+    "mobile": "9928078357",
+    "supervisor_circle": 21,
+    "supervisor_name": "Nitish Kumar Sukaria",
+    "hlb_new": 173,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Hemraj Prajapat",
+    "mobile": "9571042761",
+    "supervisor_circle": 21,
+    "supervisor_name": "Nitish Kumar Sukaria",
+    "hlb_new": 174,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "lucky parwez",
+    "mobile": "9214507135",
+    "supervisor_circle": 21,
+    "supervisor_name": "Nitish Kumar Sukaria",
+    "hlb_new": 176,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Naresh Kumar Sharma",
+    "mobile": "9784195646",
+    "supervisor_circle": 21,
+    "supervisor_name": "Nitish Kumar Sukaria",
+    "hlb_new": 178,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ahilya Sharma",
+    "mobile": "9610976472",
+    "supervisor_circle": 21,
+    "supervisor_name": "Nitish Kumar Sukaria",
+    "hlb_new": 179,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Rajendra nath Sidh",
+    "mobile": "9783601902",
+    "supervisor_circle": 21,
+    "supervisor_name": "Nitish Kumar Sukaria",
+    "hlb_new": 180,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Mahesh Kumar Bunkar",
+    "mobile": "9799859239",
+    "supervisor_circle": 22,
+    "supervisor_name": "Mahesh Kumar Bunkar",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Shanker Lal Bhambi",
+    "mobile": "9887143804",
+    "supervisor_circle": 22,
+    "supervisor_name": "Mahesh Kumar Bunkar",
+    "hlb_new": 169,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Deepak Nakwal",
+    "mobile": "9928808209",
+    "supervisor_circle": 22,
+    "supervisor_name": "Mahesh Kumar Bunkar",
+    "hlb_new": 170,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Shyoji Ram Bairwa",
+    "mobile": "9799983001",
+    "supervisor_circle": 22,
+    "supervisor_name": "Mahesh Kumar Bunkar",
+    "hlb_new": 171,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Zahid Hussain Ansari",
+    "mobile": "9460091286",
+    "supervisor_circle": 22,
+    "supervisor_name": "Mahesh Kumar Bunkar",
+    "hlb_new": 182,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Panchu lal Meghvanshi",
+    "mobile": "9929734317",
+    "supervisor_circle": 22,
+    "supervisor_name": "Mahesh Kumar Bunkar",
+    "hlb_new": 183,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Abdul Hanan Ansari",
+    "mobile": "9413743282",
+    "supervisor_circle": 22,
+    "supervisor_name": "Mahesh Kumar Bunkar",
+    "hlb_new": 184,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "GOVIND RAM JANJGID",
+    "mobile": "9982323026",
+    "supervisor_circle": 23,
+    "supervisor_name": "GOVIND RAM JANJGID",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Gajraj Bairwa",
+    "mobile": "8094138785",
+    "supervisor_circle": 23,
+    "supervisor_name": "Govind Ram Janjgid",
+    "hlb_new": 132,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Shyam Singh Shekhawat",
+    "mobile": "9929477912",
+    "supervisor_circle": 23,
+    "supervisor_name": "Govind Ram Janjgid",
+    "hlb_new": 133,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "MAHAVEER PRASAD JANGID",
+    "mobile": "9929753094",
+    "supervisor_circle": 23,
+    "supervisor_name": "Govind Ram Janjgid",
+    "hlb_new": 134,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Sanwar Nath Yogi",
+    "mobile": "9571067186",
+    "supervisor_circle": 23,
+    "supervisor_name": "Govind Ram Janjgid",
+    "hlb_new": 166,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Satyanarayan Bairwa",
+    "mobile": "8003824561",
+    "supervisor_circle": 23,
+    "supervisor_name": "Govind Ram Janjgid",
+    "hlb_new": 167,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Tara Vyas",
+    "mobile": "6376217543",
+    "supervisor_circle": 23,
+    "supervisor_name": "Govind Ram Janjgid",
+    "hlb_new": 172,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Mohammad Tayyab Khan",
+    "mobile": "9414550787",
+    "supervisor_circle": 24,
+    "supervisor_name": "Mohammad Tayyab Khan",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "BHARAT BHUSHAN PANWAR",
+    "mobile": "9610834792",
+    "supervisor_circle": 24,
+    "supervisor_name": "Mohammad Tayyab Khan",
+    "hlb_new": 105,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Hansraj Gurjar",
+    "mobile": "9784277921",
+    "supervisor_circle": 24,
+    "supervisor_name": "Mohammad Tayyab Khan",
+    "hlb_new": 106,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Dinesh Kumar Swarnkar",
+    "mobile": "9587086986",
+    "supervisor_circle": 24,
+    "supervisor_name": "Mohammad Tayyab Khan",
+    "hlb_new": 107,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Anil Kumar Rao",
+    "mobile": "9001755517",
+    "supervisor_circle": 24,
+    "supervisor_name": "Mohammad Tayyab Khan",
+    "hlb_new": 108,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Anil Kumar Rao",
+    "mobile": "9001755517",
+    "supervisor_circle": 24,
+    "supervisor_name": "Mohammad Tayyab Khan",
+    "hlb_new": 109,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ummed Singh Dewra",
+    "mobile": "9571744755",
+    "supervisor_circle": 24,
+    "supervisor_name": "Mohammad Tayyab Khan",
+    "hlb_new": 130,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "BHARAT BHUSHAN PANWAR",
+    "mobile": "9610834792",
+    "supervisor_circle": 24,
+    "supervisor_name": "Mohammad Tayyab Khan",
+    "hlb_new": 131,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Suresh Chandra Jangid",
+    "mobile": "9950170522",
+    "supervisor_circle": 25,
+    "supervisor_name": "Suresh Chandra Jangid",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Shanti Lal Jat",
+    "mobile": "8003697585",
+    "supervisor_circle": 25,
+    "supervisor_name": "Suresh Chandra Jangid",
+    "hlb_new": 104,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Rajveer Singh Rawat",
+    "mobile": "8003682476",
+    "supervisor_circle": 25,
+    "supervisor_name": "Suresh Chandra Jangid",
+    "hlb_new": 135,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Durgesh Kumar Prajapat",
+    "mobile": "6367237759",
+    "supervisor_circle": 25,
+    "supervisor_name": "Suresh Chandra Jangid",
+    "hlb_new": 136,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "vinod kumar meena",
+    "mobile": "9828393814",
+    "supervisor_circle": 25,
+    "supervisor_name": "Suresh Chandra Jangid",
+    "hlb_new": 137,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Harish Sagar",
+    "mobile": "7014423429",
+    "supervisor_circle": 25,
+    "supervisor_name": "Suresh Chandra Jangid",
+    "hlb_new": 138,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Dinesh Kumar Regar",
+    "mobile": "8107193130",
+    "supervisor_circle": 25,
+    "supervisor_name": "Suresh Chandra Jangid",
+    "hlb_new": 139,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Murali Yadav",
+    "mobile": "9602889079",
+    "supervisor_circle": 26,
+    "supervisor_name": "Murali Yadav",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Omprakash Sen",
+    "mobile": "9549934932",
+    "supervisor_circle": 26,
+    "supervisor_name": "Murali Yadav",
+    "hlb_new": 141,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Badri Narayan Jat",
+    "mobile": "9784080563",
+    "supervisor_circle": 26,
+    "supervisor_name": "Murali Yadav",
+    "hlb_new": 142,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Khushi raj Saini",
+    "mobile": "9694556275",
+    "supervisor_circle": 26,
+    "supervisor_name": "Murali Yadav",
+    "hlb_new": 154,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Dilkhush Vaishnav",
+    "mobile": "9602408532",
+    "supervisor_circle": 26,
+    "supervisor_name": "Murali Yadav",
+    "hlb_new": 155,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Mukesh Bairwa",
+    "mobile": "7340468728",
+    "supervisor_circle": 26,
+    "supervisor_name": "Murali Yadav",
+    "hlb_new": 156,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Mahaveer Singh Devda",
+    "mobile": "9982195997",
+    "supervisor_circle": 26,
+    "supervisor_name": "Murali Yadav",
+    "hlb_new": 157,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Chandraprakash Damami",
+    "mobile": "9929455837",
+    "supervisor_circle": 27,
+    "supervisor_name": "Chandraprakash Damami",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ashish Chaudhary",
+    "mobile": "9413408056",
+    "supervisor_circle": 27,
+    "supervisor_name": "Chandraprakash Damami",
+    "hlb_new": 140,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Rakesh Choudhary",
+    "mobile": "8769013299",
+    "supervisor_circle": 27,
+    "supervisor_name": "Chandraprakash Damami",
+    "hlb_new": 143,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ajay Kumar Pancholi",
+    "mobile": "8107385858",
+    "supervisor_circle": 27,
+    "supervisor_name": "Chandraprakash Damami",
+    "hlb_new": 144,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Bablu Lal Meena",
+    "mobile": "7568008715",
+    "supervisor_circle": 27,
+    "supervisor_name": "Chandraprakash Damami",
+    "hlb_new": 145,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Bhagchand Tank",
+    "mobile": "9828803505",
+    "supervisor_circle": 27,
+    "supervisor_name": "Chandraprakash Damami",
+    "hlb_new": 146,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Hari Narayan Yadav",
+    "mobile": "9680508258",
+    "supervisor_circle": 27,
+    "supervisor_name": "Chandraprakash Damami",
+    "hlb_new": 153,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Balram Chaudhary",
+    "mobile": "8432168368",
+    "supervisor_circle": 28,
+    "supervisor_name": "Balram Chaudhary",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ram prasad Kharol",
+    "mobile": "9783038311",
+    "supervisor_circle": 28,
+    "supervisor_name": "Balram Chaudhary",
+    "hlb_new": 160,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ashok Kumar Mali",
+    "mobile": "8955274942",
+    "supervisor_circle": 28,
+    "supervisor_name": "Balram Chaudhary",
+    "hlb_new": 161,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Mukesh Singh",
+    "mobile": "9799471652",
+    "supervisor_circle": 28,
+    "supervisor_name": "Balram Chaudhary",
+    "hlb_new": 162,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Sanwar Lal Sharma",
+    "mobile": "9929322995",
+    "supervisor_circle": 28,
+    "supervisor_name": "Balram Chaudhary",
+    "hlb_new": 163,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Rakesh kumar Pareek",
+    "mobile": "9001300873",
+    "supervisor_circle": 28,
+    "supervisor_name": "Balram Chaudhary",
+    "hlb_new": 164,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ashok Kumar Kamar",
+    "mobile": "8440861258",
+    "supervisor_circle": 28,
+    "supervisor_name": "Balram Chaudhary",
+    "hlb_new": 165,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Mahaveer Bairwa",
+    "mobile": "9571827858",
+    "supervisor_circle": 29,
+    "supervisor_name": "Mahaveer Bairwa",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Rajkumar Bairwa",
+    "mobile": "7611940017",
+    "supervisor_circle": 29,
+    "supervisor_name": "Mahaveer Bairwa",
+    "hlb_new": 158,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ramswaroop Choudhary",
+    "mobile": "9829287705",
+    "supervisor_circle": 29,
+    "supervisor_name": "Mahaveer Bairwa",
+    "hlb_new": 159,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Hansraj Jat",
+    "mobile": "9001260330",
+    "supervisor_circle": 29,
+    "supervisor_name": "Mahaveer Bairwa",
+    "hlb_new": 168,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Narayan Lal Bairwa",
+    "mobile": "9664216064",
+    "supervisor_circle": 29,
+    "supervisor_name": "Mahaveer Bairwa",
+    "hlb_new": 185,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Satyanarayan Meena",
+    "mobile": "9785389333",
+    "supervisor_circle": 29,
+    "supervisor_name": "Mahaveer Bairwa",
+    "hlb_new": 197,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Gyaneshwar Prasad Prajapat",
+    "mobile": "9672862304",
+    "supervisor_circle": 29,
+    "supervisor_name": "Mahaveer Bairwa",
+    "hlb_new": 234,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Govind Narayan Tripathi",
+    "mobile": "9982352925",
+    "supervisor_circle": 30,
+    "supervisor_name": "Govind Narayan Tripathi",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "HEMANT KUMAR SUKARIYA",
+    "mobile": "9001256573",
+    "supervisor_circle": 30,
+    "supervisor_name": "Govind Narayan Tripathi",
+    "hlb_new": 191,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ganesh Gurjar",
+    "mobile": "9571732379",
+    "supervisor_circle": 30,
+    "supervisor_name": "Govind Narayan Tripathi",
+    "hlb_new": 192,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Sajan Singh Chouhan",
+    "mobile": "9079245438",
+    "supervisor_circle": 30,
+    "supervisor_name": "Govind Narayan Tripathi",
+    "hlb_new": 193,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Omprakash Vyas",
+    "mobile": "9602444210",
+    "supervisor_circle": 30,
+    "supervisor_name": "Govind Narayan Tripathi",
+    "hlb_new": 194,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Kishan Lal Bairwa",
+    "mobile": "9784970296",
+    "supervisor_circle": 30,
+    "supervisor_name": "Govind Narayan Tripathi",
+    "hlb_new": 195,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Jitendra Yadav",
+    "mobile": "9929827714",
+    "supervisor_circle": 30,
+    "supervisor_name": "Govind Narayan Tripathi",
+    "hlb_new": 196,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Kamal Kumar Bairwa",
+    "mobile": "8",
+    "supervisor_circle": 31,
+    "supervisor_name": "Kamal Kumar Bairwa",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "KRISHNA KUMAR TIWARI",
+    "mobile": "9461532852",
+    "supervisor_circle": 31,
+    "supervisor_name": "Kamal Kumar Bairwa",
+    "hlb_new": 181,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Vishnu Kumar Vaishnav",
+    "mobile": "9983118699",
+    "supervisor_circle": 31,
+    "supervisor_name": "Kamal Kumar Bairwa",
+    "hlb_new": 186,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Madan Lal Bairwa",
+    "mobile": "9928347330",
+    "supervisor_circle": 31,
+    "supervisor_name": "Kamal Kumar Bairwa",
+    "hlb_new": 187,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ranjeet Bairwa",
+    "mobile": "8890036667",
+    "supervisor_circle": 31,
+    "supervisor_name": "Kamal Kumar Bairwa",
+    "hlb_new": 188,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Mahavir Prasad Bairwa",
+    "mobile": "9784741256",
+    "supervisor_circle": 31,
+    "supervisor_name": "Kamal Kumar Bairwa",
+    "hlb_new": 189,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Budh Raj Mali",
+    "mobile": "9929542239",
+    "supervisor_circle": 31,
+    "supervisor_name": "Kamal Kumar Bairwa",
+    "hlb_new": 190,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Ratan Lal Jangir",
+    "mobile": "9928884278",
+    "supervisor_circle": 32,
+    "supervisor_name": "Ratan Lal Jangir",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Rajaram Sahu",
+    "mobile": "9571940090",
+    "supervisor_circle": 32,
+    "supervisor_name": "Ratan Lal Jangir",
+    "hlb_new": 231,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Bhupender Singh Charan",
+    "mobile": "9929527319",
+    "supervisor_circle": 32,
+    "supervisor_name": "Ratan Lal Jangir",
+    "hlb_new": 232,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Dashrath Bairwa",
+    "mobile": "9116982528",
+    "supervisor_circle": 32,
+    "supervisor_name": "Ratan Lal Jangir",
+    "hlb_new": 233,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Manoj Kumar Dadhich",
+    "mobile": "9636459179",
+    "supervisor_circle": 32,
+    "supervisor_name": "Ratan Lal Jangir",
+    "hlb_new": 235,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Vijay Singh",
+    "mobile": "9799979051",
+    "supervisor_circle": 32,
+    "supervisor_name": "Ratan Lal Jangir",
+    "hlb_new": 236,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Harish Kumar Sharma",
+    "mobile": "8290707770",
+    "supervisor_circle": 32,
+    "supervisor_name": "Ratan Lal Jangir",
+    "hlb_new": 237,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Rajaneesh Kumar Jangid",
+    "mobile": "9875119865",
+    "supervisor_circle": 33,
+    "supervisor_name": "Rajaneesh Kumar Jangid",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Devaraj Gurjar",
+    "mobile": "6367962727",
+    "supervisor_circle": 33,
+    "supervisor_name": "Rajaneesh Kumar Jangid",
+    "hlb_new": 230,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Shivraj Choudhary",
+    "mobile": "9257208826",
+    "supervisor_circle": 33,
+    "supervisor_name": "Rajaneesh Kumar Jangid",
+    "hlb_new": 238,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Raghuveer Prasad Bhambi",
+    "mobile": "9784738022",
+    "supervisor_circle": 33,
+    "supervisor_name": "Rajaneesh Kumar Jangid",
+    "hlb_new": 239,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "UMRAO SINGH BARI",
+    "mobile": "9636224810",
+    "supervisor_circle": 33,
+    "supervisor_name": "Rajaneesh Kumar Jangid",
+    "hlb_new": 240,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "SUMAN PRAJAPAT",
+    "mobile": "9828724951",
+    "supervisor_circle": 33,
+    "supervisor_name": "Rajaneesh Kumar Jangid",
+    "hlb_new": 241,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Raju Rebari",
+    "mobile": "8239249326",
+    "supervisor_circle": 33,
+    "supervisor_name": "Rajaneesh Kumar Jangid",
+    "hlb_new": 242,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Manoj Kumar Jain",
+    "mobile": "9166605908",
+    "supervisor_circle": 34,
+    "supervisor_name": "Manoj Kumar Jain",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Mahavir Prasad Prajapat",
+    "mobile": "9680771065",
+    "supervisor_circle": 34,
+    "supervisor_name": "Manoj Kumar Jain",
+    "hlb_new": 198,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Banwari Lal Goswami",
+    "mobile": "9929447843",
+    "supervisor_circle": 34,
+    "supervisor_name": "Manoj Kumar Jain",
+    "hlb_new": 199,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Vishnu Prasad Sharma",
+    "mobile": "9001450390",
+    "supervisor_circle": 34,
+    "supervisor_name": "Manoj Kumar Jain",
+    "hlb_new": 200,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Abdul Kalam",
+    "mobile": "9549288805",
+    "supervisor_circle": 34,
+    "supervisor_name": "Manoj Kumar Jain",
+    "hlb_new": 214,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Bablu Meghwal",
+    "mobile": "8949510844",
+    "supervisor_circle": 34,
+    "supervisor_name": "Manoj Kumar Jain",
+    "hlb_new": 217,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Bhupendra Singh Rathore",
+    "mobile": "8875127688",
+    "supervisor_circle": 34,
+    "supervisor_name": "Manoj Kumar Jain",
+    "hlb_new": 218,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Bhagchand Jain",
+    "mobile": "9166446266",
+    "supervisor_circle": 35,
+    "supervisor_name": "Bhagchand Jain",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Murlidhar Kumawat",
+    "mobile": "9660985979",
+    "supervisor_circle": 35,
+    "supervisor_name": "Bhagchand Jain",
+    "hlb_new": 201,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ram kunwar Kumhar",
+    "mobile": "9829828478",
+    "supervisor_circle": 35,
+    "supervisor_name": "Bhagchand Jain",
+    "hlb_new": 202,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Dhanraj Mochi",
+    "mobile": "9252994550",
+    "supervisor_circle": 35,
+    "supervisor_name": "Bhagchand Jain",
+    "hlb_new": 203,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Abhay Singh Panwar",
+    "mobile": "9001986838",
+    "supervisor_circle": 35,
+    "supervisor_name": "Bhagchand Jain",
+    "hlb_new": 204,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Bhagchand Bairwa",
+    "mobile": "8696055731",
+    "supervisor_circle": 35,
+    "supervisor_name": "Bhagchand Jain",
+    "hlb_new": 205,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Kaluram Soyal",
+    "mobile": "9772826003",
+    "supervisor_circle": 35,
+    "supervisor_name": "Bhagchand Jain",
+    "hlb_new": 215,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Dhanraj Mochi",
+    "mobile": "9252994550",
+    "supervisor_circle": 35,
+    "supervisor_name": "Bhagchand Jain",
+    "hlb_new": 216,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "RAMSINGH DHAKAR",
+    "mobile": "8696546122",
+    "supervisor_circle": 36,
+    "supervisor_name": "RAMSINGH DHAKAR",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Rajendra Prasad",
+    "mobile": "7014562116",
+    "supervisor_circle": 36,
+    "supervisor_name": "Ramsingh Dhakar",
+    "hlb_new": 147,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "MUKUT MANI DVIVEDI",
+    "mobile": "9460966310",
+    "supervisor_circle": 36,
+    "supervisor_name": "Ramsingh Dhakar",
+    "hlb_new": 148,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "RAMESH CHANDRA KHATI",
+    "mobile": "9680772755",
+    "supervisor_circle": 36,
+    "supervisor_name": "Ramsingh Dhakar",
+    "hlb_new": 149,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "GYARSI LAL BAIRWA",
+    "mobile": "9694969961",
+    "supervisor_circle": 36,
+    "supervisor_name": "Ramsingh Dhakar",
+    "hlb_new": 150,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Mohan Lal Jajoria",
+    "mobile": "9950333800",
+    "supervisor_circle": 36,
+    "supervisor_name": "Ramsingh Dhakar",
+    "hlb_new": 151,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Durgesh Kumar Meghwanshi",
+    "mobile": "8824684055",
+    "supervisor_circle": 36,
+    "supervisor_name": "Ramsingh Dhakar",
+    "hlb_new": 152,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Kanwari Lal Soni",
+    "mobile": "9252565387",
+    "supervisor_circle": 37,
+    "supervisor_name": "Kanwari Lal Soni",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Yadveer Singh",
+    "mobile": "9057099538",
+    "supervisor_circle": 37,
+    "supervisor_name": "Kanwari Lal Soni",
+    "hlb_new": 206,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Dharmendra Choudhary",
+    "mobile": "9799510830",
+    "supervisor_circle": 37,
+    "supervisor_name": "Kanwari Lal Soni",
+    "hlb_new": 207,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Narendra Kumar Verma",
+    "mobile": "9664434019",
+    "supervisor_circle": 37,
+    "supervisor_name": "Kanwari Lal Soni",
+    "hlb_new": 208,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ramswaroop Bairwa",
+    "mobile": "9983360604",
+    "supervisor_circle": 37,
+    "supervisor_name": "Kanwari Lal Soni",
+    "hlb_new": 209,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Ramswaroop Bairwa",
+    "mobile": "9983360604",
+    "supervisor_circle": 37,
+    "supervisor_name": "Kanwari Lal Soni",
+    "hlb_new": 210,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Dinesh Sad",
+    "mobile": "9928956796",
+    "supervisor_circle": 37,
+    "supervisor_name": "Kanwari Lal Soni",
+    "hlb_new": 211,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Gaourav Kumar",
+    "mobile": "9875078999",
+    "supervisor_circle": 37,
+    "supervisor_name": "Kanwari Lal Soni",
+    "hlb_new": 212,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Dharmendra Choudhary",
+    "mobile": "9799510830",
+    "supervisor_circle": 37,
+    "supervisor_name": "Kanwari Lal Soni",
+    "hlb_new": 213,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Shankar Lal Saini",
+    "mobile": "8233686098",
+    "supervisor_circle": 38,
+    "supervisor_name": "Shankar Lal Saini",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Lokesh Jat",
+    "mobile": "9829243359",
+    "supervisor_circle": 38,
+    "supervisor_name": "Shankar Lal Saini",
+    "hlb_new": 219,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Hem Singh",
+    "mobile": "9982674193",
+    "supervisor_circle": 38,
+    "supervisor_name": "Shankar Lal Saini",
+    "hlb_new": 220,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Gangaram Regar",
+    "mobile": "9929136369",
+    "supervisor_circle": 38,
+    "supervisor_name": "Shankar Lal Saini",
+    "hlb_new": 221,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Shantilal Jain",
+    "mobile": "9828874347",
+    "supervisor_circle": 38,
+    "supervisor_name": "Shankar Lal Saini",
+    "hlb_new": 227,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Prithviraj meena",
+    "mobile": "8696157366",
+    "supervisor_circle": 38,
+    "supervisor_name": "Shankar Lal Saini",
+    "hlb_new": 228,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Om Prakash Doria",
+    "mobile": "9928986712",
+    "supervisor_circle": 38,
+    "supervisor_name": "Shankar Lal Saini",
+    "hlb_new": 229,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Supervisor",
+    "name": "Gajendra Saini",
+    "mobile": "9772122272",
+    "supervisor_circle": 39,
+    "supervisor_name": "Gajendra Saini",
+    "hlb_new": null,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Balmukand Khati",
+    "mobile": "9784375452",
+    "supervisor_circle": 39,
+    "supervisor_name": "Gajendra Saini",
+    "hlb_new": 222,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Avinash Sharma",
+    "mobile": "9887786686",
+    "supervisor_circle": 39,
+    "supervisor_name": "Gajendra Saini",
+    "hlb_new": 223,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Pankaj Tiwari",
+    "mobile": "9928649547",
+    "supervisor_circle": 39,
+    "supervisor_name": "Gajendra Saini",
+    "hlb_new": 224,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Shivraj Prajapat",
+    "mobile": "8955208814",
+    "supervisor_circle": 39,
+    "supervisor_name": "Gajendra Saini",
+    "hlb_new": 225,
+    "village_en": null,
+    "village_hi": null
+  },
+  {
+    "role": "Enumerator",
+    "name": "Norat Mal Balai",
+    "mobile": "9461259946",
+    "supervisor_circle": 39,
+    "supervisor_name": "Gajendra Saini",
+    "hlb_new": 226,
+    "village_en": null,
+    "village_hi": null
+  }
+]

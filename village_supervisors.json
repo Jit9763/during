@@ -1,0 +1,756 @@
+{
+  "Bandanwara (0013)": [
+    {
+      "circle": 1,
+      "name": "trilok chand bhambi",
+      "mobile": "8233559209"
+    },
+    {
+      "circle": 3,
+      "name": "Mahavir Prasad Jangid",
+      "mobile": "9799312619"
+    },
+    {
+      "circle": 6,
+      "name": "Gangavishan Prajapat",
+      "mobile": "7742549519"
+    }
+  ],
+  "Amargarh (0001)": [
+    {
+      "circle": 1,
+      "name": "trilok chand bhambi",
+      "mobile": "8233559209"
+    }
+  ],
+  "Motipura (0002)": [
+    {
+      "circle": 1,
+      "name": "trilok chand bhambi",
+      "mobile": "8233559209"
+    }
+  ],
+  "Rooppura (0014)": [
+    {
+      "circle": 2,
+      "name": "Sanjay Vyas",
+      "mobile": "8504884191"
+    }
+  ],
+  "Rampura (0015)": [
+    {
+      "circle": 2,
+      "name": "Sanjay Vyas",
+      "mobile": "8504884191"
+    }
+  ],
+  "Devpura (0017)": [
+    {
+      "circle": 2,
+      "name": "Sanjay Vyas",
+      "mobile": "8504884191"
+    }
+  ],
+  "Gajjanadi (0016)": [
+    {
+      "circle": 2,
+      "name": "Sanjay Vyas",
+      "mobile": "8504884191"
+    }
+  ],
+  "Kheri (0011)": [
+    {
+      "circle": 3,
+      "name": "Mahavir Prasad Jangid",
+      "mobile": "9799312619"
+    },
+    {
+      "circle": 7,
+      "name": "Sandeep Bagrani",
+      "mobile": "9602564649"
+    }
+  ],
+  "Kumhariya (0004)": [
+    {
+      "circle": 4,
+      "name": "Shivprakash Lunia",
+      "mobile": "9772270806"
+    }
+  ],
+  "Bagrai (0003)": [
+    {
+      "circle": 4,
+      "name": "Shivprakash Lunia",
+      "mobile": "9772270806"
+    }
+  ],
+  "Soorajpura (0005)": [
+    {
+      "circle": 4,
+      "name": "Shivprakash Lunia",
+      "mobile": "9772270806"
+    }
+  ],
+  "Keetap (0006)": [
+    {
+      "circle": 5,
+      "name": "Mukesh Rawat",
+      "mobile": "9799203204"
+    }
+  ],
+  "Sedariya (0007)": [
+    {
+      "circle": 5,
+      "name": "Mukesh Rawat",
+      "mobile": "9799203204"
+    },
+    {
+      "circle": 12,
+      "name": "Mukesh Chandra Gurjar",
+      "mobile": "9413457331"
+    }
+  ],
+  "Pratappura (0010)": [
+    {
+      "circle": 7,
+      "name": "Sandeep Bagrani",
+      "mobile": "9602564649"
+    }
+  ],
+  "Gowaliya (0023)": [
+    {
+      "circle": 7,
+      "name": "Sandeep Bagrani",
+      "mobile": "9602564649"
+    }
+  ],
+  "Padanga (0012)": [
+    {
+      "circle": 8,
+      "name": "Chotu Lal Jat",
+      "mobile": "9571857537"
+    }
+  ],
+  "Mathaniya (0022)": [
+    {
+      "circle": 8,
+      "name": "Chotu Lal Jat",
+      "mobile": "9571857537"
+    }
+  ],
+  "Sawaipura (0021)": [
+    {
+      "circle": 8,
+      "name": "Chotu Lal Jat",
+      "mobile": "9571857537"
+    }
+  ],
+  "Arjunpura (0018)": [
+    {
+      "circle": 8,
+      "name": "Chotu Lal Jat",
+      "mobile": "9571857537"
+    }
+  ],
+  "Jheepiya (0019)": [
+    {
+      "circle": 9,
+      "name": "Dharmendra Singh Rathore",
+      "mobile": "9414550823"
+    }
+  ],
+  "Ratakot (0020)": [
+    {
+      "circle": 9,
+      "name": "Dharmendra Singh Rathore",
+      "mobile": "9414550823"
+    }
+  ],
+  "Singhawal (0046)": [
+    {
+      "circle": 10,
+      "name": "LALIT KISHORE PAREEK",
+      "mobile": "9414550520"
+    }
+  ],
+  "Khatanon Ka Khera (0047)": [
+    {
+      "circle": 10,
+      "name": "LALIT KISHORE PAREEK",
+      "mobile": "9414550520"
+    }
+  ],
+  "Jorawarpura (0027)": [
+    {
+      "circle": 11,
+      "name": "Muralidhar Sadhu",
+      "mobile": "9680315441"
+    }
+  ],
+  "Karati (0024)": [
+    {
+      "circle": 11,
+      "name": "Muralidhar Sadhu",
+      "mobile": "9680315441"
+    }
+  ],
+  "Gopalpura (0045)": [
+    {
+      "circle": 11,
+      "name": "Muralidhar Sadhu",
+      "mobile": "9680315441"
+    }
+  ],
+  "Ratanpura (0028)": [
+    {
+      "circle": 12,
+      "name": "Mukesh Chandra Gurjar",
+      "mobile": "9413457331"
+    }
+  ],
+  "Chhachhundra (0008)": [
+    {
+      "circle": 12,
+      "name": "Mukesh Chandra Gurjar",
+      "mobile": "9413457331"
+    }
+  ],
+  "Daulatpura (0009)": [
+    {
+      "circle": 12,
+      "name": "Mukesh Chandra Gurjar",
+      "mobile": "9413457331"
+    }
+  ],
+  "Sargaon (0025)": [
+    {
+      "circle": 12,
+      "name": "Mukesh Chandra Gurjar",
+      "mobile": "9413457331"
+    }
+  ],
+  "Gordhanpura (0026)": [
+    {
+      "circle": 12,
+      "name": "Mukesh Chandra Gurjar",
+      "mobile": "9413457331"
+    }
+  ],
+  "Udaigarh Khera (0030)": [
+    {
+      "circle": 13,
+      "name": "Dilip Singh Rathore",
+      "mobile": "9414348489"
+    }
+  ],
+  "Gujarwara (0031)": [
+    {
+      "circle": 13,
+      "name": "Dilip Singh Rathore",
+      "mobile": "9414348489"
+    }
+  ],
+  "Dhantol (0032)": [
+    {
+      "circle": 13,
+      "name": "Dilip Singh Rathore",
+      "mobile": "9414348489"
+    }
+  ],
+  "Raghunath Garh (0035)": [
+    {
+      "circle": 14,
+      "name": "Dilip Singh Rathore",
+      "mobile": "9667718413"
+    }
+  ],
+  "Rammaliya (0034)": [
+    {
+      "circle": 14,
+      "name": "Dilip Singh Rathore",
+      "mobile": "9667718413"
+    }
+  ],
+  "Peeloda (0037)": [
+    {
+      "circle": 15,
+      "name": "Dinesh Kumar Kumawat",
+      "mobile": "9829896189"
+    }
+  ],
+  "Heerapura (0033)": [
+    {
+      "circle": 15,
+      "name": "Dinesh Kumar Kumawat",
+      "mobile": "9829896189"
+    }
+  ],
+  "Boobkiya (0036)": [
+    {
+      "circle": 15,
+      "name": "Dinesh Kumar Kumawat",
+      "mobile": "9829896189"
+    }
+  ],
+  "Ren (0038)": [
+    {
+      "circle": 15,
+      "name": "Dinesh Kumar Kumawat",
+      "mobile": "9829896189"
+    },
+    {
+      "circle": 16,
+      "name": "Arvind Kumar Sen",
+      "mobile": "9799250075"
+    }
+  ],
+  "Bhinay (0029)": [
+    {
+      "circle": 16,
+      "name": "Arvind Kumar Sen",
+      "mobile": "9799250075"
+    },
+    {
+      "circle": 17,
+      "name": "Ramdayal Regar",
+      "mobile": "9928748496"
+    },
+    {
+      "circle": 18,
+      "name": "Omvrat",
+      "mobile": "7597732890"
+    }
+  ],
+  "Barli (0071)": [
+    {
+      "circle": 19,
+      "name": "Rang Lal Bairwa",
+      "mobile": "9252170173"
+    },
+    {
+      "circle": 21,
+      "name": "Nitish Kumar Sukaria",
+      "mobile": "9783650727"
+    }
+  ],
+  "Ekalseenga (0051)": [
+    {
+      "circle": 19,
+      "name": "Rang Lal Bairwa",
+      "mobile": "9252170173"
+    },
+    {
+      "circle": 20,
+      "name": "MANA LAL MALI",
+      "mobile": "9680218716"
+    }
+  ],
+  "Chawandiya (0044)": [
+    {
+      "circle": 19,
+      "name": "Rang Lal Bairwa",
+      "mobile": "9252170173"
+    }
+  ],
+  "Dhani (0052)": [
+    {
+      "circle": 19,
+      "name": "Rang Lal Bairwa",
+      "mobile": "9252170173"
+    }
+  ],
+  "Balapura (0050)": [
+    {
+      "circle": 20,
+      "name": "MANA LAL MALI",
+      "mobile": "9680218716"
+    }
+  ],
+  "Baneriya (0049)": [
+    {
+      "circle": 20,
+      "name": "MANA LAL MALI",
+      "mobile": "9680218716"
+    }
+  ],
+  "Hiyaliya (0048)": [
+    {
+      "circle": 20,
+      "name": "MANA LAL MALI",
+      "mobile": "9680218716"
+    }
+  ],
+  "Lamgara (0074)": [
+    {
+      "circle": 22,
+      "name": "Mahesh Kumar Bunkar",
+      "mobile": "9799859239"
+    },
+    {
+      "circle": 29,
+      "name": "Mahaveer Bairwa",
+      "mobile": "9571827858"
+    }
+  ],
+  "Neemera (0069)": [
+    {
+      "circle": 22,
+      "name": "Mahesh Kumar Bunkar",
+      "mobile": "9799859239"
+    }
+  ],
+  "Ganahera (0073)": [
+    {
+      "circle": 22,
+      "name": "Mahesh Kumar Bunkar",
+      "mobile": "9799859239"
+    }
+  ],
+  "Ghana (0054)": [
+    {
+      "circle": 23,
+      "name": "GOVIND RAM JANJGID",
+      "mobile": "9982323026"
+    }
+  ],
+  "Udaipura Khera (0066)": [
+    {
+      "circle": 23,
+      "name": "GOVIND RAM JANJGID",
+      "mobile": "9982323026"
+    }
+  ],
+  "Bhairoo Khera (0067)": [
+    {
+      "circle": 23,
+      "name": "GOVIND RAM JANJGID",
+      "mobile": "9982323026"
+    }
+  ],
+  "Jhanbarkiya (0070)": [
+    {
+      "circle": 23,
+      "name": "GOVIND RAM JANJGID",
+      "mobile": "9982323026"
+    }
+  ],
+  "Kumhariya Khera (0040)": [
+    {
+      "circle": 24,
+      "name": "Mohammad Tayyab Khan",
+      "mobile": "9414550787"
+    }
+  ],
+  "Pratappura (0042)": [
+    {
+      "circle": 24,
+      "name": "Mohammad Tayyab Khan",
+      "mobile": "9414550787"
+    }
+  ],
+  "Rooppura (0043)": [
+    {
+      "circle": 24,
+      "name": "Mohammad Tayyab Khan",
+      "mobile": "9414550787"
+    }
+  ],
+  "Telara (0053)": [
+    {
+      "circle": 24,
+      "name": "Mohammad Tayyab Khan",
+      "mobile": "9414550787"
+    }
+  ],
+  "Sobri (0041)": [
+    {
+      "circle": 24,
+      "name": "Mohammad Tayyab Khan",
+      "mobile": "9414550787"
+    }
+  ],
+  "Solkhurd (0039)": [
+    {
+      "circle": 25,
+      "name": "Suresh Chandra Jangid",
+      "mobile": "9950170522"
+    }
+  ],
+  "Khayra (0055)": [
+    {
+      "circle": 25,
+      "name": "Suresh Chandra Jangid",
+      "mobile": "9950170522"
+    }
+  ],
+  "Peepaliya (0056)": [
+    {
+      "circle": 25,
+      "name": "Suresh Chandra Jangid",
+      "mobile": "9950170522"
+    }
+  ],
+  "Sol Kalan (0057)": [
+    {
+      "circle": 25,
+      "name": "Suresh Chandra Jangid",
+      "mobile": "9950170522"
+    }
+  ],
+  "Barla @ Kala Talab (0058)": [
+    {
+      "circle": 26,
+      "name": "Murali Yadav",
+      "mobile": "9602889079"
+    },
+    {
+      "circle": 27,
+      "name": "Chandraprakash Damami",
+      "mobile": "9929455837"
+    }
+  ],
+  "Nagola (0064)": [
+    {
+      "circle": 26,
+      "name": "Murali Yadav",
+      "mobile": "9602889079"
+    }
+  ],
+  "Keriya Khurd (0059)": [
+    {
+      "circle": 27,
+      "name": "Chandraprakash Damami",
+      "mobile": "9929455837"
+    }
+  ],
+  "Balapura (0063)": [
+    {
+      "circle": 27,
+      "name": "Chandraprakash Damami",
+      "mobile": "9929455837"
+    }
+  ],
+  "Sapnikhera (0060)": [
+    {
+      "circle": 27,
+      "name": "Chandraprakash Damami",
+      "mobile": "9929455837"
+    }
+  ],
+  "Chapaneri (0065)": [
+    {
+      "circle": 28,
+      "name": "Balram Chaudhary",
+      "mobile": "8432168368"
+    },
+    {
+      "circle": 29,
+      "name": "Mahaveer Bairwa",
+      "mobile": "9571827858"
+    }
+  ],
+  "Moondiya Khera (0076)": [
+    {
+      "circle": 29,
+      "name": "Mahaveer Bairwa",
+      "mobile": "9571827858"
+    }
+  ],
+  "Barla Khera (0068)": [
+    {
+      "circle": 29,
+      "name": "Mahaveer Bairwa",
+      "mobile": "9571827858"
+    }
+  ],
+  "Bagrai (0094)": [
+    {
+      "circle": 29,
+      "name": "Mahaveer Bairwa",
+      "mobile": "9571827858"
+    },
+    {
+      "circle": 32,
+      "name": "Ratan Lal Jangir",
+      "mobile": "9928884278"
+    }
+  ],
+  "Deoliya Kalan (0075)": [
+    {
+      "circle": 30,
+      "name": "Govind Narayan Tripathi",
+      "mobile": "9982352925"
+    },
+    {
+      "circle": 31,
+      "name": "Kamal Kumar Bairwa",
+      "mobile": "8770000000"
+    }
+  ],
+  "Mataji Ka Khera (0072)": [
+    {
+      "circle": 31,
+      "name": "Kamal Kumar Bairwa",
+      "mobile": "8770000000"
+    }
+  ],
+  "Kheri (0095)": [
+    {
+      "circle": 32,
+      "name": "Ratan Lal Jangir",
+      "mobile": "9928884278"
+    }
+  ],
+  "Indrapura (0093)": [
+    {
+      "circle": 32,
+      "name": "Ratan Lal Jangir",
+      "mobile": "9928884278"
+    }
+  ],
+  "Gurha Khurd (0096)": [
+    {
+      "circle": 32,
+      "name": "Ratan Lal Jangir",
+      "mobile": "9928884278"
+    },
+    {
+      "circle": 33,
+      "name": "Rajaneesh Kumar Jangid",
+      "mobile": "9875119865"
+    }
+  ],
+  "Pandonlai (0092)": [
+    {
+      "circle": 33,
+      "name": "Rajaneesh Kumar Jangid",
+      "mobile": "9875119865"
+    }
+  ],
+  "Gurha Kalan (0097)": [
+    {
+      "circle": 33,
+      "name": "Rajaneesh Kumar Jangid",
+      "mobile": "9875119865"
+    }
+  ],
+  "Kachariya (0087)": [
+    {
+      "circle": 34,
+      "name": "Manoj Kumar Jain",
+      "mobile": "9166605908"
+    }
+  ],
+  "Nandsi (0077)": [
+    {
+      "circle": 34,
+      "name": "Manoj Kumar Jain",
+      "mobile": "9166605908"
+    }
+  ],
+  "Laxmipura (0085)": [
+    {
+      "circle": 34,
+      "name": "Manoj Kumar Jain",
+      "mobile": "9166605908"
+    }
+  ],
+  "Gordhanpura (0079)": [
+    {
+      "circle": 35,
+      "name": "Bhagchand Jain",
+      "mobile": "9166446266"
+    }
+  ],
+  "Beeliya (0080)": [
+    {
+      "circle": 35,
+      "name": "Bhagchand Jain",
+      "mobile": "9166446266"
+    }
+  ],
+  "Padaliya (0078)": [
+    {
+      "circle": 35,
+      "name": "Bhagchand Jain",
+      "mobile": "9166446266"
+    }
+  ],
+  "Chawandiya (0086)": [
+    {
+      "circle": 35,
+      "name": "Bhagchand Jain",
+      "mobile": "9166446266"
+    }
+  ],
+  "Bargaon urf Surkhand (0061)": [
+    {
+      "circle": 36,
+      "name": "RAMSINGH DHAKAR",
+      "mobile": "8696546122"
+    }
+  ],
+  "Raghunathpura (0062)": [
+    {
+      "circle": 36,
+      "name": "RAMSINGH DHAKAR",
+      "mobile": "8696546122"
+    }
+  ],
+  "Nimeda (0084)": [
+    {
+      "circle": 37,
+      "name": "Kanwari Lal Soni",
+      "mobile": "9252565387"
+    }
+  ],
+  "Kanai Kalan (0081)": [
+    {
+      "circle": 37,
+      "name": "Kanwari Lal Soni",
+      "mobile": "9252565387"
+    }
+  ],
+  "Dhandhon Ka Khera (0083)": [
+    {
+      "circle": 37,
+      "name": "Kanwari Lal Soni",
+      "mobile": "9252565387"
+    }
+  ],
+  "Kanai Khurd (0082)": [
+    {
+      "circle": 37,
+      "name": "Kanwari Lal Soni",
+      "mobile": "9252565387"
+    }
+  ],
+  "Kurthal (0091)": [
+    {
+      "circle": 38,
+      "name": "Shankar Lal Saini",
+      "mobile": "8233686098"
+    }
+  ],
+  "Jetpura (0088)": [
+    {
+      "circle": 38,
+      "name": "Shankar Lal Saini",
+      "mobile": "8233686098"
+    }
+  ],
+  "Kadolai (0089)": [
+    {
+      "circle": 39,
+      "name": "Gajendra Saini",
+      "mobile": "9772122272"
+    }
+  ],
+  "Kerot (0090)": [
+    {
+      "circle": 39,
+      "name": "Gajendra Saini",
+      "mobile": "9772122272"
+    }
+  ]
+}
