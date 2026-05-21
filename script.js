@@ -3044,13 +3044,7 @@ function switchTab(tabName) {
         if (btnPdf) btnPdf.classList.add('active');
         if (pdfPanel) {
             pdfPanel.style.display = 'flex';
-            // Load PDF from localStorage or fallback to report.pdf
-            const pdfIframe = document.getElementById('pdf-iframe');
-            const pdfLink = document.getElementById('pdf-download-link');
-            const savedPdf = localStorage.getItem('census_pdf_data');
-            const src = savedPdf || 'pdf/Charge_Wise_HLB_Progress_Report.pdf';
-            if (pdfIframe) pdfIframe.src = src;
-            if (pdfLink) pdfLink.href = src;
+            loadLatestPdf();
         }
     }
 }
@@ -3400,24 +3394,28 @@ async function loadLatestPdf() {
     try {
         const resp = await fetch(`${DEFAULT_API_URL}?folderPdf=1&t=${Date.now()}`, { cache: 'no-store' });
         if (!resp.ok) throw new Error('Network response was not OK');
-        const blob = await resp.blob();
-        if (blob.size > 0) {
-            const pdfUrl = URL.createObjectURL(blob);
+        const data = await resp.json();
+        if (data.status === 'success' && data.pdfUrl) {
+            if (iframe) iframe.src = data.pdfUrl;
             if (link) {
-                link.href = pdfUrl;
-                link.download = 'report.pdf';
-            }
-            if (iframe) {
-                if (iframe.src && iframe.src.startsWith('blob:')) {
-                    URL.revokeObjectURL(iframe.src);
-                }
-                iframe.src = pdfUrl;
+                link.href = data.pdfUrl;
+                link.target = '_blank';
             }
         } else {
-            console.warn('No valid PDF blob returned from folder endpoint');
+            throw new Error(data.message || 'No PDF URL returned');
         }
     } catch (err) {
         console.error('Failed to load latest PDF:', err);
+        // Fallback to local or saved PDF
+        const savedPdf = localStorage.getItem('census_pdf_data');
+        const fallbackSrc = savedPdf || 'pdf/Charge_Wise_HLB_Progress_Report.pdf';
+        if (iframe && (!iframe.src || iframe.src === 'about:blank')) {
+            iframe.src = fallbackSrc;
+        }
+        if (link && (!link.href || link.href === '#')) {
+            link.href = fallbackSrc;
+            link.target = '_blank';
+        }
     }
 }
 

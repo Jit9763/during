@@ -68,20 +68,8 @@ function doGet(e){
         return ContentService.createTextOutput(JSON.stringify({status:'error',message:'No PDF found in folder'}))
           .setMimeType(ContentService.MimeType.JSON);
       }
-      // Instead of returning preview URL, serve the PDF binary directly
-      const folderId = '1EKPJ5N9w1QLeSMBCMrIUt33C9c2fb4R9';
-      const folder = DriveApp.getFolderById(folderId);
-      const files = folder.getFilesByType(MimeType.PDF);
-      let latestFile=null, latestDate=new Date(0);
-      while(files.hasNext()){
-        const f=files.next();
-        const m=f.getLastUpdated();
-        if(m>latestDate){latestDate=m; latestFile=f;}
-      }
-      if(!latestFile) return ContentService.createTextOutput(JSON.stringify({status:'error',message:'No PDF found'})).setMimeType(ContentService.MimeType.JSON);
-      const blob=latestFile.getBlob();
-      return ContentService.createBinaryOutput(blob.getBytes())
-        .setMimeType(ContentService.MimeType.PDF);
+      return ContentService.createTextOutput(JSON.stringify({status:'success',pdfUrl:url}))
+        .setMimeType(ContentService.MimeType.JSON);
     }
     // ----- New: Serve PDF preview URL from Sheet -----
     if(e.parameter && e.parameter.pdfTab){
