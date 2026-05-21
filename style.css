@@ -1504,12 +1504,11 @@ header h1 {
 
 .tabs-container {
     display: flex;
+    flex-wrap: wrap;
     gap: 12px;
     margin: 10px 0 25px 0;
     border-bottom: 2px solid #e2e8f0;
     padding-bottom: 12px;
-    overflow-x: auto;
-    scrollbar-width: none; /* Firefox */
 }
 
 .tabs-container::-webkit-scrollbar {

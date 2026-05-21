@@ -46,6 +46,9 @@
             <button id="btn-tab-progress" class="tab-btn active" onclick="switchTab('progress')">
                 <i class="fas fa-chart-line"></i> जनगणना प्रगति (Census Progress)
             </button>
+            <button id="btn-tab-mapping" class="tab-btn" onclick="window.open('https://chem-portal.github.io/census/index.html', '_blank')">
+                <i class="fas fa-map-marked-alt"></i> प्रशासनिक एवं मैपिंग (Administrative Mapping)
+            </button>
             <button id="btn-tab-directory" class="tab-btn" onclick="switchTab('directory')">
                 <i class="fas fa-address-book"></i> सुपरवाइजर एवं प्रगणक निर्देशिका (Directory)
             </button>
@@ -126,9 +129,7 @@
             <iframe id="pdf-iframe" src="" style="width: 100%; flex: 1; border: none;"></iframe>
         </div>
 
-        <!-- Daily Scheduler -->
-        <div id="daily-scheduler"></div>
-
+        
         <!-- Cloud Sync Settings (Compact) -->
         <div class="cloud-sync-bar">
             <div class="sync-label"><i class="fas fa-cloud"></i> क्लाउड सिंक:</div>
@@ -137,28 +138,16 @@
             <button class="sync-btn sync-push" onclick="forceCloudSync()"><i class="fas fa-upload"></i> सिंक</button>
         </div>
 
-        <!-- Admin Content (Same as Public Container Structure) -->
-        <div id="admin-container">
-            <div style="text-align: center; padding: 50px;">
-                <i class="fas fa-spinner fa-spin" style="font-size: 40px; color: var(--primary);"></i>
-                <p style="margin-top: 10px;">डेटा लोड हो रहा है...</p>
-            </div>
-        </div>
+        
 
         <!-- Census Upload Trigger Button -->
-        <div style="text-align:right; margin-bottom: 15px;">
+        <div id="upload-trigger-container" style="text-align:right; margin-bottom: 15px;">
             <button class="action-btn" style="background: linear-gradient(135deg, #7c3aed, #4f46e5); padding: 10px 20px; border-radius: 10px; font-size: 14px;" onclick="document.getElementById('during-census-panel').style.display='block'">
                 <i class="fas fa-file-upload"></i> प्रोग्रेस शीट अपलोड करें
             </button>
         </div>
 
-        <!-- Sticky Footer Action Bar -->
-        <div class="admin-action-bar">
-            <button class="action-btn btn-save" onclick="saveChanges()"><i class="fas fa-save"></i> Save</button>
-            <button class="action-btn btn-export" onclick="exportToJSON()"><i class="fas fa-file-export"></i> Backup</button>
-            <button class="action-btn btn-report" onclick="generateReport()"><i class="fas fa-file-alt"></i> रिपोर्ट</button>
-            <button class="action-btn btn-reset" onclick="resetData()"><i class="fas fa-sync"></i> Reset</button>
-        </div>
+        
     </div>
 
     <!-- Modal for Export -->

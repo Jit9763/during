@@ -66,8 +66,7 @@ function doGet(e){
       const url = getLatestPdfFromFolder();
       if(!url){
         return ContentService.createTextOutput(JSON.stringify({status:'error',message:'No PDF found in folder'}))
-          .setMimeType(ContentService.MimeType.JSON)
-          .setHeader('Access-Control-Allow-Origin','*');
+          .setMimeType(ContentService.MimeType.JSON);
       }
       // Instead of returning preview URL, serve the PDF binary directly
       const folderId = '1EKPJ5N9w1QLeSMBCMrIUt33C9c2fb4R9';
@@ -82,9 +81,7 @@ function doGet(e){
       if(!latestFile) return ContentService.createTextOutput(JSON.stringify({status:'error',message:'No PDF found'})).setMimeType(ContentService.MimeType.JSON);
       const blob=latestFile.getBlob();
       return ContentService.createBinaryOutput(blob.getBytes())
-        .setMimeType(ContentService.MimeType.PDF)
-        .setHeader('Access-Control-Allow-Origin','*')
-        .setHeader('Cache-Control','no-store, no-cache, must-revalidate, max-age=0');
+        .setMimeType(ContentService.MimeType.PDF);
     }
     // ----- New: Serve PDF preview URL from Sheet -----
     if(e.parameter && e.parameter.pdfTab){
@@ -92,12 +89,10 @@ function doGet(e){
       const storedUrl = pdfSheet.getRange('A1').getValue();
       if(!storedUrl){
         return ContentService.createTextOutput(JSON.stringify({status:'error',message:'No PDF URL stored'}))
-          .setMimeType(ContentService.MimeType.JSON)
-          .setHeader('Access-Control-Allow-Origin','*');
+          .setMimeType(ContentService.MimeType.JSON);
       }
       return ContentService.createTextOutput(JSON.stringify({publicUrl:storedUrl,status:'success'}))
-        .setMimeType(ContentService.MimeType.JSON)
-        .setHeader('Access-Control-Allow-Origin','*');
+        .setMimeType(ContentService.MimeType.JSON);
     }
     // Existing PDF endpoint (if needed)
     if(e.parameter && e.parameter.pdf){
@@ -105,15 +100,13 @@ function doGet(e){
       const b64 = pdfSheet.getRange('A1').getValue() || '';
       if(!b64){
         return ContentService.createTextOutput('PDF उपलब्ध नहीं')
-          .setMimeType(ContentService.MimeType.TEXT)
-          .setHeader('Access-Control-Allow-Origin','*');
+          .setMimeType(ContentService.MimeType.TEXT);
       }
       const decoded = Utilities.base64Decode(b64);
       const blob = Utilities.newBlob(decoded,'application/pdf','report.pdf');
       return ContentService.createBinaryOutput(blob.getBytes())
         .setMimeType(ContentService.MimeType.PDF)
-        .setHeader('Access-Control-Allow-Origin','*')
-        .setHeader('Content-Disposition','inline; filename="report.pdf"');
+
     }
     // ----- Normal data request (all data) -----
     const tasksSheet   = _openSheet(SHEET_TASKS);
@@ -134,12 +127,10 @@ function doGet(e){
     const pdfData = pdfSheet.getRange('A1').getValue() || null;
     const response = {values:tasksObj,censusData:censusArr,overallStats:overallObj,pdfData:pdfData,status:'success'};
     return ContentService.createTextOutput(JSON.stringify(response))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader('Access-Control-Allow-Origin','*');
+      .setMimeType(ContentService.MimeType.JSON);
   }catch(err){
     return ContentService.createTextOutput(JSON.stringify({status:'error',message:err.toString()}))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader('Access-Control-Allow-Origin','*');
+      .setMimeType(ContentService.MimeType.JSON);
   }
 }
 
@@ -191,21 +182,16 @@ function doPost(e) {
     }
 
     return ContentService
-      .createTextOutput('Saved')
-      .setHeader('Access-Control-Allow-Origin', '*');
+      .createTextOutput('Saved');
   } catch (err) {
     return ContentService
-      .createTextOutput('Error: ' + err.toString())
-      .setHeader('Access-Control-Allow-Origin', '*');
+      .createTextOutput('Error: ' + err.toString());
   }
 }
 
 /* ---------- CORS Pre‑flight ---------- */
 function doOptions(e) {
-  return ContentService.createTextOutput('')
-    .setHeader('Access-Control-Allow-Origin', '*')
-    .setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
-    .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  return ContentService.createTextOutput('');
 }
 
 // ----- New: Setup time-driven trigger for PDF sync -----

@@ -35,9 +35,10 @@
 async function loadPdf(){
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbymRFTWdTupv_8qb314NF9RBffgwU47dqEMB3stzMYN5N0RZ5JEIQO8Lxbo-cGxnwfU9w/exec';
         try{
-          const resp = await fetch(WEB_APP_URL + '?folderPdf=1', {cache: 'no-store'});
-          if(!resp.ok) throw new Error('Network response was not ok');
+          const resp = await fetch(`${WEB_APP_URL}?folderPdf=1&t=${Date.now()}`, {cache: 'no-store'});
+          console.log('Fetching PDF, response status:', resp.status);
           const blob = await resp.blob();
+          console.log('PDF Blob size (bytes):', blob.size);
           // Create an object URL to force fresh rendering
           const pdfUrl = URL.createObjectURL(blob);
           const iframe = document.getElementById('pdf-iframe');
@@ -63,6 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="tabs-container">
             <button id="btn-tab-progress" class="tab-btn active" onclick="switchTab('progress')">
                 <i class="fas fa-chart-line"></i> जनगणना प्रगति (Census Progress)
+            </button>
+            <button id="btn-tab-mapping" class="tab-btn" onclick="window.open('https://chem-portal.github.io/census/index.html', '_blank')">
+                <i class="fas fa-map-marked-alt"></i> प्रशासनिक एवं मैपिंग (Administrative Mapping)
             </button>
             <button id="btn-tab-directory" class="tab-btn" onclick="switchTab('directory')">
                 <i class="fas fa-address-book"></i> सुपरवाइजर एवं प्रगणक निर्देशिका (Directory)
@@ -97,15 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <iframe id="pdf-iframe" src="" style="width: 100%; flex: 1; border: none;"></iframe>
         </div>
         
-        <div id="daily-scheduler"></div>
-        <div id="public-container">
-            <!-- Data will be loaded from data.xml -->
-            <div style="text-align: center; padding: 50px;">
-                <i class="fas fa-sync fa-spin" style="font-size: 40px; color: var(--primary);"></i>
-                <p style="margin-top: 10px;">डेटा लोड हो रहा है...</p>
-            </div>
-        </div>
-
         <footer style="text-align: center; margin-top: 50px; padding: 20px; color: #666; font-size: 14px; border-top: 1px solid #ddd;">
             <p>© 2026 जनगणना सेल, भिनाय ब्लॉक। सभी अधिकार सुरक्षित।</p>
             <p style="margin-top: 5px;">डेटा प्रति सप्ताह अपडेट किया जाता है।</p>

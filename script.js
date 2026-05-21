@@ -390,38 +390,6 @@ const TASK_STRUCTURE = [
         ]
     },
     {
-        category: "उपयोगकर्ता प्रबंधन (User Management)",
-        tasks: [
-            { id: "charge1", name: "चार्ज कार्मिक (Charge User) विवरण", type: "info", content: "चार्ज ऑफिसर और सहायक कर्मचारी", deadline: "2026-04-18" },
-            { id: "sup1", name: "पर्यवेक्षक (Supervisors) प्रबंधन", type: "user-group", totalCount: 39, reserveCount: 4, uploadedCount: 0, reserveUploadedCount: 0, niyukti: "purn", circleAlloc: "purn", pragnakAlloc: "lambit", hlbAlloc: "lambit", idCard: "lambit", mapDistrib: "lambit", reserveId: "lambit", deadline: "2026-04-25" },
-            { id: "enum1", name: "प्रगणक (Enumerators) प्रबंधन", type: "user-group", totalCount: 237, reserveCount: 24, uploadedCount: 0, reserveUploadedCount: 0, niyukti: "purn", alloc: "lambit", hlbAlloc: "lambit", idCard: "lambit", mapDistrib: "lambit", reserveId: "lambit", deadline: "2026-04-26" }
-        ]
-    },
-    {
-        category: "प्रशिक्षण प्रबंधन (Training Management)",
-        tasks: [
-            { id: "t-centers", name: "प्रशिक्षण केंद्र प्रबंधन (Center Management)", type: "training-centers", c1: "रा.उ.मा.वि. देवलिया कला सभागार", c2: "रा.उ.मा.वि. नगोला सभागार", c3: "भिनाय पंचायत सभागार", c4: "रा.उ.मा.वि. बांदनवाड़ा सभागार", deadline: "2026-04-20" },
-            { id: "t-logis", name: "प्रशिक्षण रसद (Training Logistics)", type: "training-logistics", centerSelection: "lambit", permissionLetter: "lambit", deadline: "2026-04-25" },
-            { id: "13", name: "FIELD Trainners (4) का पंजीकरण और प्रशिक्षण", status: "purn", type: "simple", deadline: "2026-04-15" },
-            { id: "t-batch", name: "प्रशिक्षण बैच पोर्टल कार्य और उपस्थिति", type: "training-summary", totalBatches: 7, completedBatches: 0, totalAttended: 0, batchList: [{"id":1,"date":"1-3 May","venue":"रा.उ.मा.वि. देवलिया कला सभागार","time":"8:00 AM - 5:00 PM","nirm":"lambit","alloc":"lambit","down":"lambit","verify":"lambit","up":"lambit"},{"id":2,"date":"1-3 May","venue":"रा.उ.मा.वि. नगोला सभागार","time":"8:00 AM - 5:00 PM","nirm":"lambit","alloc":"lambit","down":"lambit","verify":"lambit","up":"lambit"},{"id":3,"date":"4-5 May","venue":"भिनाय पंचायत सभागार","time":"8:00 AM - 5:00 PM","nirm":"lambit","alloc":"lambit","down":"lambit","verify":"lambit","up":"lambit"},{"id":4,"date":"4-5 May","venue":"रा.उ.मा.वि. बांदनवाड़ा सभागार","time":"8:00 AM - 5:00 PM","nirm":"lambit","alloc":"lambit","down":"lambit","verify":"lambit","up":"lambit"},{"id":5,"date":"6-7 May","venue":"रा.उ.मा.वि. देवलिया कला सभागार","time":"8:00 AM - 5:00 PM","nirm":"lambit","alloc":"lambit","down":"lambit","verify":"lambit","up":"lambit"},{"id":6,"date":"6-7 May","venue":"रा.उ.मा.वि. नगोला सभागार","time":"8:00 AM - 5:00 PM","nirm":"lambit","alloc":"lambit","down":"lambit","verify":"lambit","up":"lambit"},{"id":7,"date":"8-10 May","venue":"भिनाय पंचायत सभागार","time":"8:00 AM - 5:00 PM","nirm":"lambit","alloc":"lambit","down":"lambit","verify":"lambit","up":"lambit"}], deadline: "2026-05-15" },
-            { id: "16", name: "हस्ताक्षरित अटेंडेंस शीट पोर्टल पर अपलोड करना", status: "lambit", type: "simple", deadline: "2026-05-20" }
-        ]
-    },
-    {
-        category: "रसद और वित्त (Logistics & Finance)",
-        tasks: [
-            { id: "l-fac", name: "केंद्र व्यवस्थाएं (Facilities Readiness)", type: "logistics-checklist", internet: "lambit", sound: "purn", food: "apurn", water: "purn", deadline: "2026-04-27" }
-        ]
-    },
-    {
-        category: "FIELD SURVEY तैयारी (Field Survey Readiness)",
-        tasks: [
-            { id: "21", name: "HLO मोबाइल ऐप का सिंक और लॉगिन टेस्ट", status: "lambit", type: "simple", deadline: "2026-06-15" },
-            { id: "22", name: "ब्लॉक क्यूआर कोड (QR Code) वितरण", status: "lambit", type: "simple", deadline: "2026-06-20" },
-            { id: "23", name: "चार्ज रेडीनेस सर्टिफिकेट (CRC) अपलोड", status: "lambit", type: "simple", deadline: "2026-06-25" }
-        ]
-    },
-    {
         category: "जनगणना कार्य प्रगति (During Census Progress)",
         tasks: [
             {
@@ -467,11 +435,51 @@ async function loadData() {
             try {
                 const response = await fetch(apiUrl);
                 const data = await response.json();
-                if (data && data.values) {
-                    savedValues = data.values;
+                if (data) {
+                    if (data.values) {
+                        savedValues = data.values;
+                        localStorage.setItem('census_tasks_values', JSON.stringify(savedValues));
+                    }
+                    if (data.censusData && data.censusData.length > 0) {
+                        const formattedCensusData = data.censusData.map(v => ({
+                            village: v.village,
+                            totalHlbs: parseInt(v.totalHlbs) || 0,
+                            inProgress: parseInt(v.inProgress) || 0,
+                            completedHlbs: parseInt(v.completedHlbs) || 0,
+                            yetToStart: parseInt(v.yetToStart) || 0,
+                            expectedHouses: parseInt(v.expectedHouses) || 0,
+                            completedHouses: parseInt(v.completedHouses) || 0,
+                            whollyRes: parseInt(v.whollyRes) || 0,
+                            partlyRes: parseInt(v.partlyRes) || 0,
+                            vacant: parseInt(v.vacant) || 0,
+                            locked: parseInt(v.locked) || 0,
+                            otherUse: parseInt(v.otherUse) || 0,
+                            households: parseInt(v.households) || 0,
+                            verifiedHouseholds: parseInt(v.verifiedHouseholds) || 0,
+                            population: parseInt(v.population) || 0,
+                            seIdUsed: parseInt(v.seIdUsed) || 0
+                        }));
+                        const censusTask = taskData.flatMap(c => c.tasks).find(t => t.id === 'during_census_progress');
+                        if (censusTask) {
+                            censusTask.hlbProgress = formattedCensusData;
+                        }
+                        localStorage.setItem('census_data_local', JSON.stringify(formattedCensusData));
+                    }
+                    if (data.overallStats) {
+                        window.CENSUS_OVERALL_STATS = {
+                            totalHlbs: parseInt(data.overallStats.totalHlbs) || 0,
+                            inProgress: parseInt(data.overallStats.inProgress) || 0,
+                            completedHlbs: parseInt(data.overallStats.completedHlbs) || 0,
+                            yetToStart: parseInt(data.overallStats.yetToStart) || 0,
+                            expectedHouses: parseInt(data.overallStats.expectedHouses) || 0,
+                            completedHouses: parseInt(data.overallStats.completedHouses) || 0,
+                            population: parseInt(data.overallStats.population) || 0
+                        };
+                        localStorage.setItem('census_overall_stats', JSON.stringify(window.CENSUS_OVERALL_STATS));
+                    }
                 }
             } catch(e) {
-                console.warn("Cloud sync failed, trying localStorage.");
+                console.warn("Cloud sync failed, trying localStorage.", e);
             }
         }
 
@@ -480,6 +488,17 @@ async function loadData() {
             const localData = localStorage.getItem('census_tasks_values');
             if (localData) {
                 savedValues = JSON.parse(localData);
+            }
+            const localCensus = localStorage.getItem('census_data_local');
+            if (localCensus) {
+                const censusTask = taskData.flatMap(c => c.tasks).find(t => t.id === 'during_census_progress');
+                if (censusTask) {
+                    censusTask.hlbProgress = JSON.parse(localCensus);
+                }
+            }
+            const localOverall = localStorage.getItem('census_overall_stats');
+            if (localOverall) {
+                window.CENSUS_OVERALL_STATS = JSON.parse(localOverall);
             }
         }
 
@@ -492,6 +511,11 @@ async function loadData() {
                     }
                 });
             });
+        }
+
+        const censusTask = taskData.flatMap(c => c.tasks).find(t => t.id === 'during_census_progress');
+        if (censusTask && (!censusTask.hlbProgress || censusTask.hlbProgress.length === 0)) {
+            censusTask.hlbProgress = JSON.parse(JSON.stringify(typeof DEFAULT_CENSUS_PROGRESS !== 'undefined' ? DEFAULT_CENSUS_PROGRESS : []));
         }
 
         calculateOverallProgress();
@@ -509,12 +533,16 @@ async function loadData() {
 
 // 2. Render Page
 function renderPage() {
+    renderDuringCensusDashboard();
+
     const container = isAdminPage ? document.getElementById('admin-container') : document.getElementById('public-container');
     if (!container) return;
     
     container.innerHTML = '';
 
     taskData.forEach((cat, catIdx) => {
+        // Skip rendering Census Progress task category in checklist container
+        if (cat.category.includes("जनगणना कार्य प्रगति") || cat.category.includes("During Census Progress")) return;
         const section = document.createElement('div');
         section.className = 'category-section';
         
@@ -1523,12 +1551,8 @@ function updateDailyScheduler() {
     }
 }
 
-// 4. Save Changes
-async function saveChanges() {
-    const btn = document.querySelector('.btn-save');
-    const originalHTML = btn.innerHTML;
-    
-    // 1) Always save values only to localStorage
+// Helper to prepare the full payload for sync
+function preparePayload() {
     const valuesOnly = {};
     taskData.forEach(cat => {
         cat.tasks.forEach(t => {
@@ -1536,9 +1560,55 @@ async function saveChanges() {
             valuesOnly[id] = values;
         });
     });
-    localStorage.setItem('census_tasks_values', JSON.stringify(valuesOnly));
+
+    const censusTask = taskData.flatMap(c => c.tasks).find(t => t.id === 'during_census_progress');
+    const hlbProgress = (censusTask && censusTask.hlbProgress && censusTask.hlbProgress.length > 0) ? censusTask.hlbProgress : (typeof DEFAULT_CENSUS_PROGRESS !== 'undefined' ? DEFAULT_CENSUS_PROGRESS : []);
+
+    let expectedHouses = 0;
+    let completedHouses = 0;
+    let population = 0;
+    let totalHlbs = 0;
+    let inProgress = 0;
+    let completedHlbs = 0;
+    let yetToStart = 0;
+
+    hlbProgress.forEach(v => {
+        expectedHouses += (v.expectedHouses || 0);
+        completedHouses += (v.completedHouses || 0);
+        population += (v.population || 0);
+        totalHlbs += (v.totalHlbs || 0);
+        inProgress += (v.inProgress || 0);
+        completedHlbs += (v.completedHlbs || 0);
+        yetToStart += (v.yetToStart || 0);
+    });
+
+    const overallStats = {
+        expectedHouses,
+        completedHouses,
+        population,
+        totalHlbs,
+        inProgress,
+        completedHlbs,
+        yetToStart
+    };
+
+    return {
+        values: valuesOnly,
+        censusData: hlbProgress,
+        overallStats: overallStats
+    };
+}
+
+// 4. Save Changes
+async function saveChanges() {
+    const btn = document.querySelector('.btn-save');
+    const originalHTML = btn.innerHTML;
     
-    // 2) Always try to sync values to Google Sheets (cloud)
+    const payload = preparePayload();
+    localStorage.setItem('census_tasks_values', JSON.stringify(payload.values));
+    localStorage.setItem('census_data_local', JSON.stringify(payload.censusData));
+    localStorage.setItem('census_overall_stats', JSON.stringify(payload.overallStats));
+    
     const apiUrl = localStorage.getItem('census_api_url') || DEFAULT_API_URL;
     if (apiUrl) {
         try {
@@ -1548,7 +1618,7 @@ async function saveChanges() {
             await fetch(apiUrl, {
                 method: 'POST',
                 mode: 'no-cors',
-                body: JSON.stringify({ values: valuesOnly })
+                body: JSON.stringify(payload)
             });
             
             setTimeout(() => {
@@ -1582,19 +1652,13 @@ async function forceCloudSync() {
         return;
     }
 
-    const valuesOnly = {};
-    taskData.forEach(cat => {
-        cat.tasks.forEach(t => {
-            const { id, name, type, ...values } = t;
-            valuesOnly[id] = values;
-        });
-    });
+    const payload = preparePayload();
 
     try {
         await fetch(apiUrl, {
             method: 'POST',
             mode: 'no-cors',
-            body: JSON.stringify({ values: valuesOnly })
+            body: JSON.stringify(payload)
         });
         alert("डेटा क्लाउड (Google Sheets) पर भेज दिया गया है!");
     } catch (e) {
@@ -1657,259 +1721,289 @@ function toggleBatchStep(id, bIdx, step) {
 
 // 7. Generate Formal Report (प्रतिवेदन)
 function getReportHTML() {
-    const today = new Date();
-    const dateStr = today.toLocaleDateString('hi-IN', { year: 'numeric', month: 'long', day: 'numeric' });
-    
-    // Calculate overall progress using unified logic
-    let totalP = 0, totalT = 0;
-    taskData.forEach(cat => {
-        cat.tasks.forEach(t => {
-            const prog = getTaskProgress(t);
-            totalP += prog.purn;
-            totalT += prog.total;
-        });
-    });
-    const overallPercent = totalT > 0 ? Math.round((totalP / totalT) * 100) : 0;
+    try {
+        const today = new Date();
+        const dateStr = today.toLocaleDateString('hi-IN', { year: 'numeric', month: 'long', day: 'numeric' });
 
-    // Build category-wise report
-    let categoryReports = '';
-    let catIndex = 1;
+        const censusTask = taskData.flatMap(c => c.tasks).find(t => t.id === 'during_census_progress');
+        const hlbProgress = (censusTask && censusTask.hlbProgress && censusTask.hlbProgress.length > 0) ? censusTask.hlbProgress : (typeof DEFAULT_CENSUS_PROGRESS !== 'undefined' ? DEFAULT_CENSUS_PROGRESS : []);
+        
+        const totalVillages = hlbProgress.length;
 
-    taskData.forEach(cat => {
-        let catName = cat.category;
-        let taskLines = '';
-        let taskNum = 1;
+        let expectedHouses = 0;
+        let completedHouses = 0;
+        let population = 0;
+        let totalHlbs = 0;
+        let inProgress = 0;
+        let completedHlbs = 0;
+        let yetToStart = 0;
 
-        cat.tasks.forEach(t => {
-            if (t.type === 'info' || t.type === 'training-centers') return;
-
-            let statusText = '';
-            if (t.type === 'counter') {
-                const pct = Math.round((t.completed / t.total) * 100);
-                statusText = `कुल ${t.total} में से ${t.completed} पूर्ण (${pct}%)`;
-            } else if (t.type === 'map-stats') {
-                statusText = `कुल ${t.total} में से ${t.checked} जांच पूर्ण। सही: ${t.correct}, गलत: ${t.incorrect}`;
-            } else if (t.type === 'user-group') {
-                const stepLabels = {
-                    niyukti: "नियुक्ति",
-                    circleAlloc: "सर्किल",
-                    pragnakAlloc: "प्रगणक",
-                    alloc: "आवंटन",
-                    hlbAlloc: "HLB",
-                    idCard: "ID कार्ड",
-                    mapDistrib: "मैप",
-                    reserveId: "रिजर्व"
-                };
-                const keys = t.id === 'sup1' 
-                    ? ['niyukti','circleAlloc','pragnakAlloc','hlbAlloc','idCard','mapDistrib','reserveId']
-                    : ['niyukti','alloc','hlbAlloc','idCard','mapDistrib','reserveId'];
-                
-                const stepsHtml = keys.map(k => {
-                    const isDone = t[k] === 'purn';
-                    return `<span style="white-space:nowrap; color:${isDone ? '#059669' : '#999'}; font-size:10px;">${isDone ? '●' : '○'} ${stepLabels[k] || k}</span>`;
-                }).join(' ');
-
-                statusText = `
-                    <div style="font-weight:bold; margin-bottom:4px;">कुल: ${t.totalCount}, पोर्टल अपलोड: ${t.uploadedCount}/${t.totalCount}</div>
-                    <div style="line-height:1.2;">${stepsHtml}</div>
-                `;
-            } else if (t.type === 'training-summary') {
-                const stepLabels = ["निर्माण", "अलॉट", "शीट", "जांच", "अपलोड"];
-                const batchDetails = t.batchList.map(b => {
-                    const steps = ["nirm", "alloc", "down", "verify", "up"];
-                    const stepsHtml = steps.map((s, idx) => {
-                        const isDone = b[s] === 'purn';
-                        return `<span style="color:${isDone ? '#059669' : '#999'}; margin-right:4px;">${isDone ? '●' : '○'}${stepLabels[idx]}</span>`;
-                    }).join('');
-
-                    const isFullyDone = b.nirm==='purn' && b.alloc==='purn' && b.down==='purn' && b.verify==='purn' && b.up==='purn';
-                    return `
-                        <div style="font-size:10px; margin-bottom:2px; border-bottom:1px solid #f0f0f0; padding-bottom:1px;">
-                            <b>Batch ${b.id}:</b> ${stepsHtml} ${isFullyDone ? '<b style="color:#059669;">[पूर्ण]</b>' : ''}
-                        </div>
-                    `;
-                }).join('');
-                
-                statusText = `
-                    <div style="font-weight:bold; margin-bottom:4px;">बैच: ${t.totalBatches}, पूर्ण: ${t.completedBatches}, उपस्थिति: ${t.totalAttended}</div>
-                    <div style="line-height:1.2;">${batchDetails}</div>
-                `;
-            } else if (t.type === 'training-logistics') {
-                const s1 = t.centerSelection === 'purn' ? 'पूर्ण' : 'लंबित';
-                const s2 = t.permissionLetter === 'purn' ? 'पूर्ण' : 'लंबित';
-                statusText = `केंद्र चयन: ${s1}, अनुमति पत्र: ${s2}`;
-            } else if (t.type === 'logistics-checklist') {
-                const items = [
-                    { label: 'इंटरनेट', key: 'internet' },
-                    { label: 'साउंड/माइक', key: 'sound' },
-                    { label: 'भोजन', key: 'food' },
-                    { label: 'पेयजल', key: 'water' }
-                ];
-                statusText = items.map(i => `${i.label}: ${t[i.key] === 'purn' ? '✅ पूर्ण' : '⏳ लंबित'}`).join(', ');
-            } else if (t.type === 'cell-info') {
-                statusText = `कार्मिक: ${t.staffCount}, कंप्यूटर: ${t.computers}, प्रिंटर: ${t.printers}`;
-            } else {
-                const label = t.status === 'purn' ? '✅ पूर्ण' : t.status === 'apurn' ? '⚠️ अपूर्ण' : '⏳ लंबित';
-                statusText = `स्थिति: ${label}`;
-            }
-
-            const dlText = t.deadline ? ` (समय सीमा: ${t.deadline})` : '';
-            taskLines += `<tr><td style="padding:6px 10px; border:1px solid #ccc; text-align:center;">${catIndex}.${taskNum}</td><td style="padding:6px 10px; border:1px solid #ccc;">${t.name}${dlText}</td><td style="padding:6px 10px; border:1px solid #ccc;">${statusText}</td></tr>`;
-            taskNum++;
+        hlbProgress.forEach(v => {
+            expectedHouses += (v.expectedHouses || 0);
+            completedHouses += (v.completedHouses || 0);
+            population += (v.population || 0);
+            totalHlbs += (v.totalHlbs || 0);
+            inProgress += (v.inProgress || 0);
+            completedHlbs += (v.completedHlbs || 0);
+            yetToStart += (v.yetToStart || 0);
         });
 
-        if (taskLines) {
-            categoryReports += `
-                <tr style="background:#e8f0fe;">
-                    <td colspan="3" style="padding:8px 10px; border:1px solid #ccc; font-weight:bold; font-size:14px;">
-                        ${catIndex}. ${catName}
-                    </td>
-                </tr>
-                ${taskLines}
-            `;
-            catIndex++;
+        // Check if we have an overall stats object (to be 100% in sync with dashboard)
+        if (typeof CENSUS_OVERALL_STATS !== 'undefined') {
+            totalHlbs = CENSUS_OVERALL_STATS.totalHlbs || totalHlbs;
+            inProgress = CENSUS_OVERALL_STATS.inProgress || inProgress;
+            completedHlbs = CENSUS_OVERALL_STATS.completedHlbs || completedHlbs;
+            yetToStart = CENSUS_OVERALL_STATS.yetToStart || yetToStart;
+            expectedHouses = CENSUS_OVERALL_STATS.expectedHouses || expectedHouses;
+            completedHouses = CENSUS_OVERALL_STATS.completedHouses || completedHouses;
+            population = CENSUS_OVERALL_STATS.population || population;
         }
-    });
 
+        const overPct = expectedHouses > 0 ? Math.round((completedHouses / expectedHouses) * 100) : 0;
 
-    // Generate Top 5 and Bottom 5 Villages for Report
-    let villageHtml = '';
-    const censusTask = taskData.flatMap(c => c.tasks).find(t => t.id === 'during_census_progress');
-    const hlbProgress = (censusTask && censusTask.hlbProgress && censusTask.hlbProgress.length > 0) ? censusTask.hlbProgress : (typeof DEFAULT_CENSUS_PROGRESS !== 'undefined' ? DEFAULT_CENSUS_PROGRESS : []);
-    
-    if (hlbProgress.length > 0) {
-        const villageData = hlbProgress.filter(v => v.expectedHouses > 0).map(v => {
-            const percent = Math.round((v.completedHouses / v.expectedHouses) * 100) || 0;
+        // Generate Top 5 and Bottom 5 Villages for Report
+        const villageDataForRank = hlbProgress.filter(v => (v.expectedHouses || 0) > 0).map(v => {
+            const percent = Math.round(((v.completedHouses || 0) / (v.expectedHouses || 1)) * 100) || 0;
             return {
-                name: v.village.split(' - ')[1] || v.village,
-                expected: v.expectedHouses,
-                completed: v.completedHouses,
+                name: v.village || 'अज्ञात',
                 percent: percent
             };
         });
-        
-        villageData.sort((a, b) => b.percent - a.percent);
-        const top5 = villageData.slice(0, 5);
-        const bottom5 = [...villageData].sort((a, b) => a.percent - b.percent).slice(0, 5);
-        
-        let expT = 0, compT = 0;
-        hlbProgress.forEach(v => { expT += (v.expectedHouses||0); compT += (v.completedHouses||0); });
-        const overPct = expT > 0 ? Math.round((compT / expT) * 100) : 0;
 
-        villageHtml = `
-            <div style="margin:20px 0; padding:15px; border:2px solid #4f46e5; border-radius:10px; background:#f8fafc; text-align:center;">
-                <h3 style="margin-bottom:10px; color:#1e1e1e;">जनगणना मकान सर्वेक्षण (Census Live Data)</h3>
-                <div style="font-size:20px; font-weight:bold; color:#4f46e5;">कुल प्रगति: ${compT.toLocaleString('hi-IN')} / ${expT.toLocaleString('hi-IN')} (${overPct}%)</div>
+        villageDataForRank.sort((a, b) => b.percent - a.percent);
+        const top5 = villageDataForRank.slice(0, 5);
+        const bottom5 = [...villageDataForRank].sort((a, b) => a.percent - b.percent).slice(0, 5);
+
+        const top5Html = top5.map(v => `
+            <tr>
+                <td style="padding: 6px; border: 1px solid #cbd5e1;">${v.name}</td>
+                <td style="padding: 6px; border: 1px solid #cbd5e1; font-weight: bold; color: #16a34a; text-align: center;">${v.percent}%</td>
+            </tr>
+        `).join('');
+
+        const bottom5Html = bottom5.map(v => `
+            <tr>
+                <td style="padding: 6px; border: 1px solid #cbd5e1;">${v.name}</td>
+                <td style="padding: 6px; border: 1px solid #cbd5e1; font-weight: bold; color: #dc2626; text-align: center;">${v.percent}%</td>
+            </tr>
+        `).join('');
+
+        // Village-wise Detailed rows
+        let villageRows = '';
+        let serialNum = 1;
+        hlbProgress.forEach(v => {
+            const exp = v.expectedHouses || 0;
+            const comp = v.completedHouses || 0;
+            const pct = exp > 0 ? Math.round((comp / exp) * 100) : 0;
+            villageRows += `
+                <tr>
+                    <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1;">${serialNum}</td>
+                    <td style="padding: 6px; border: 1px solid #cbd5e1; font-weight: 600;">${v.village || ''}</td>
+                    <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1;">${v.totalHlbs || 0}</td>
+                    <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1;">${v.completedHlbs || 0}</td>
+                    <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1;">${(exp).toLocaleString('hi-IN')}</td>
+                    <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1;">${(comp).toLocaleString('hi-IN')}</td>
+                    <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1;">${(v.population || 0).toLocaleString('hi-IN')}</td>
+                    <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1; font-weight: bold; color: ${pct >= 80 ? '#16a34a' : pct >= 40 ? '#ca8a04' : '#dc2626'};">${pct}%</td>
+                </tr>
+            `;
+            serialNum++;
+        });
+
+        const reportHTML = `
+        <!DOCTYPE html>
+        <html lang="hi">
+        <head>
+            <meta charset="UTF-8">
+            <title>प्रगति प्रतिवेदन - जनगणना 2027</title>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap');
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body { font-family: 'Noto Sans Devanagari', sans-serif; padding: 40px; color: #1e293b; font-size: 13px; line-height: 1.6; background: #fff; }
+                .header { text-align: center; border-bottom: 3px double #1e1b4b; padding-bottom: 15px; margin-bottom: 20px; }
+                .header h1 { font-size: 22px; color: #1e1b4b; font-weight: 700; }
+                .header h2 { font-size: 16px; color: #475569; margin-top: 5px; }
+                .meta { display: flex; justify-content: space-between; margin-bottom: 20px; }
+                .meta div { font-size: 13px; }
+                .subject { text-align: center; font-weight: 700; font-size: 15px; margin: 15px 0; padding: 10px; background: #f1f5f9; border-radius: 8px; border-left: 5px solid #1e1b4b; color: #1e1b4b; }
+                .body-text { text-align: justify; margin-bottom: 15px; font-size: 14px; }
+                
+                .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0; }
+                .stat-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; text-align: center; }
+                .stat-card .val { font-size: 18px; font-weight: 700; color: #1e1b4b; margin-top: 5px; }
+                .stat-card .lbl { font-size: 11px; color: #64748b; }
+                
+                .progress-box { text-align: center; margin: 20px 0; padding: 20px; background: linear-gradient(135deg, #f0fdf4, #dcfce7); border-radius: 12px; border: 2px solid #22c55e; }
+                .progress-box .lbl { font-size: 14px; font-weight: 600; color: #166534; }
+                .progress-box .pct { font-size: 40px; font-weight: 800; color: #15803d; }
+                
+                .table-section-title { font-size: 14px; font-weight: 700; color: #1e1b4b; margin: 20px 0 8px 0; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; }
+                
+                table { width: 100%; border-collapse: collapse; margin: 10px 0 20px 0; font-size: 12px; }
+                th { background: #1e1b4b; color: white; padding: 8px 10px; border: 1px solid #cbd5e1; text-align: center; }
+                td { padding: 6px 10px; border: 1px solid #cbd5e1; }
+                tr:nth-child(even) { background: #f8fafc; }
+                
+                .top-bottom-container { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
+                .top-bottom-box { width: 48%; }
+                
+                .signature { margin-top: 60px; display: flex; justify-content: space-between; page-break-inside: avoid; }
+                .signature div { text-align: center; min-width: 220px; }
+                .signature .line { border-top: 1px solid #475569; margin-top: 50px; padding-top: 5px; font-weight: 600; color: #1e293b; }
+                @media print { body { padding: 0; } .no-print { display: none; } }
+            </style>
+        </head>
+        <body>
+            <button class="no-print" onclick="window.print()" style="position:fixed; top:15px; right:15px; padding:10px 25px; background:#1e1b4b; color:white; border:none; border-radius:8px; font-size:14px; cursor:pointer; font-family:inherit; font-weight:600; box-shadow: 0 4px 12px rgba(30, 27, 75, 0.3);">🖨️ प्रिंट करें (Print)</button>
+    
+            <div class="header">
+                <h1>कार्यालय चार्ज अधिकारी, जनगणना 2027</h1>
+                <h2>भिनाय ब्लॉक, जिला अजमेर (राजस्थान)</h2>
             </div>
-            
-            <div style="display:flex; justify-content:space-between; gap:20px; margin-bottom:20px;">
-                <div style="width:48%;">
-                    <h4 style="color:#10b981; margin-bottom:5px;">शीर्ष 5 गाँव (Top 5)</h4>
+    
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <div><strong>पत्रांक:</strong> भिनाय/जनगणना/2027/</div>
+                <div style="text-align:right;"><strong>दिनांक:</strong> ${dateStr}</div>
+            </div>
+    
+            <div class="meta">
+                <div><strong>सेवा में,</strong><br>श्रीमान तहसीलदार महोदय,<br>तहसील भिनाय, जिला अजमेर</div>
+            </div>
+    
+            <div class="subject">विषय: जनगणना 2027 (मकान सूचीकरण एवं मकान गणना) की ग्राम-वार प्रगति प्रतिवेदन</div>
+    
+            <div class="body-text">
+                <p>महोदय,</p>
+                <p>सविनय निवेदन है कि भिनाय ब्लॉक में जारी जनगणना 2027 (मकान सूचीकरण एवं मकान गणना) कार्य के अंतर्गत विभिन्न गाँवों से प्राप्त वास्तविक प्रगति का विस्तृत ग्राम-वार प्रतिवेदन निम्नानुसार प्रस्तुत है:</p>
+            </div>
+    
+            <div class="progress-box">
+                <div class="lbl">समग्र मकान सर्वेक्षण प्रगति (Overall House Progress)</div>
+                <div class="pct">${overPct}%</div>
+            </div>
+    
+            <h3 class="table-section-title">📊 मुख्य सांख्यिकी (Key Statistics):</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="lbl">कुल गाँव</div>
+                    <div class="val">${totalVillages}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="lbl">कुल HLB (मकान सूची ब्लॉक)</div>
+                    <div class="val">${totalHlbs}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="lbl">पूर्ण HLB</div>
+                    <div class="val">${completedHlbs}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="lbl">सर्वेक्षित जनसंख्या</div>
+                    <div class="val">${(population || 0).toLocaleString('hi-IN')}</div>
+                </div>
+            </div>
+            <div class="stats-grid" style="margin-top:-10px;">
+                <div class="stat-card">
+                    <div class="lbl">अपेक्षित मकान</div>
+                    <div class="val">${(expectedHouses || 0).toLocaleString('hi-IN')}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="lbl">पूर्ण मकान</div>
+                    <div class="val">${(completedHouses || 0).toLocaleString('hi-IN')}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="lbl">कार्यरत HLB</div>
+                    <div class="val">${inProgress}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="lbl">अप्रारंभ HLB</div>
+                    <div class="val">${yetToStart}</div>
+                </div>
+            </div>
+    
+            <div class="top-bottom-container">
+                <div class="top-bottom-box">
+                    <h4 style="color:#16a34a; margin-bottom:5px;">शीर्ष 5 गाँव (Top 5 Villages)</h4>
                     <table style="width:100%; border-collapse:collapse; font-size:12px;">
-                        <tr style="background:#f1f5f9;"><th style="padding:5px; border:1px solid #ccc; text-align:left;">गाँव</th><th style="padding:5px; border:1px solid #ccc; text-align:left;">प्रगति</th></tr>
-                        ${top5.map(v => `<tr><td style="padding:5px; border:1px solid #ccc;">${v.name}</td><td style="padding:5px; border:1px solid #ccc; font-weight:bold; color:#10b981;">${v.percent}%</td></tr>`).join('')}
+                        <thead>
+                            <tr><th style="text-align:left;">गाँव</th><th style="width:30%;">प्रगति</th></tr>
+                        </thead>
+                        <tbody>
+                            ${top5Html}
+                        </tbody>
                     </table>
                 </div>
-                <div style="width:48%;">
-                    <h4 style="color:#ef4444; margin-bottom:5px;">निचले 5 गाँव (Bottom 5)</h4>
+                <div class="top-bottom-box">
+                    <h4 style="color:#dc2626; margin-bottom:5px;">निचले 5 गाँव (Bottom 5 Villages)</h4>
                     <table style="width:100%; border-collapse:collapse; font-size:12px;">
-                        <tr style="background:#f1f5f9;"><th style="padding:5px; border:1px solid #ccc; text-align:left;">गाँव</th><th style="padding:5px; border:1px solid #ccc; text-align:left;">प्रगति</th></tr>
-                        ${bottom5.map(v => `<tr><td style="padding:5px; border:1px solid #ccc;">${v.name}</td><td style="padding:5px; border:1px solid #ccc; font-weight:bold; color:#ef4444;">${v.percent}%</td></tr>`).join('')}
+                        <thead>
+                            <tr><th style="text-align:left;">गाँव</th><th style="width:30%;">प्रगति</th></tr>
+                        </thead>
+                        <tbody>
+                            ${bottom5Html}
+                        </tbody>
                     </table>
                 </div>
             </div>
+    
+            <h3 class="table-section-title">📋 ग्राम-वार विस्तृत विवरण (Village-wise Progress List):</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:50px;">क्र.सं.</th>
+                        <th>गाँव का नाम</th>
+                        <th style="width:80px;">कुल HLB</th>
+                        <th style="width:80px;">पूर्ण HLB</th>
+                        <th style="width:110px;">अपेक्षित मकान</th>
+                        <th style="width:110px;">पूर्ण मकान</th>
+                        <th style="width:110px;">जनसंख्या</th>
+                        <th style="width:80px;">प्रगति (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${villageRows}
+                </tbody>
+            </table>
+    
+            <div class="body-text" style="margin-top:20px;">
+                <p>अतः उपरोक्त प्रगति प्रतिवेदन आपकी सेवा में सादर प्रस्तुत है। कृपया अवलोकन कर आवश्यक दिशा-निर्देश प्रदान करने की कृपा करें।</p>
+                <p>सधन्यवाद।</p>
+            </div>
+    
+            <div class="signature">
+                <div>
+                    <div class="line">चार्ज अधिकारी<br>जनगणना 2027, भिनाय ब्लॉक</div>
+                </div>
+                <div>
+                    <div class="line">तहसीलदार<br>तहसील भिनाय, जिला अजमेर</div>
+                </div>
+            </div>
+        </body>
+        </html>`;
+    
+        return reportHTML;
+    } catch (e) {
+        console.error("Error generating report HTML:", e);
+        return `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>त्रुटि (Error)</title>
+            <style>
+                body { font-family: sans-serif; padding: 30px; line-height: 1.5; color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 8px; }
+                h3 { margin-top: 0; color: #721c24; }
+                pre { background: rgba(0,0,0,0.05); padding: 10px; border-radius: 4px; overflow-x: auto; }
+            </style>
+        </head>
+        <body>
+            <h3>प्रगति प्रतिवेदन तैयार करने में त्रुटि हुई है</h3>
+            <p>विवरण:</p>
+            <pre>${e.stack || e.message || e}</pre>
+            <p>कृपया सुनिश्चित करें कि जनगणना डेटा सही ढंग से लोड हो गया है।</p>
+        </body>
+        </html>
         `;
     }
-
-    const reportHTML = `
-    <!DOCTYPE html>
-    <html lang="hi">
-    <head>
-        <meta charset="UTF-8">
-        <title>प्रतिवेदन - जनगणना 2027</title>
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap');
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { font-family: 'Noto Sans Devanagari', sans-serif; padding: 40px; color: #1a1a1a; font-size: 13px; line-height: 1.8; }
-            .header { text-align: center; border-bottom: 3px double #1a1a1a; padding-bottom: 15px; margin-bottom: 20px; }
-            .header h1 { font-size: 20px; color: #1a237e; }
-            .header h2 { font-size: 16px; color: #333; margin-top: 5px; }
-            .meta { display: flex; justify-content: space-between; margin-bottom: 20px; }
-            .meta div { font-size: 13px; }
-            .subject { text-align: center; font-weight: 700; font-size: 15px; margin: 15px 0; padding: 8px; background: #f5f5f5; border-radius: 5px; }
-            .body-text { text-align: justify; margin-bottom: 15px; }
-            table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 12px; }
-            th { background: #1a237e; color: white; padding: 8px 10px; border: 1px solid #ccc; text-align: left; }
-            .progress-box { text-align: center; margin: 20px 0; padding: 15px; background: linear-gradient(135deg, #e8f5e9, #f1f8e9); border-radius: 10px; border: 2px solid #4caf50; }
-            .progress-box .pct { font-size: 36px; font-weight: 700; color: #2e7d32; }
-            .signature { margin-top: 50px; display: flex; justify-content: space-between; }
-            .signature div { text-align: center; min-width: 200px; }
-            .signature .line { border-top: 1px solid #333; margin-top: 40px; padding-top: 5px; }
-            @media print { body { padding: 20px; font-size: 12px; } .no-print { display: none; } }
-        </style>
-    </head>
-    <body>
-        <button class="no-print" onclick="window.print()" style="position:fixed; top:15px; right:15px; padding:10px 25px; background:#1a237e; color:white; border:none; border-radius:8px; font-size:14px; cursor:pointer; font-family:inherit; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">🖨️ प्रिंट करें</button>
-
-        <div class="header">
-            <h1>कार्यालय चार्ज अधिकारी, जनगणना 2027</h1>
-            <h2>भिनाय ब्लॉक, जिला अजमेर (राजस्थान)</h2>
-        </div>
-
-        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-            <div><strong>पत्रांक:</strong> भिनाय/जनगणना/2027/</div>
-            <div style="text-align:right;"><strong>दिनांक:</strong> ${dateStr}</div>
-        </div>
-
-        <div class="meta">
-            <div><strong>सेवा में,</strong><br>श्रीमान तहसीलदार महोदय,<br>तहसील भिनाय, जिला अजमेर</div>
-        </div>
-
-        <div class="subject">विषय: जनगणना 2027 की पूर्व तैयारी का प्रगति प्रतिवेदन</div>
-
-        <div class="body-text">
-            <p>महोदय,</p>
-            <p>सविनय निवेदन है कि जनगणना 2027 की पूर्व तैयारी के संबंध में भिनाय ब्लॉक की वर्तमान प्रगति का विस्तृत प्रतिवेदन निम्नानुसार प्रस्तुत है:</p>
-        </div>
-
-        <div class="progress-box">
-            <div>समग्र प्रगति (Overall Progress)</div>
-            <div class="pct">${overallPercent}%</div>
-        </div>\n        ${villageHtml}\n
-
-        <h3 style="margin:15px 0 5px; color:#1a237e;">📋 श्रेणी-वार विस्तृत विवरण:</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width:60px;">क्र.सं.</th>
-                    <th>कार्य विवरण</th>
-                    <th style="width:35%;">स्थिति / प्रगति</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${categoryReports}
-            </tbody>
-        </table>
-
-        <div class="body-text" style="margin-top:20px;">
-            <p>अतः उपरोक्त प्रतिवेदन आपकी सेवा में सादर प्रस्तुत है। कृपया अवलोकन कर आवश्यक दिशा-निर्देश प्रदान करने की कृपा करें।</p>
-            <p>सधन्यवाद।</p>
-        </div>
-
-        <div class="signature">
-            <div>
-                <div class="line">चार्ज अधिकारी<br>जनगणना 2027, भिनाय ब्लॉक</div>
-            </div>
-            <div>
-                <div class="line">तहसीलदार<br>तहसील भिनाय, जिला अजमेर</div>
-            </div>
-        </div>
-    </body>
-    </html>`;
-
-    const reportWindow = window.open('', '_blank');
-    reportWindow.document.write(reportHTML);
-    reportWindow.document.close();
 }
 
 /* ==========================================================================
@@ -2891,12 +2985,14 @@ function switchTab(tabName) {
     activeCensusTab = tabName;
     
     const btnProgress = document.getElementById('btn-tab-progress');
+    const btnMapping = document.getElementById('btn-tab-mapping');
     const btnDirectory = document.getElementById('btn-tab-directory');
     const btnPdf = document.getElementById('btn-tab-pdf');
     const btnReport = document.getElementById('btn-tab-report');
     
     // Reset all buttons
     if (btnProgress) btnProgress.classList.remove('active');
+    if (btnMapping) btnMapping.classList.remove('active');
     if (btnDirectory) btnDirectory.classList.remove('active');
     if (btnPdf) btnPdf.classList.remove('active');
     if (btnReport) btnReport.classList.remove('active');
@@ -2908,7 +3004,9 @@ function switchTab(tabName) {
     const directoryPanel = document.getElementById('personnel-directory-panel');
     const pdfPanel = document.getElementById('pdf-viewer-panel');
     const reportPanel = document.getElementById('report-panel');
-    const uploadTrigger = document.querySelector('button[onclick*="during-census-panel"]')?.parentElement;
+    const uploadTrigger = document.getElementById('upload-trigger-container');
+    const syncBar = document.querySelector('.cloud-sync-bar');
+    const adminActionBar = document.querySelector('.admin-action-bar');
     
     if (dashboard) dashboard.style.display = 'none';
     if (scheduler) scheduler.style.display = 'none';
@@ -2917,13 +3015,19 @@ function switchTab(tabName) {
     if (pdfPanel) pdfPanel.style.display = 'none';
     if (reportPanel) reportPanel.style.display = 'none';
     if (uploadTrigger) uploadTrigger.style.display = 'none';
+    if (syncBar) syncBar.style.display = 'none';
+    if (adminActionBar) adminActionBar.style.display = 'none';
     
     if (tabName === 'progress') {
         if (btnProgress) btnProgress.classList.add('active');
         if (dashboard) dashboard.style.display = 'block';
+        if (uploadTrigger) uploadTrigger.style.display = 'block';
+        if (syncBar) syncBar.style.display = 'flex';
+    } else if (tabName === 'mapping') {
+        if (btnMapping) btnMapping.classList.add('active');
         if (scheduler) scheduler.style.display = 'block';
         if (container) container.style.display = 'block';
-        if (uploadTrigger) uploadTrigger.style.display = 'block';
+        if (adminActionBar) adminActionBar.style.display = 'flex';
     } else if (tabName === 'directory') {
         if (btnDirectory) btnDirectory.classList.add('active');
         if (directoryPanel) {
@@ -3294,14 +3398,23 @@ async function loadLatestPdf() {
     const link = document.getElementById('pdf-download-link');
     const iframe = document.getElementById('pdf-iframe');
     try {
-        const resp = await fetch(`${DEFAULT_API_URL}?folderPdf=1`);
-        const data = await resp.json();
-        if (data.publicUrl) {
-            const bustUrl = `${data.publicUrl}?t=${Date.now()}`;
-            link.href = bustUrl;
-            if (iframe) iframe.src = bustUrl;
+        const resp = await fetch(`${DEFAULT_API_URL}?folderPdf=1&t=${Date.now()}`, { cache: 'no-store' });
+        if (!resp.ok) throw new Error('Network response was not OK');
+        const blob = await resp.blob();
+        if (blob.size > 0) {
+            const pdfUrl = URL.createObjectURL(blob);
+            if (link) {
+                link.href = pdfUrl;
+                link.download = 'report.pdf';
+            }
+            if (iframe) {
+                if (iframe.src && iframe.src.startsWith('blob:')) {
+                    URL.revokeObjectURL(iframe.src);
+                }
+                iframe.src = pdfUrl;
+            }
         } else {
-            console.warn('No PDF URL returned from folder endpoint');
+            console.warn('No valid PDF blob returned from folder endpoint');
         }
     } catch (err) {
         console.error('Failed to load latest PDF:', err);
