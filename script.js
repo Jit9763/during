@@ -3388,28 +3388,53 @@ statusSpan.innerHTML = '<i class="fas fa-check-circle"></i> Uploaded!';
     reader.readAsBinaryString(selectedPdfFile);
     closeDriveModal();
 }
+let currentPdfBlobUrl = null;
+
+function base64ToBlob(base64, mimeType = 'application/pdf') {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: mimeType });
+}
+
 async function loadLatestPdf() {
     const link = document.getElementById('pdf-download-link');
     const iframe = document.getElementById('pdf-iframe');
+    
+    // Clear iframe src to show it is loading
+    if (iframe) {
+        iframe.src = '';
+    }
+    
     try {
         const resp = await fetch(`${DEFAULT_API_URL}?folderPdf=1&t=${Date.now()}`, { cache: 'no-store' });
         if (!resp.ok) throw new Error('Network response was not OK');
         const data = await resp.json();
-        if (data.status === 'success' && data.pdfUrl) {
-            if (iframe) iframe.src = data.pdfUrl;
+        if (data.status === 'success' && data.pdfData) {
+            const blob = base64ToBlob(data.pdfData, 'application/pdf');
+            if (currentPdfBlobUrl) {
+                URL.revokeObjectURL(currentPdfBlobUrl);
+            }
+            currentPdfBlobUrl = URL.createObjectURL(blob);
+            
+            if (iframe) iframe.src = currentPdfBlobUrl;
             if (link) {
-                link.href = data.pdfUrl;
-                link.target = '_blank';
+                link.href = currentPdfBlobUrl;
+                link.download = data.fileName || '1.pdf';
+                link.removeAttribute('target');
             }
         } else {
-            throw new Error(data.message || 'No PDF URL returned');
+            throw new Error(data.message || 'No PDF data returned');
         }
     } catch (err) {
         console.error('Failed to load latest PDF:', err);
         // Fallback to local or saved PDF
         const savedPdf = localStorage.getItem('census_pdf_data');
         const fallbackSrc = savedPdf || 'pdf/Charge_Wise_HLB_Progress_Report.pdf';
-        if (iframe && (!iframe.src || iframe.src === 'about:blank')) {
+        if (iframe && (!iframe.src || iframe.src === 'about:blank' || iframe.src === '')) {
             iframe.src = fallbackSrc;
         }
         if (link && (!link.href || link.href === '#')) {

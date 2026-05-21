@@ -44,6 +44,35 @@ function getLatestPdfFromFolder(){
   return baseUrl + '?t=' + ts;
 }
 
+// ----- New: Serve latest PDF from Drive folder as Base64 -----
+function getLatestPdfBase64(){
+  const folderId = '1EKPJ5N9w1QLeSMBCMrIUt33C9c2fb4R9';
+  const folder = DriveApp.getFolderById(folderId);
+  const files = folder.getFilesByType(MimeType.PDF);
+  let latestFile = null;
+  let latestDate = new Date(0);
+  while(files.hasNext()){
+    const f = files.next();
+    const mod = f.getLastUpdated();
+    if(mod > latestDate){
+      latestDate = mod;
+      latestFile = f;
+    }
+  }
+  if(!latestFile) return null;
+  
+  // Ensure public access just in case
+  latestFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  
+  const bytes = latestFile.getBlob().getBytes();
+  const base64 = Utilities.base64Encode(bytes);
+  return {
+    status: 'success',
+    fileName: latestFile.getName(),
+    pdfData: base64
+  };
+}
+
 // ----- New: Update PDF preview URL in Sheet -----
 function updatePdfInSheet(){
   const url = getLatestPdfFromFolder();
@@ -63,12 +92,12 @@ function doGet(e){
   try{
     // Serve latest PDF from Drive folder when ?folderPdf=1
     if(e.parameter && e.parameter.folderPdf){
-      const url = getLatestPdfFromFolder();
-      if(!url){
+      const result = getLatestPdfBase64();
+      if(!result){
         return ContentService.createTextOutput(JSON.stringify({status:'error',message:'No PDF found in folder'}))
           .setMimeType(ContentService.MimeType.JSON);
       }
-      return ContentService.createTextOutput(JSON.stringify({status:'success',pdfUrl:url}))
+      return ContentService.createTextOutput(JSON.stringify(result))
         .setMimeType(ContentService.MimeType.JSON);
     }
     // ----- New: Serve PDF preview URL from Sheet -----
