@@ -31,6 +31,34 @@
             </div>
         </section>
 
+<script>
+async function loadPdf(){
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbymRFTWdTupv_8qb314NF9RBffgwU47dqEMB3stzMYN5N0RZ5JEIQO8Lxbo-cGxnwfU9w/exec';
+        try{
+          const resp = await fetch(WEB_APP_URL + '?folderPdf=1', {cache: 'no-store'});
+          if(!resp.ok) throw new Error('Network response was not ok');
+          const blob = await resp.blob();
+          // Create an object URL to force fresh rendering
+          const pdfUrl = URL.createObjectURL(blob);
+          const iframe = document.getElementById('pdf-iframe');
+          // Revoke previous object URL if any
+          if (iframe.src) URL.revokeObjectURL(iframe.src);
+          iframe.src = pdfUrl;
+          const dlLink = document.getElementById('pdf-download-link');
+          if (dlLink) {
+            dlLink.href = pdfUrl;
+            dlLink.download = 'report.pdf';
+          }
+          document.getElementById('pdf-viewer-panel').style.display='flex';
+        }catch(e){ console.error('PDF load error:', e); }
+
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const pdfBtn = document.getElementById('btn-tab-pdf');
+  if (pdfBtn) pdfBtn.addEventListener('click', loadPdf);
+});
+</script>
+
         <!-- Tabs for Switching Views -->
         <div class="tabs-container">
             <button id="btn-tab-progress" class="tab-btn active" onclick="switchTab('progress')">
