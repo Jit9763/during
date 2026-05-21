@@ -1,4 +1,4 @@
-const DETAILED_CENSUS_DATA = [
+let DETAILED_CENSUS_DATA = [
   {
     "Village/Town": " - Total",
     "Total HLBs": 242,

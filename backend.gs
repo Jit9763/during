@@ -11,18 +11,22 @@ const SHEET_OVERALL     = 'OverallStats';
 const SHEET_PDF         = 'PDF';
 
 /* ---------- HELPER ---------- */
+function _getSpreadsheet() {
+  try {
+    const active = SpreadsheetApp.getActiveSpreadsheet();
+    if (active) return active;
+  } catch(e) {}
+  return SpreadsheetApp.openById(SPREADSHEET_ID);
+}
+
 function _openSheet(name) {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ss = _getSpreadsheet();
   let sheet = ss.getSheetByName(name);
   if (!sheet) {
-    if (name === SHEET_PDF) {
-      try {
-        sheet = ss.insertSheet(name);
-      } catch(err) {
-        throw new Error('Sheet "' + name + '" नहीं मिला और नया शीट बनाने में विफल: ' + err.toString());
-      }
-    } else {
-      throw new Error('Sheet "' + name + '" नहीं मिला।');
+    try {
+      sheet = ss.insertSheet(name);
+    } catch(err) {
+      throw new Error('Sheet "' + name + '" नहीं मिला और नया शीट बनाने में विफल: ' + err.toString());
     }
   }
   return sheet;
@@ -95,6 +99,37 @@ function updatePdfInSheet(){
 // ----- Modified doGet to handle folderPdf param -----
 function doGet(e){
   try{
+    // ----- Debug endpoint -----
+    if(e && e.parameter && e.parameter.debug){
+      const ss = _getSpreadsheet();
+      const sheets = ss.getSheets().map(function(s) { return s.getName(); });
+      const debugInfo = {
+        ssId: ss.getId(),
+        ssName: ss.getName(),
+        sheets: sheets,
+        configSpreadsheetId: SPREADSHEET_ID,
+        sheetDetails: {}
+      };
+      
+      sheets.forEach(function(name) {
+        try {
+          const sheet = ss.getSheetByName(name);
+          const vals = sheet.getDataRange().getValues();
+          debugInfo.sheetDetails[name] = {
+            rows: vals.length,
+            cols: vals[0] ? vals[0].length : 0,
+            headers: vals[0] || [],
+            sampleRows: vals.slice(1, 6) // first 5 data rows
+          };
+        } catch(err) {
+          debugInfo.sheetDetails[name] = { error: err.toString() };
+        }
+      });
+      
+      return ContentService.createTextOutput(JSON.stringify({status:'success', debug: debugInfo}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
     // Serve latest PDF from Drive folder when ?folderPdf=1
     if(e.parameter && e.parameter.folderPdf){
       const result = getLatestPdfBase64();
@@ -132,22 +167,130 @@ function doGet(e){
     }
     // ----- Normal data request (all data) -----
     const tasksSheet   = _openSheet(SHEET_TASKS);
-    const censusSheet  = _openSheet(SHEET_CENSUS_DATA);
-    const overallSheet = _openSheet(SHEET_OVERALL);
     const pdfSheet     = _openSheet(SHEET_PDF);
     const taskVals   = tasksSheet.getDataRange().getValues();
     const taskHeader = taskVals.shift();
     const tasksObj   = {};
     taskVals.forEach(row=>{const obj={};taskHeader.forEach((h,i)=>obj[h]=row[i]);if(obj.id)tasksObj[obj.id]=obj;});
-    const censusVals   = censusSheet.getDataRange().getValues();
-    const censusHeader = censusVals.shift();
-    const censusArr    = censusVals.map(row=>{const o={};censusHeader.forEach((h,i)=>o[h]=row[i]);return o;});
-    const overallVals   = overallSheet.getDataRange().getValues();
-    const overallHeader = overallVals.shift();
-    const overallObj    = {};
-    overallVals.forEach(row=>{overallHeader.forEach((h,i)=>overallObj[h]=row[i]);});
+    
     const pdfData = pdfSheet.getRange('A1').getValue() || null;
-    const response = {values:tasksObj,censusData:censusArr,overallStats:overallObj,pdfData:pdfData,status:'success'};
+
+    // Read from Sheet1 first, fallback to CensusData
+    const ss = _getSpreadsheet();
+    let censusSheet = ss.getSheetByName('Sheet1') || ss.getSheetByName('CensusData');
+    
+    let censusArr = [];
+    let overallObj = {
+      expectedHouses: 0,
+      completedHouses: 0,
+      population: 0,
+      totalHlbs: 0,
+      inProgress: 0,
+      completedHlbs: 0,
+      yetToStart: 0
+    };
+    
+    if (censusSheet) {
+      const censusVals = censusSheet.getDataRange().getValues();
+      if (censusVals.length > 1) {
+        const censusHeader = censusVals.shift();
+        
+        const findIdx = function(keywords) {
+          return censusHeader.findIndex(function(h) {
+            const hStr = String(h || '').toLowerCase();
+            return keywords.some(function(k) {
+              return hStr.indexOf(k) !== -1;
+            });
+          });
+        };
+        
+        const hlbIdx = findIdx(['village', 'town', 'गाँव', 'कस्बा', 'नाम']);
+        const hlbColIdx = hlbIdx === -1 ? 0 : hlbIdx;
+        
+        const totalHlbsIdx = findIdx(['total hlb', 'total_hlb', 'कुल hlb', 'hlb']);
+        const inProgressIdx = findIdx(['in progress', 'in_progress', 'प्रगतिरत', 'प्रगति पर']);
+        const completedHlbsIdx = findIdx(['completed hlb', 'completed_hlb', 'completed', 'पूर्ण hlb']);
+        const yetToStartIdx = findIdx(['yet to start', 'yet_to_start', 'लंबित hlb', 'शुरू नहीं']);
+        const expectedHousesIdx = findIdx(['expected', 'total expected', 'कुल अनुमानित', 'लक्ष्य']);
+        const completedHousesIdx = findIdx(['total number of census', 'number of census houses', 'completed houses', 'done', 'पूर्ण मकान', 'संख्या']);
+        const whollyResIdx = findIdx(['wholly residential', 'wholly_res', 'पूर्ण आवासीय']);
+        const partlyResIdx = findIdx(['partly residential', 'partly_res', 'आंशिक आवासीय']);
+        const vacantIdx = findIdx(['vacant', 'खाली']);
+        const lockedIdx = findIdx(['locked', 'ताला बंद']);
+        const otherUseIdx = findIdx(['put to other uses', 'other uses', 'अन्य उपयोग']);
+        const householdsIdx = findIdx(['total number of households', 'households', 'कुल परिवार']);
+        const verifiedHouseholdsIdx = findIdx(['verified by supervisor', 'verified_households', 'सत्यापित परिवार']);
+        const populationIdx = findIdx(['total population', 'population', 'जनसंख्या']);
+        const seIdUsedIdx = findIdx(['se id used', 'se_id_used', 'इस्तेमाल id']);
+        let totalRowFound = false;
+        
+        censusVals.forEach(function(row) {
+          const villageName = String(row[hlbColIdx] || '').trim();
+          if (!villageName || villageName === '-') {
+            return;
+          }
+          
+          const getValue = function(idx, fallback) {
+            if (idx === -1 || row[idx] === undefined || row[idx] === null) return fallback;
+            const parsed = parseInt(row[idx]);
+            return isNaN(parsed) ? fallback : parsed;
+          };
+          
+          const rowObj = {
+            village: villageName,
+            totalHlbs: getValue(totalHlbsIdx, 1),
+            inProgress: getValue(inProgressIdx, 0),
+            completedHlbs: getValue(completedHlbsIdx, 0),
+            yetToStart: getValue(yetToStartIdx, 0),
+            expectedHouses: getValue(expectedHousesIdx, 0),
+            completedHouses: getValue(completedHousesIdx, 0),
+            whollyRes: getValue(whollyResIdx, 0),
+            partlyRes: getValue(partlyResIdx, 0),
+            vacant: getValue(vacantIdx, 0),
+            locked: getValue(lockedIdx, 0),
+            otherUse: getValue(otherUseIdx, 0),
+            households: getValue(householdsIdx, 0),
+            verifiedHouseholds: getValue(verifiedHouseholdsIdx, 0),
+            population: getValue(populationIdx, 0),
+            seIdUsed: getValue(seIdUsedIdx, 0)
+          };
+          
+          if (villageName.toLowerCase().indexOf('total') !== -1) {
+            overallObj.totalHlbs = rowObj.totalHlbs;
+            overallObj.inProgress = rowObj.inProgress;
+            overallObj.completedHlbs = rowObj.completedHlbs;
+            overallObj.yetToStart = rowObj.yetToStart;
+            overallObj.expectedHouses = rowObj.expectedHouses;
+            overallObj.completedHouses = rowObj.completedHouses;
+            overallObj.population = rowObj.population;
+            totalRowFound = true;
+            return; // Skip adding Total row to the list of villages
+          }
+          
+          censusArr.push(rowObj);
+          
+          // Accumulate for fallback if no Total row exists
+          if (!totalRowFound) {
+            overallObj.totalHlbs += rowObj.totalHlbs;
+            overallObj.inProgress += rowObj.inProgress;
+            overallObj.completedHlbs += rowObj.completedHlbs;
+            overallObj.yetToStart += rowObj.yetToStart;
+            overallObj.expectedHouses += rowObj.expectedHouses;
+            overallObj.completedHouses += rowObj.completedHouses;
+            overallObj.population += rowObj.population;
+          }
+        });
+      }
+    }
+
+    const response = {
+      values: tasksObj,
+      censusData: censusArr,
+      overallStats: overallObj,
+      pdfData: pdfData,
+      status: 'success'
+    };
+    
     return ContentService.createTextOutput(JSON.stringify(response))
       .setMimeType(ContentService.MimeType.JSON);
   }catch(err){
@@ -175,7 +318,8 @@ function doPost(e) {
 
     // ---- Save Census Live Data ----
     if (payload.censusData) {
-      const sheet = _openSheet(SHEET_CENSUS_DATA);
+      const ss = _getSpreadsheet();
+      const sheet = ss.getSheetByName('Sheet1') || ss.getSheetByName('CensusData') || ss.insertSheet('Sheet1');
       const sample = payload.censusData[0] || {};
       const header = Object.keys(sample);
       sheet.clear();

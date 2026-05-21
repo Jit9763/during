@@ -76,7 +76,7 @@ const valueLabelPlugin = {
     }
 };
 Chart.register(valueLabelPlugin);
-const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbwKJWLEMINBxrtOZxzCS9ByF36zuaUW7Xb1VdsOJV4ULsUPnnCe462PZiSCSNes5F3ySg/exec';
+const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbyW_yk6GNscbpqHBSmPAPPu2BX4aRAdrozToqWeKIqS-WANsatvmnWrK3EbJTyJMn-8/exec';
 const isAdminPage = window.location.pathname.includes('admin.html');
 
 let activeCensusTab = 'progress'; // 'progress' | 'directory'
@@ -418,6 +418,11 @@ async function loadPersonnelDirectory() {
 // 1. Load Data
 async function loadData() {
     let apiUrl = localStorage.getItem('census_api_url') || DEFAULT_API_URL;
+    // Migrate from the old Web App URL to the new one if stored in localStorage
+    if (apiUrl.includes('AKfycbwKJWLEMINBxrtOZxzCS9ByF36zuaUW7Xb1VdsOJV4ULsUPnnCe462PZiSCSNes5F3ySg')) {
+        apiUrl = DEFAULT_API_URL;
+        localStorage.setItem('census_api_url', DEFAULT_API_URL);
+    }
     const apiInput = document.getElementById('api-url');
     if (apiInput) apiInput.value = apiUrl;
 
@@ -430,56 +435,83 @@ async function loadData() {
     try {
         let savedValues = null;
 
+        const processDataPayload = (data) => {
+            if (!data || data.status !== 'success') return false;
+            let hasSavedValues = false;
+            if (data.values) {
+                savedValues = data.values;
+                localStorage.setItem('census_tasks_values', JSON.stringify(savedValues));
+                hasSavedValues = true;
+            }
+            if (data.censusData && data.censusData.length > 0) {
+                const formattedCensusData = data.censusData.map(v => ({
+                    village: v.village,
+                    totalHlbs: parseInt(v.totalHlbs) || 0,
+                    inProgress: parseInt(v.inProgress) || 0,
+                    completedHlbs: parseInt(v.completedHlbs) || 0,
+                    yetToStart: parseInt(v.yetToStart) || 0,
+                    expectedHouses: parseInt(v.expectedHouses) || 0,
+                    completedHouses: parseInt(v.completedHouses) || 0,
+                    whollyRes: parseInt(v.whollyRes) || 0,
+                    partlyRes: parseInt(v.partlyRes) || 0,
+                    vacant: parseInt(v.vacant) || 0,
+                    locked: parseInt(v.locked) || 0,
+                    otherUse: parseInt(v.otherUse) || 0,
+                    households: parseInt(v.households) || 0,
+                    verifiedHouseholds: parseInt(v.verifiedHouseholds) || 0,
+                    population: parseInt(v.population) || 0,
+                    seIdUsed: parseInt(v.seIdUsed) || 0
+                }));
+                const censusTask = taskData.flatMap(c => c.tasks).find(t => t.id === 'during_census_progress');
+                if (censusTask) {
+                    censusTask.hlbProgress = formattedCensusData;
+                }
+                localStorage.setItem('census_data_local', JSON.stringify(formattedCensusData));
+                hasSavedValues = true;
+            }
+            if (data.overallStats) {
+                window.CENSUS_OVERALL_STATS = {
+                    totalHlbs: parseInt(data.overallStats.totalHlbs) || 0,
+                    inProgress: parseInt(data.overallStats.inProgress) || 0,
+                    completedHlbs: parseInt(data.overallStats.completedHlbs) || 0,
+                    yetToStart: parseInt(data.overallStats.yetToStart) || 0,
+                    expectedHouses: parseInt(data.overallStats.expectedHouses) || 0,
+                    completedHouses: parseInt(data.overallStats.completedHouses) || 0,
+                    population: parseInt(data.overallStats.population) || 0
+                };
+                localStorage.setItem('census_overall_stats', JSON.stringify(window.CENSUS_OVERALL_STATS));
+                hasSavedValues = true;
+            }
+            return hasSavedValues;
+        };
+
         // 1) Try cloud (Google Sheets)
         if (apiUrl) {
             try {
-                const response = await fetch(apiUrl);
+                const separator = apiUrl.includes('?') ? '&' : '?';
+                const response = await fetch(`${apiUrl}${separator}_t=${Date.now()}`, { cache: 'no-store' });
                 const data = await response.json();
-                if (data) {
-                    if (data.values) {
-                        savedValues = data.values;
-                        localStorage.setItem('census_tasks_values', JSON.stringify(savedValues));
-                    }
-                    if (data.censusData && data.censusData.length > 0) {
-                        const formattedCensusData = data.censusData.map(v => ({
-                            village: v.village,
-                            totalHlbs: parseInt(v.totalHlbs) || 0,
-                            inProgress: parseInt(v.inProgress) || 0,
-                            completedHlbs: parseInt(v.completedHlbs) || 0,
-                            yetToStart: parseInt(v.yetToStart) || 0,
-                            expectedHouses: parseInt(v.expectedHouses) || 0,
-                            completedHouses: parseInt(v.completedHouses) || 0,
-                            whollyRes: parseInt(v.whollyRes) || 0,
-                            partlyRes: parseInt(v.partlyRes) || 0,
-                            vacant: parseInt(v.vacant) || 0,
-                            locked: parseInt(v.locked) || 0,
-                            otherUse: parseInt(v.otherUse) || 0,
-                            households: parseInt(v.households) || 0,
-                            verifiedHouseholds: parseInt(v.verifiedHouseholds) || 0,
-                            population: parseInt(v.population) || 0,
-                            seIdUsed: parseInt(v.seIdUsed) || 0
-                        }));
-                        const censusTask = taskData.flatMap(c => c.tasks).find(t => t.id === 'during_census_progress');
-                        if (censusTask) {
-                            censusTask.hlbProgress = formattedCensusData;
-                        }
-                        localStorage.setItem('census_data_local', JSON.stringify(formattedCensusData));
-                    }
-                    if (data.overallStats) {
-                        window.CENSUS_OVERALL_STATS = {
-                            totalHlbs: parseInt(data.overallStats.totalHlbs) || 0,
-                            inProgress: parseInt(data.overallStats.inProgress) || 0,
-                            completedHlbs: parseInt(data.overallStats.completedHlbs) || 0,
-                            yetToStart: parseInt(data.overallStats.yetToStart) || 0,
-                            expectedHouses: parseInt(data.overallStats.expectedHouses) || 0,
-                            completedHouses: parseInt(data.overallStats.completedHouses) || 0,
-                            population: parseInt(data.overallStats.population) || 0
-                        };
-                        localStorage.setItem('census_overall_stats', JSON.stringify(window.CENSUS_OVERALL_STATS));
-                    }
+                const success = processDataPayload(data);
+                if (!success) {
+                    throw new Error("Invalid API response format or status");
                 }
             } catch(e) {
-                console.warn("Cloud sync failed, trying localStorage.", e);
+                console.warn("Cloud sync failed for saved URL, trying default URL...", e);
+                if (apiUrl !== DEFAULT_API_URL) {
+                    try {
+                        const separator = DEFAULT_API_URL.includes('?') ? '&' : '?';
+                        const response = await fetch(`${DEFAULT_API_URL}${separator}_t=${Date.now()}`, { cache: 'no-store' });
+                        const data = await response.json();
+                        const success = processDataPayload(data);
+                        if (success) {
+                            console.log("Successfully fell back to default API URL. Saving it to localStorage.");
+                            localStorage.setItem('census_api_url', DEFAULT_API_URL);
+                            if (apiInput) apiInput.value = DEFAULT_API_URL;
+                        }
+                    } catch(fallbackError) {
+                        console.error("Default API URL fallback also failed:", fallbackError);
+                    }
+                }
             }
         }
 
@@ -516,6 +548,10 @@ async function loadData() {
         const censusTask = taskData.flatMap(c => c.tasks).find(t => t.id === 'during_census_progress');
         if (censusTask && (!censusTask.hlbProgress || censusTask.hlbProgress.length === 0)) {
             censusTask.hlbProgress = JSON.parse(JSON.stringify(typeof DEFAULT_CENSUS_PROGRESS !== 'undefined' ? DEFAULT_CENSUS_PROGRESS : []));
+        }
+
+        if (censusTask && censusTask.hlbProgress) {
+            syncDetailedCensusData(censusTask.hlbProgress);
         }
 
         calculateOverallProgress();
@@ -1602,18 +1638,21 @@ function preparePayload() {
 // 4. Save Changes
 async function saveChanges() {
     const btn = document.querySelector('.btn-save');
-    const originalHTML = btn.innerHTML;
+    const originalHTML = btn ? btn.innerHTML : '';
     
     const payload = preparePayload();
     localStorage.setItem('census_tasks_values', JSON.stringify(payload.values));
     localStorage.setItem('census_data_local', JSON.stringify(payload.censusData));
     localStorage.setItem('census_overall_stats', JSON.stringify(payload.overallStats));
+    window.CENSUS_OVERALL_STATS = payload.overallStats;
     
     const apiUrl = localStorage.getItem('census_api_url') || DEFAULT_API_URL;
     if (apiUrl) {
         try {
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-            btn.disabled = true;
+            if (btn) {
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                btn.disabled = true;
+            }
 
             await fetch(apiUrl, {
                 method: 'POST',
@@ -1622,14 +1661,18 @@ async function saveChanges() {
             });
             
             setTimeout(() => {
-                btn.innerHTML = originalHTML;
-                btn.disabled = false;
+                if (btn) {
+                    btn.innerHTML = originalHTML;
+                    btn.disabled = false;
+                }
                 alert("✅ बदलाव सुरक्षित हो गए!\n• लोकल मेमोरी: ✅\n• Google Sheets (Cloud): ✅ डेटा भेज दिया गया");
             }, 500);
         } catch (e) {
             console.error("Cloud sync error:", e);
-            btn.innerHTML = originalHTML;
-            btn.disabled = false;
+            if (btn) {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }
             alert("⚠️ बदलाव लोकल मेमोरी में सुरक्षित हैं।\nCloud सिंक में समस्या: " + e.message);
         }
     } else {
@@ -2219,7 +2262,7 @@ function processHlbSheet() {
     
     const totalHlbsIdx = findIndex(['total hlb', 'total_hlb', 'कुल hlb', 'hlb']);
     const inProgressIdx = findIndex(['in progress', 'in_progress', 'प्रगतिरत', 'प्रगति पर']);
-    const completedHlbsIdx = findIndex(['completed hlb', 'completed_hlb', 'पूर्ण hlb']);
+    const completedHlbsIdx = findIndex(['completed hlb', 'completed_hlb', 'completed', 'पूर्ण hlb']);
     const yetToStartIdx = findIndex(['yet to start', 'yet_to_start', 'लंबित hlb', 'शुरू नहीं']);
     const whollyResIdx = findIndex(['wholly residential', 'wholly_res', 'पूर्ण आवासीय']);
     const partlyResIdx = findIndex(['partly residential', 'partly_res', 'आंशिक आवासीय']);
@@ -2282,6 +2325,8 @@ function processHlbSheet() {
         });
     });
     
+    syncDetailedCensusData(processedList);
+    
     alert("✅ एक्सेल शीट का डेटा सफलतापूर्वक प्रोसेस करके एकीकृत कर दिया गया है!");
     
     const panel = document.getElementById('during-census-panel');
@@ -2289,6 +2334,7 @@ function processHlbSheet() {
     
     resetUpload();
     onDataChange();
+    saveChanges();
 }
 
 function resetUpload() {
@@ -2305,6 +2351,102 @@ function resetUpload() {
             <p>Excel / CSV फ़ाइल यहाँ खींचें या क्लिक करें</p>
             <small>समर्थित: .xlsx, .xls, .csv</small>
         `;
+    }
+}
+
+// Sync detailed census data with uploaded/loaded hlb progress data
+function syncDetailedCensusData(hlbProgress) {
+    if (!hlbProgress || hlbProgress.length === 0) return;
+    
+    const list = [];
+    
+    // Create the total row to insert at the beginning
+    const totalRow = {
+        "Village/Town": " - Total",
+        "Total HLBs": 0,
+        "In progress": 0,
+        "Completed": 0,
+        "Yet to start": 0,
+        "Total Expected Census Houses": 0,
+        "Total Number of Census Houses": 0,
+        "Wholly Residential": 0,
+        "Partly Residential": 0,
+        "Total of Occupied Residential Census Houses": 0,
+        "Vacant Census Houses": 0,
+        "Total Locked Census Houses": 0,
+        "Total Census Houses (Residential & Vacant)": 0,
+        "Census Houses put to other uses": 0,
+        "Total number of Households": 0,
+        "Households Verified By Supervisor": 0,
+        "Total Population": 0,
+        "Total SE ID Generated": 0,
+        "Total SE ID Used": 0,
+        "Refreshed Date": "",
+        "Refreshed Time": ""
+    };
+    
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('hi-IN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const timeStr = now.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+    totalRow["Refreshed Date"] = dateStr;
+    totalRow["Refreshed Time"] = timeStr;
+    
+    hlbProgress.forEach(v => {
+        const row = {
+            "Village/Town": v.village,
+            "Total HLBs": parseInt(v.totalHlbs) || 0,
+            "In progress": parseInt(v.inProgress) || 0,
+            "Completed": parseInt(v.completedHlbs) || 0,
+            "Yet to start": parseInt(v.yetToStart) || 0,
+            "Total Expected Census Houses": parseInt(v.expectedHouses) || 0,
+            "Total Number of Census Houses": parseInt(v.completedHouses) || 0,
+            "Wholly Residential": parseInt(v.whollyRes) || 0,
+            "Partly Residential": parseInt(v.partlyRes) || 0,
+            "Total of Occupied Residential Census Houses": (parseInt(v.whollyRes) || 0) + (parseInt(v.partlyRes) || 0),
+            "Vacant Census Houses": parseInt(v.vacant) || 0,
+            "Total Locked Census Houses": parseInt(v.locked) || 0,
+            "Total Census Houses (Residential & Vacant)": (parseInt(v.whollyRes) || 0) + (parseInt(v.partlyRes) || 0) + (parseInt(v.vacant) || 0) + (parseInt(v.locked) || 0),
+            "Census Houses put to other uses": parseInt(v.otherUse) || 0,
+            "Total number of Households": parseInt(v.households) || 0,
+            "Households Verified By Supervisor": parseInt(v.verifiedHouseholds) || 0,
+            "Total Population": parseInt(v.population) || 0,
+            "Total SE ID Generated": parseInt(v.seIdUsed) || 0,
+            "Total SE ID Used": parseInt(v.seIdUsed) || 0,
+            "Refreshed Date": dateStr,
+            "Refreshed Time": timeStr
+        };
+        
+        list.push(row);
+        
+        // Accumulate totals
+        totalRow["Total HLBs"] += row["Total HLBs"];
+        totalRow["In progress"] += row["In progress"];
+        totalRow["Completed"] += row["Completed"];
+        totalRow["Yet to start"] += row["Yet to start"];
+        totalRow["Total Expected Census Houses"] += row["Total Expected Census Houses"];
+        totalRow["Total Number of Census Houses"] += row["Total Number of Census Houses"];
+        totalRow["Wholly Residential"] += row["Wholly Residential"];
+        totalRow["Partly Residential"] += row["Partly Residential"];
+        totalRow["Total of Occupied Residential Census Houses"] += row["Total of Occupied Residential Census Houses"];
+        totalRow["Vacant Census Houses"] += row["Vacant Census Houses"];
+        totalRow["Total Locked Census Houses"] += row["Total Locked Census Houses"];
+        totalRow["Total Census Houses (Residential & Vacant)"] += row["Total Census Houses (Residential & Vacant)"];
+        totalRow["Census Houses put to other uses"] += row["Census Houses put to other uses"];
+        totalRow["Total number of Households"] += row["Total number of Households"];
+        totalRow["Households Verified By Supervisor"] += row["Households Verified By Supervisor"];
+        totalRow["Total Population"] += row["Total Population"];
+        totalRow["Total SE ID Generated"] += row["Total SE ID Generated"];
+        totalRow["Total SE ID Used"] += row["Total SE ID Used"];
+    });
+    
+    // Add total row at index 0
+    list.unshift(totalRow);
+    
+    // Assign to the global DETAILED_CENSUS_DATA
+    if (typeof DETAILED_CENSUS_DATA !== 'undefined') {
+        DETAILED_CENSUS_DATA = list;
+    } else {
+        window.DETAILED_CENSUS_DATA = list;
     }
 }
 
