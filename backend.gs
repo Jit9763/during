@@ -13,8 +13,18 @@ const SHEET_PDF         = 'PDF';
 /* ---------- HELPER ---------- */
 function _openSheet(name) {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const sheet = ss.getSheetByName(name);
-  if (!sheet) throw new Error('Sheet "' + name + '" नहीं मिला।');
+  let sheet = ss.getSheetByName(name);
+  if (!sheet) {
+    if (name === SHEET_PDF) {
+      try {
+        sheet = ss.insertSheet(name);
+      } catch(err) {
+        throw new Error('Sheet "' + name + '" नहीं मिला और नया शीट बनाने में विफल: ' + err.toString());
+      }
+    } else {
+      throw new Error('Sheet "' + name + '" नहीं मिला।');
+    }
+  }
   return sheet;
 }
 

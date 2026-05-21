@@ -3389,6 +3389,7 @@ statusSpan.innerHTML = '<i class="fas fa-check-circle"></i> Uploaded!';
     closeDriveModal();
 }
 let currentPdfBlobUrl = null;
+let currentPdfRenderTask = null;
 
 function base64ToBlob(base64, mimeType = 'application/pdf') {
     const byteCharacters = atob(base64);
@@ -3400,12 +3401,116 @@ function base64ToBlob(base64, mimeType = 'application/pdf') {
     return new Blob([byteArray], { type: mimeType });
 }
 
+async function renderPdfFromUint8Array(uint8Array) {
+    const container = document.getElementById('pdf-canvas-container');
+    if (!container) return;
+    
+    // Clear previous pages
+    container.innerHTML = '';
+    
+    if (typeof pdfjsLib !== 'undefined') {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+    } else {
+        throw new Error('PDF.js library not loaded');
+    }
+    
+    const loadingTask = pdfjsLib.getDocument({ data: uint8Array });
+    currentPdfRenderTask = loadingTask;
+    
+    const pdf = await loadingTask.promise;
+    
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        if (currentPdfRenderTask !== loadingTask) return; // Abort if a new render started
+        
+        const page = await pdf.getPage(pageNum);
+        
+        const canvas = document.createElement('canvas');
+        canvas.className = 'pdf-page-canvas';
+        canvas.style.margin = '10px 0';
+        canvas.style.boxShadow = '0 4px 8px rgba(0,0,0,0.15)';
+        canvas.style.maxWidth = '95%';
+        canvas.style.height = 'auto';
+        canvas.style.backgroundColor = '#ffffff';
+        container.appendChild(canvas);
+        
+        const context = canvas.getContext('2d');
+        const containerWidth = container.clientWidth || window.innerWidth;
+        const baseViewport = page.getViewport({ scale: 1.0 });
+        const targetWidth = Math.min(containerWidth * 0.95, 900);
+        const scale = targetWidth / baseViewport.width;
+        
+        const viewport = page.getViewport({ scale: scale });
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        
+        const renderContext = {
+            canvasContext: context,
+            viewport: viewport
+        };
+        
+        await page.render(renderContext).promise;
+        
+        if (pageNum === 1) {
+            const loadingScreen = document.getElementById('pdf-loading-screen');
+            if (loadingScreen) loadingScreen.style.display = 'none';
+        }
+    }
+}
+
+async function renderPdfFromUrl(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Failed to fetch local PDF fallback');
+    const arrayBuffer = await response.arrayBuffer();
+    const uint8Array = new Uint8Array(arrayBuffer);
+    await renderPdfFromUint8Array(uint8Array);
+}
+
+function useIframeFallback(src) {
+    const iframe = document.getElementById('pdf-iframe');
+    const canvasContainer = document.getElementById('pdf-canvas-container');
+    const loadingScreen = document.getElementById('pdf-loading-screen');
+    
+    if (canvasContainer) canvasContainer.style.display = 'none';
+    if (iframe) {
+        iframe.style.display = 'block';
+        iframe.onload = () => {
+            if (loadingScreen) loadingScreen.style.display = 'none';
+        };
+        iframe.src = src;
+        
+        setTimeout(() => {
+            if (loadingScreen && loadingScreen.style.display !== 'none') {
+                loadingScreen.style.display = 'none';
+            }
+        }, 2500);
+    }
+}
+
 async function loadLatestPdf() {
     const link = document.getElementById('pdf-download-link');
     const iframe = document.getElementById('pdf-iframe');
+    const canvasContainer = document.getElementById('pdf-canvas-container');
+    const loadingScreen = document.getElementById('pdf-loading-screen');
+    const errorMsg = document.getElementById('pdf-error-msg');
     
-    // Clear iframe src to show it is loading
+    if (loadingScreen) {
+        loadingScreen.style.display = 'flex';
+        const spinner = loadingScreen.querySelector('.fa-spinner');
+        if (spinner) spinner.style.display = 'inline-block';
+        const textEl = loadingScreen.querySelector('p');
+        if (textEl) textEl.style.display = 'block';
+        
+        // Restore error msg styling elements if hidden
+        const errorText = document.getElementById('pdf-error-msg');
+        if (errorText) errorText.style.display = 'none';
+    }
+    
+    if (canvasContainer) {
+        canvasContainer.style.display = 'flex';
+        canvasContainer.innerHTML = '';
+    }
     if (iframe) {
+        iframe.style.display = 'none';
         iframe.src = '';
     }
     
@@ -3414,6 +3519,7 @@ async function loadLatestPdf() {
         const resp = await fetch(`${apiUrl}?folderPdf=1&t=${Date.now()}`, { cache: 'no-store' });
         if (!resp.ok) throw new Error('Network response was not OK');
         const data = await resp.json();
+        
         if (data.status === 'success' && data.pdfData) {
             const blob = base64ToBlob(data.pdfData, 'application/pdf');
             if (currentPdfBlobUrl) {
@@ -3421,26 +3527,62 @@ async function loadLatestPdf() {
             }
             currentPdfBlobUrl = URL.createObjectURL(blob);
             
-            if (iframe) iframe.src = currentPdfBlobUrl;
             if (link) {
                 link.href = currentPdfBlobUrl;
                 link.download = data.fileName || '1.pdf';
                 link.removeAttribute('target');
             }
+            
+            if (typeof pdfjsLib !== 'undefined') {
+                try {
+                    const binaryString = atob(data.pdfData);
+                    const uint8Array = new Uint8Array(binaryString.length);
+                    for (let i = 0; i < binaryString.length; i++) {
+                        uint8Array[i] = binaryString.charCodeAt(i);
+                    }
+                    await renderPdfFromUint8Array(uint8Array);
+                    
+                    if (loadingScreen) loadingScreen.style.display = 'none';
+                    return;
+                } catch (renderErr) {
+                    console.error('PDF.js render error, falling back to iframe:', renderErr);
+                }
+            }
+            
+            useIframeFallback(currentPdfBlobUrl);
         } else {
             throw new Error(data.message || 'No PDF data returned');
         }
     } catch (err) {
         console.error('Failed to load latest PDF:', err);
-        // Fallback to local or saved PDF
+        if (errorMsg) {
+            errorMsg.innerHTML = `<i class="fas fa-exclamation-circle"></i> त्रुटि (Error): ${err.message}<br><span style="font-size:12px; font-weight:normal; color:#64748b; display:block; margin-top:5px;">स्थानीय फ़ाइल (fallback) लोड की जा रही है...</span>`;
+            errorMsg.style.display = 'block';
+        }
+        
+        if (loadingScreen) {
+            const spinner = loadingScreen.querySelector('.fa-spinner');
+            if (spinner) spinner.style.display = 'none';
+        }
+        
         const savedPdf = localStorage.getItem('census_pdf_data');
         const fallbackSrc = savedPdf || 'pdf/Charge_Wise_HLB_Progress_Report.pdf';
-        if (iframe && (!iframe.src || iframe.src === 'about:blank' || iframe.src === '')) {
-            iframe.src = fallbackSrc;
-        }
-        if (link && (!link.href || link.href === '#')) {
+        
+        if (link) {
             link.href = fallbackSrc;
             link.target = '_blank';
+        }
+        
+        if (typeof pdfjsLib !== 'undefined') {
+            try {
+                await renderPdfFromUrl(fallbackSrc);
+                if (loadingScreen) loadingScreen.style.display = 'none';
+            } catch (fallbackErr) {
+                console.error('Failed to render fallback PDF via PDF.js:', fallbackErr);
+                useIframeFallback(fallbackSrc);
+            }
+        } else {
+            useIframeFallback(fallbackSrc);
         }
     }
 }
