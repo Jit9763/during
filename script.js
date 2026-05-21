@@ -3410,7 +3410,8 @@ async function loadLatestPdf() {
     }
     
     try {
-        const resp = await fetch(`${DEFAULT_API_URL}?folderPdf=1&t=${Date.now()}`, { cache: 'no-store' });
+        const apiUrl = localStorage.getItem('census_api_url') || DEFAULT_API_URL;
+        const resp = await fetch(`${apiUrl}?folderPdf=1&t=${Date.now()}`, { cache: 'no-store' });
         if (!resp.ok) throw new Error('Network response was not OK');
         const data = await resp.json();
         if (data.status === 'success' && data.pdfData) {
