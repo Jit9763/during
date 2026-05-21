@@ -35,8 +35,6 @@ function getLatestPdfFromFolder(){
     }
   }
   if(!latestFile) return null;
-  // Ensure public access
-  latestFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   // Direct preview URL, suitable for <iframe src>
   // Append a timestamp to bypass browser caching of the preview URL
   const baseUrl = 'https://drive.google.com/file/d/' + latestFile.getId() + '/preview';
@@ -60,9 +58,6 @@ function getLatestPdfBase64(){
     }
   }
   if(!latestFile) return null;
-  
-  // Ensure public access just in case
-  latestFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   
   const bytes = latestFile.getBlob().getBytes();
   const base64 = Utilities.base64Encode(bytes);
