@@ -1780,6 +1780,8 @@ function getReportHTML() {
         let inProgress = 0;
         let completedHlbs = 0;
         let yetToStart = 0;
+        let totalHouseholds = 0;
+        let verifiedHouseholds = 0;
 
         hlbProgress.forEach(v => {
             expectedHouses += (v.expectedHouses || 0);
@@ -1789,6 +1791,8 @@ function getReportHTML() {
             inProgress += (v.inProgress || 0);
             completedHlbs += (v.completedHlbs || 0);
             yetToStart += (v.yetToStart || 0);
+            totalHouseholds += (v.households || 0);
+            verifiedHouseholds += (v.verifiedHouseholds || 0);
         });
 
         // Check if we have an overall stats object (to be 100% in sync with dashboard)
@@ -1803,6 +1807,7 @@ function getReportHTML() {
         }
 
         const overPct = expectedHouses > 0 ? Math.round((completedHouses / expectedHouses) * 100) : 0;
+        const verifiedPct = totalHouseholds > 0 ? Math.round((verifiedHouseholds / totalHouseholds) * 100) : 0;
 
         // Generate Top 5 and Bottom 5 Villages for Report
         const villageDataForRank = hlbProgress.filter(v => (v.expectedHouses || 0) > 0).map(v => {
@@ -1838,6 +1843,9 @@ function getReportHTML() {
             const exp = v.expectedHouses || 0;
             const comp = v.completedHouses || 0;
             const pct = exp > 0 ? Math.round((comp / exp) * 100) : 0;
+            const hhs = v.households || 0;
+            const vhhs = v.verifiedHouseholds || 0;
+            const vpct = hhs > 0 ? Math.round((vhhs / hhs) * 100) : 0;
             villageRows += `
                 <tr>
                     <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1;">${serialNum}</td>
@@ -1846,6 +1854,9 @@ function getReportHTML() {
                     <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1;">${v.completedHlbs || 0}</td>
                     <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1;">${(exp).toLocaleString('hi-IN')}</td>
                     <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1;">${(comp).toLocaleString('hi-IN')}</td>
+                    <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1;">${(hhs).toLocaleString('hi-IN')}</td>
+                    <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1;">${(vhhs).toLocaleString('hi-IN')}</td>
+                    <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1; font-weight: bold; color: ${vpct >= 80 ? '#16a34a' : vpct >= 40 ? '#ca8a04' : '#dc2626'};">${vpct}%</td>
                     <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1;">${(v.population || 0).toLocaleString('hi-IN')}</td>
                     <td style="text-align: center; padding: 6px; border: 1px solid #cbd5e1; font-weight: bold; color: ${pct >= 80 ? '#16a34a' : pct >= 40 ? '#ca8a04' : '#dc2626'};">${pct}%</td>
                 </tr>
@@ -1962,6 +1973,25 @@ function getReportHTML() {
                     <div class="val">${yetToStart}</div>
                 </div>
             </div>
+            
+            <div class="stats-grid" style="margin-top:-10px;">
+                <div class="stat-card" style="border-left: 4px solid #a855f7;">
+                    <div class="lbl">कुल परिवार (Total Households)</div>
+                    <div class="val">${(totalHouseholds || 0).toLocaleString('hi-IN')}</div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid #a855f7;">
+                    <div class="lbl">सत्यापित परिवार (Supervisor Verified)</div>
+                    <div class="val">${(verifiedHouseholds || 0).toLocaleString('hi-IN')}</div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid #a855f7;">
+                    <div class="lbl">सत्यापन प्रगति (Verification %)</div>
+                    <div class="val">${verifiedPct}%</div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid #a855f7;">
+                    <div class="lbl">लंबित सत्यापन (Pending Verification)</div>
+                    <div class="val">${(totalHouseholds - verifiedHouseholds).toLocaleString('hi-IN')}</div>
+                </div>
+            </div>
     
             <div class="top-bottom-container">
                 <div class="top-bottom-box">
@@ -1994,11 +2024,14 @@ function getReportHTML() {
                     <tr>
                         <th style="width:50px;">क्र.सं.</th>
                         <th>गाँव का नाम</th>
-                        <th style="width:80px;">कुल HLB</th>
-                        <th style="width:80px;">पूर्ण HLB</th>
-                        <th style="width:110px;">अपेक्षित मकान</th>
-                        <th style="width:110px;">पूर्ण मकान</th>
-                        <th style="width:110px;">जनसंख्या</th>
+                        <th style="width:70px;">कुल HLB</th>
+                        <th style="width:70px;">पूर्ण HLB</th>
+                        <th style="width:90px;">अपेक्षित मकान</th>
+                        <th style="width:90px;">पूर्ण मकान</th>
+                        <th style="width:90px;">कुल परिवार</th>
+                        <th style="width:90px;">सत्यापित परिवार</th>
+                        <th style="width:80px;">सत्यापन (%)</th>
+                        <th style="width:90px;">जनसंख्या</th>
                         <th style="width:80px;">प्रगति (%)</th>
                     </tr>
                 </thead>
@@ -2855,7 +2888,7 @@ function closeSupervisorModal() {
     const overlay = document.getElementById('sup-modal-overlay');
     if (overlay) {
         overlay.classList.remove('active');
-        setTimeout(() => { overlay.innerHTML = ''; }, 300);
+        setTimeout(() => { overlay.remove(); }, 300);
     }
 }
 
@@ -3114,7 +3147,7 @@ function closeVillageDetails() {
     if (modalOverlay) {
         modalOverlay.classList.remove('active');
         setTimeout(() => {
-            modalOverlay.innerHTML = '';
+            modalOverlay.remove();
         }, 300);
     }
 }

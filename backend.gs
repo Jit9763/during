@@ -31,10 +31,24 @@ function _openSheet(name) {
   }
   return sheet;
 }
+function ensureDriveAuth(){
+  try {
+    // Trigger authentication by accessing Drive
+    DriveApp.getRootFolder();
+    return true;
+  } catch (e) {
+    Logger.log('Drive authentication error: ' + e.toString());
+    return false;
+  }
+}
+
 
 /* ---------- GET ---------- */
 // ----- New: Serve latest PDF from Drive folder -----
 function getLatestPdfFromFolder(){
+  if (!ensureDriveAuth()) {
+    return { status: 'error', message: 'Drive authentication failed' };
+  }
   const folderId = '1EKPJ5N9w1QLeSMBCMrIUt33C9c2fb4R9';
   const folder = DriveApp.getFolderById(folderId);
   const files = folder.getFilesByType(MimeType.PDF);
@@ -58,6 +72,9 @@ function getLatestPdfFromFolder(){
 
 // ----- New: Serve latest PDF from Drive folder as Base64 -----
 function getLatestPdfBase64(){
+  if (!ensureDriveAuth()) {
+    return { status: 'error', message: 'Drive authentication failed' };
+  }
   const folderId = '1EKPJ5N9w1QLeSMBCMrIUt33C9c2fb4R9';
   const folder = DriveApp.getFolderById(folderId);
   const files = folder.getFilesByType(MimeType.PDF);
@@ -376,3 +393,197 @@ function setupTriggers(){
     .create();
   Logger.log('Trigger for updatePdfInSheet created (every 5 minutes)');
 }
+
+/* ---------- CUSTOM MENU & PERMISSIONS REVIEW ---------- */
+
+/**
+ * Automatically runs when the spreadsheet is opened.
+ * Adds a custom menu for administrative operations and permission management.
+ */
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('Dashboard Settings')
+    .addItem('Test Drive Auth & Permissions', 'ensureDriveAuthMenu')
+    .addItem('Review/Manage App Permissions', 'reviewPermissions')
+    .addItem('Setup Trigger & Sync PDF', 'setupTriggers')
+    .addToUi();
+}
+
+/**
+ * Menu action to check if Google Drive access is active.
+ */
+function ensureDriveAuthMenu() {
+  const ui = SpreadsheetApp.getUi();
+  if (ensureDriveAuth()) {
+    ui.alert('Success', 'Drive authentication is active and working successfully!', ui.ButtonSet.OK);
+  } else {
+    ui.alert('Error', 'Authentication failed or not fully authorized. Please review permissions.', ui.ButtonSet.OK);
+  }
+}
+
+/**
+ * Menu action to show permission status and instructions/links for review/revocation.
+ */
+function reviewPermissions() {
+  const authInfo = ScriptApp.getAuthorizationInfo(ScriptApp.AuthMode.FULL);
+  const status = authInfo.getAuthorizationStatus();
+  const url = authInfo.getAuthorizationUrl();
+  const hasAuth = (status !== ScriptApp.AuthorizationStatus.REQUIRED);
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <base target="_top">
+        <style>
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 20px;
+            color: #202124;
+            background-color: #f8f9fa;
+          }
+          .card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            padding: 20px;
+            margin-bottom: 20px;
+          }
+          h2 {
+            margin-top: 0;
+            color: #1a73e8;
+            font-size: 20px;
+          }
+          .status {
+            font-size: 15px;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+          }
+          .status-authorized {
+            background-color: #e6f4ea;
+            color: #137333;
+            border: 1px solid #ceead6;
+          }
+          .status-required {
+            background-color: #fce8e6;
+            color: #c5221f;
+            border: 1px solid #fad2cf;
+          }
+          .btn-container {
+            margin-top: 15px;
+            margin-bottom: 10px;
+          }
+          .btn {
+            display: inline-block;
+            background-color: #1a73e8;
+            color: #ffffff;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+            transition: background-color 0.2s;
+          }
+          .btn-secondary {
+            background-color: #ffffff;
+            color: #1a73e8;
+            border: 1px solid #dadce0;
+            box-shadow: none;
+            margin-left: 10px;
+          }
+          .btn:hover {
+            background-color: #1557b0;
+          }
+          .btn-secondary:hover {
+            background-color: #f8f9fa;
+            color: #1557b0;
+            border-color: #1a73e8;
+          }
+          .instructions {
+            font-size: 13px;
+            line-height: 1.6;
+          }
+          .instructions h3 {
+            margin-top: 10px;
+            margin-bottom: 5px;
+            color: #3c4043;
+            font-size: 14px;
+            font-weight: 600;
+          }
+          .lang-section {
+            padding-bottom: 15px;
+          }
+          .lang-section:not(:last-child) {
+            border-bottom: 1px solid #dadce0;
+            margin-bottom: 15px;
+          }
+          ol {
+            margin: 5px 0 0 20px;
+            padding: 0;
+          }
+          li {
+            margin-bottom: 4px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <h2>App Permission Status</h2>
+          
+          <div class="status ${hasAuth ? 'status-authorized' : 'status-required'}">
+            Current Status: ${hasAuth ? 'Permissions Active & Authorized' : 'Re-Authorization Required'}
+          </div>
+
+          <p style="font-size: 14px; color: #5f6368; margin-top: 5px;">
+            ${hasAuth ? 'The application currently has access to required Google services.' : 'The app needs authorization to access Google Drive and other services.'}
+          </p>
+
+          <div class="btn-container">
+            ${!hasAuth ? `
+              <a href="${url}" target="_blank" class="btn">Authorize Now</a>
+            ` : ''}
+            <a href="https://myaccount.google.com/permissions" target="_blank" class="btn btn-secondary">Manage / Revoke Google Permissions</a>
+          </div>
+        </div>
+
+        <div class="card instructions">
+          <div class="lang-section">
+            <h3>English Instructions (How to review permissions again):</h3>
+            <ol>
+              <li>Click <b>"Manage / Revoke Google Permissions"</b> above to open Google Account Settings.</li>
+              <li>Find this project's name (e.g. <i>Census Dashboard</i> or <i>Live Changes Report</i>) and click <b>"Remove Access"</b>.</li>
+              <li>Close that window and return here.</li>
+              <li>Run any task from the menu (e.g., <b>Test Drive Auth & Permissions</b>).</li>
+              <li>Google will prompt you with the authorization consent screen to review and accept scopes again.</li>
+            </ol>
+          </div>
+          
+          <div class="lang-section">
+            <h3>हिंदी निर्देश (अनुमति की दोबारा समीक्षा कैसे करें):</h3>
+            <ol>
+              <li>ऊपर दिए गए <b>"Manage / Revoke Google Permissions"</b> बटन पर क्लिक करें।</li>
+              <li>इस प्रोजेक्ट का नाम खोजें और <b>"Remove Access"</b> पर क्लिक करके अनुमति हटा दें।</li>
+              <li>विंडो बंद करें और वापस इस Google Sheet पर आएं।</li>
+              <li>मेन्यू से <b>Test Drive Auth & Permissions</b> विकल्प चलाएं।</li>
+              <li>Google आपको फिर से अनुमति देने और समीक्षा (Authorization review) करने का स्क्रीन दिखाएगा।</li>
+            </ol>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+  const html = HtmlService.createHtmlOutput(htmlContent)
+    .setWidth(600)
+    .setHeight(550)
+    .setTitle('Review & Manage App Permissions');
+  
+  SpreadsheetApp.getUi().showModalDialog(html, 'Permissions Review Console');
+}
+
